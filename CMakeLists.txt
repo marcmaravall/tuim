@@ -7,6 +7,6 @@ endif()
 
 project ("tuim")
 
-add_executable (tuim "src/main.c" "include/ansi.h" "src/ansi.c" "include/context.h" "src/context.c" "include/text.h" "src/text.c" "include/style.h" "src/style.c")
+add_executable (tuim "src/main.c" "src/ansi.c" "src/context.c" "include/text.h" "src/text.c" "src/style.c" "include/os.h" "src/os.c")
 
 target_include_directories (tuim PRIVATE include)

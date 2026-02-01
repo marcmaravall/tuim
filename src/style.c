@@ -1,5 +1,6 @@
 #include <style.h>
 
-inline int tuim_foreground_to_background(TuimColor color) {
-	return color + 10;
+void tuim_style_set_default(TuimStyle* style) {
+	style->text_foreground_color = TUIM_COLOR_WHITE;
+	style->background_color		 = TO_BACKGROUND(TUIM_COLOR_BLACK);
 }

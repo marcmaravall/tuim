@@ -1,6 +1,9 @@
 #ifndef TUIM_STYLE_H
 #define TUIM_STYLE_H
 
+#include <stdint.h>
+#include <assert.h>
+
 typedef enum TuimColor {
     TUIM_COLOR_BLACK = 30, 
     TUIM_COLOR_RED = 31,  
@@ -21,10 +24,13 @@ typedef enum TuimColor {
     TUIM_COLOR_DEFAULT = 39             // default foreground
 } TuimColor;
 
-inline int tuim_color_to_background(TuimColor color);
+#define TO_BACKGROUND(x) (x + 10)
 
 typedef struct TuimStyle {
-    TuimColor text_foreground_color;
+    uint8_t text_foreground_color;
+    uint8_t background_color;
 } TuimStyle;
+
+void tuim_style_set_default(TuimStyle* color);
 
 #endif //TUIM_STYLE_H
