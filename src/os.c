@@ -1,4 +1,5 @@
 #include <os.h>
+#include <context.h>
 
 #ifdef _WIN32
 
@@ -53,8 +54,8 @@ int tuim_win32_get_console_buffer_info(TuimOsConsoleBufferInfo* info) {
 	return 0;
 }
 
-void tuim_os_init() {
-	tuim_win32_init();
+void tuim_os_init(TuimContext* ctx) {
+	tuim_win32_init(&ctx->os_data);
 }
 
 int tuim_os_get_console_buffer_info(TuimOsConsoleBufferInfo* info) {

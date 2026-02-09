@@ -5,7 +5,7 @@
 #include <windows.h>
 #endif
 
-#include <context.h>
+typedef struct TuimContext TuimContext;
 
 // TODO: implement:
 
@@ -42,7 +42,7 @@ int  tuim_win32_get_console_buffer_info(TuimOsConsoleBufferInfo* info);
 #pragma warning("WARNING: the current os is not supported!")
 #endif
 
-void tuim_os_init();
+void tuim_os_init(TuimContext* ctx);
 int  tuim_os_get_console_buffer_info(TuimOsConsoleBufferInfo* info);
 
 #endif // TUIM_OS_H

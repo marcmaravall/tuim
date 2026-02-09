@@ -3,27 +3,39 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include <style.h>
+#include <os.h>
 
-typedef enum TuimAlgin {
-	TUIM_LEFT	 = 0,
-	TUIM_CENTER   = 1,
-	TUIM_RIGHT    = 2,
+typedef enum {
+	TUIM_LEFT,
+	TUIM_CENTER,
+	TUIM_RIGHT,  
 } TuimAlgin;
 
 #define TUIM_ALGIN_DEFAULT TUIM_LEFT
 
-typedef struct TuimContext {
+// TODO: implement
+typedef struct TuimFrameContext {
+	int frame_index;
+
 	int cursor_x;
 	int cursor_y;
+	
+	bool is_mouse_down;
 
-	int frame_index;
+} TuimFrameContext;
+
+typedef struct TuimContext {
+	TuimFrameContext frame_context;
+
 	int available_width;
 
 	TuimAlgin algin;
-
 	TuimStyle style;
+
+	TuimOsData os_data;
 
 } TuimContext;
 

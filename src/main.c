@@ -1,25 +1,28 @@
 #include <tuim.h>
 #include <context.h>
 #include <os.h>
+
+#include <backend.h>
+#include <backends/ansi/ansi_backend.h>
+
 #include <text.h>
 #include <stdio.h>
 
-int main(int argc, char** argv) {
-	tuim_os_init();
+int main(void) {
+    while (1) {
+        TuimBackend ansi_backend = tuim_ansi_backend();
 
-	TuimContext* ctx;
-	ctx = malloc(sizeof(TuimContext));
+        ansi_backend.init(NULL);
+        ansi_backend.clear(NULL);
 
-	tuim_init_context(ctx);
+        ansi_backend.set_cursor_pos(NULL, 5, 3);
+        ansi_backend.set_foreground_color(NULL, TUIM_COLOR_BRIGHT_YELLOW);
+        ansi_backend.set_background_color(NULL, TUIM_COLOR_RED);
+        ansi_backend.render_text(NULL, "Hola desde Tuim");
 
-	TuimOsConsoleBufferInfo buffer_info;
-	tuim_os_get_console_buffer_info(&buffer_info);
-	
-	printf("Console Size { WIDTH: %d HEIGHT: %d } Cursor Position { X: %d Y: %d }",
-		buffer_info.width, buffer_info.height,
-		buffer_info.cursor_x, buffer_info.cursor_y);
+        printf("\x1b[0m");
+        ansi_backend.destroy(NULL);
+    }
 
-	tuim_destroy_context(ctx);
-	while (1) {}
-	return 0;
+    return 0;
 }
