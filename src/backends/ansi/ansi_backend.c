@@ -39,7 +39,10 @@ void tuim_ansi_backend_destroy() {
 }
 
 void tuim_ansi_backend_clear() {
-	printf("\x1b[1;1H\x1b[2J");
+	// TODO: do with os api
+#ifdef _WIN32
+	system("cls");
+#endif
 	fflush(stdout);
 }
 

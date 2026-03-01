@@ -11,6 +11,8 @@ typedef struct TuimBackend {
 	void (*set_cursor_pos)(void* backend_data, int x, int y);
 	void (*set_foreground_color)(void* backend_data, TuimColor color);
 	void (*set_background_color)(void* backend_data, TuimColor color);
+	void (*set_console_name)(void* backend_data, const char* msg);
+	void* data;
 } TuimBackend;
 
 #endif //TUIM_BACKEND_H

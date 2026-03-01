@@ -25,13 +25,16 @@ typedef enum TuimColor {
     TUIM_COLOR_DEFAULT = 39             // default foreground
 } TuimColor;
 
+typedef uint32_t TuimColorRGB;
+
 #define TO_BACKGROUND(x) ((x) + 10)
 
 typedef struct TuimStyle {
-    uint8_t text_foreground_color;
     uint8_t background_color;
+    uint8_t text_foreground_color;
+    uint8_t rect_background_color;
 } TuimStyle;
 
-void tuim_style_set_default(TuimStyle* color);
+TuimStyle tuim_style_set_default();
 
 #endif //TUIM_STYLE_H

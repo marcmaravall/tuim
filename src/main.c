@@ -1,27 +1,46 @@
 #include <tuim.h>
 #include <context.h>
 #include <os.h>
+#include "rect.h"
 
 #include <backend.h>
-#include <backends/ansi/ansi_backend.h>
+#include <backends/windows/windows_backend.h>
 
 #include <text.h>
 #include <stdio.h>
 
 int main(void) {
+    TuimContext ctx;
+    tuim_init_context(&ctx);
+    TuimBackend b = tuim_windows_backend();
+    b.init(b.data);
+    b.set_console_name(b.data, "hola");
+    ctx.backend = b;
+
+    TuimRect rect;
+    rect.x = 10;
+    rect.y = 2;
+
+    rect.width = 10;
+    rect.height = 10;
+
+    TuimRect rect1;
+    rect1.x = 20;
+    rect1.y = 6;
+
+    rect1.width = 13;
+    rect1.height = 5;
+
     while (1) {
-        TuimBackend ansi_backend = tuim_ansi_backend();
+        tuim_begin_frame(&ctx);
+        tuim_set_rect_background_color(&ctx, TUIM_COLOR_RED);
+        tuim_draw_rect(&ctx, rect);
+        tuim_set_rect_background_color(&ctx, TUIM_COLOR_GREEN);
+        tuim_draw_rect(&ctx, rect1);
 
-        ansi_backend.init(NULL);
-        ansi_backend.clear(NULL);
+        Sleep(10);
 
-        ansi_backend.set_cursor_pos(NULL, 5, 3);
-        ansi_backend.set_foreground_color(NULL, TUIM_COLOR_BRIGHT_YELLOW);
-        ansi_backend.set_background_color(NULL, TUIM_COLOR_RED);
-        ansi_backend.render_text(NULL, "Hola desde Tuim");
-
-        printf("\x1b[0m");
-        ansi_backend.destroy(NULL);
+        tuim_end_frame(&ctx);
     }
 
     return 0;

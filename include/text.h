@@ -2,6 +2,7 @@
 #define TUIM_TEXT_H
 
 #include <context.h>
+#include <backend.h>
 
 void tuim_draw_text(TuimContext* context, char* msg);
 
