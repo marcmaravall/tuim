@@ -4,7 +4,7 @@
 #include "rect.h"
 
 #include <backend.h>
-#include <backends/windows/windows_backend.h>
+#include <backends/ansi/ansi_backend.h>
 
 #include <text.h>
 #include <stdio.h>
@@ -12,9 +12,9 @@
 int main(void) {
     TuimContext ctx;
     tuim_init_context(&ctx);
-    TuimBackend b = tuim_windows_backend();
+    TuimBackend b = tuim_ansi_backend();
     b.init(b.data);
-    b.set_console_name(b.data, "hola");
+    //b.set_console_name(b.data, "hi");
     ctx.backend = b;
 
     TuimRect rect;
@@ -33,9 +33,9 @@ int main(void) {
 
     while (1) {
         tuim_begin_frame(&ctx);
-        tuim_set_rect_background_color(&ctx, TUIM_COLOR_RED);
+        tuim_set_rect_background_color(&ctx, TUIM_ANSI_COLOR_RED);
         tuim_draw_rect(&ctx, rect);
-        tuim_set_rect_background_color(&ctx, TUIM_COLOR_GREEN);
+        tuim_set_rect_background_color(&ctx, TUIM_ANSI_COLOR_GREEN);
         tuim_draw_rect(&ctx, rect1);
 
         Sleep(10);

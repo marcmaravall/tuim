@@ -39,7 +39,6 @@ void tuim_ansi_backend_destroy() {
 }
 
 void tuim_ansi_backend_clear() {
-	// TODO: do with os api
 #ifdef _WIN32
 	system("cls");
 #endif
@@ -54,13 +53,13 @@ void tuim_ansi_backend_set_cursor_pos(void* backend_data, int x, int y) {
 	printf("\033[%d;%dH", y, x);
 }
 
-void tuim_ansi_backend_set_foreground_color(void* backend_data, TuimColor color) {
+void tuim_ansi_backend_set_foreground_color(void* backend_data, TuimAnsiColor color) {
 	(void)backend_data;
 
 	printf("\x1b[%dm", color);
 }
 
-void tuim_ansi_backend_set_background_color(void* backend_data, TuimColor color) {
+void tuim_ansi_backend_set_background_color(void* backend_data, TuimAnsiColor color) {
 	(void)backend_data;
 
 	printf("\x1b[%dm", TO_BACKGROUND(color));

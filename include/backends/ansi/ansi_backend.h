@@ -13,8 +13,8 @@ void tuim_ansi_backend_destroy				();
 void tuim_ansi_backend_clear				();
 void tuim_ansi_backend_render_text			(void* backend_data, const char* msg);
 void tuim_ansi_backend_set_cursor_pos		(void* backend_data, int x, int y);
-void tuim_ansi_backend_set_foreground_color	(void* backend_data, TuimColor color);
-void tuim_ansi_backend_set_background_color	(void* backend_data, TuimColor color);
+void tuim_ansi_backend_set_foreground_color	(void* backend_data, TuimAnsiColor color);
+void tuim_ansi_backend_set_background_color	(void* backend_data, TuimAnsiColor color);
 
 TuimBackend tuim_ansi_backend();
 
