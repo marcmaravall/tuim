@@ -1,4 +1,29 @@
-#include <backends/ansi/ansi_backend.h>
+#include "backends/ansi/ansi_backend.h"
+
+TuimAnsiColor tuim_color_to_ansi(TuimColor color) {
+	if (color.type == TUIM_COLOR_TYPE_INDEXED) {
+		switch (color.indexed_color) {
+			case TUIM_BLACK: return TUIM_ANSI_COLOR_BLACK;
+			case TUIM_RED: return TUIM_ANSI_COLOR_RED;
+			case TUIM_GREEN: return TUIM_ANSI_COLOR_GREEN;
+			case TUIM_YELLOW: return TUIM_ANSI_COLOR_YELLOW;
+			case TUIM_BLUE: return TUIM_ANSI_COLOR_BLUE;
+			case TUIM_MAGENTA: return TUIM_ANSI_COLOR_MAGENTA;
+			case TUIM_CYAN: return TUIM_ANSI_COLOR_CYAN;
+			case TUIM_WHITE: return TUIM_ANSI_COLOR_WHITE;
+			case TUIM_BRIGHT_BLACK: return TUIM_ANSI_COLOR_BRIGHT_BLACK;
+			case TUIM_BRIGHT_RED: return TUIM_ANSI_COLOR_BRIGHT_RED;
+			case TUIM_BRIGHT_GREEN: return TUIM_ANSI_COLOR_BRIGHT_GREEN;
+			case TUIM_BRIGHT_YELLOW: return TUIM_ANSI_COLOR_BRIGHT_YELLOW;
+			case TUIM_BRIGHT_BLUE: return TUIM_ANSI_COLOR_BRIGHT_BLUE;
+			case TUIM_BRIGHT_MAGENTA: return TUIM_ANSI_COLOR_BRIGHT_MAGENTA;
+			case TUIM_BRIGHT_CYAN: return TUIM_ANSI_COLOR_BRIGHT_CYAN;
+			case TUIM_BRIGHT_WHITE: return TUIM_ANSI_COLOR_BRIGHT_WHITE;
+			default: break;
+		}
+	}
+	assert(0);	// INVALID CASEs
+}
 
 void tuim_ansi_backend_init() {
 #ifdef _WIN32
@@ -53,16 +78,17 @@ void tuim_ansi_backend_set_cursor_pos(void* backend_data, int x, int y) {
 	printf("\033[%d;%dH", y, x);
 }
 
-void tuim_ansi_backend_set_foreground_color(void* backend_data, TuimAnsiColor color) {
+// TODO: do with TuimColor
+void tuim_ansi_backend_set_foreground_color(void* backend_data, TuimColor color) {
 	(void)backend_data;
 
-	printf("\x1b[%dm", color);
+	printf("\x1b[%dm", tuim_color_to_ansi(color));
 }
 
-void tuim_ansi_backend_set_background_color(void* backend_data, TuimAnsiColor color) {
+void tuim_ansi_backend_set_background_color(void* backend_data, TuimColor color) {
 	(void)backend_data;
 
-	printf("\x1b[%dm", TO_BACKGROUND(color));
+	printf("\x1b[%dm", TO_BACKGROUND(tuim_color_to_ansi(color)));
 }
 
 TuimBackend tuim_ansi_backend() {

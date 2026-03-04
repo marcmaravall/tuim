@@ -1,4 +1,4 @@
-#include <text.h>
+#include "text.h"
 
 void tuim_draw_text(TuimContext* context, char* msg) {
 	context->backend.set_foreground_color(

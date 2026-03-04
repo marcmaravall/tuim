@@ -1,12 +1,14 @@
-#include <tuim.h>
-#include <context.h>
-#include <os.h>
+// THIS IS AN EXAMPLE
+
+#include "tuim.h"
+#include "context.h"
+#include "os.h"
 #include "rect.h"
 
-#include <backend.h>
-#include <backends/ansi/ansi_backend.h>
+#include "backend.h"
+#include "backends/ansi/ansi_backend.h"
 
-#include <text.h>
+#include "text.h"
 #include <stdio.h>
 
 int main(void) {
@@ -14,7 +16,6 @@ int main(void) {
     tuim_init_context(&ctx);
     TuimBackend b = tuim_ansi_backend();
     b.init(b.data);
-    //b.set_console_name(b.data, "hi");
     ctx.backend = b;
 
     TuimRect rect;
@@ -33,9 +34,9 @@ int main(void) {
 
     while (1) {
         tuim_begin_frame(&ctx);
-        tuim_set_rect_background_color(&ctx, TUIM_ANSI_COLOR_RED);
+        tuim_set_rect_background_color(&ctx, TUIM_RED_STRUCT_INDEXED);
         tuim_draw_rect(&ctx, rect);
-        tuim_set_rect_background_color(&ctx, TUIM_ANSI_COLOR_GREEN);
+        tuim_set_rect_background_color(&ctx, TUIM_GREEN_STRUCT_INDEXED);
         tuim_draw_rect(&ctx, rect1);
 
         Sleep(10);

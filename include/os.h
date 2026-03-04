@@ -1,3 +1,5 @@
+// TODO: remove os data and move it to backend
+
 #ifndef TUIM_OS_H
 #define TUIM_OS_H
 

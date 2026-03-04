@@ -23,17 +23,17 @@ void tuim_destroy_context(TuimContext* ctx) {
 }
 
 
-void tuim_set_rect_background_color(TuimContext* ctx, TuimAnsiColor color) {
+void tuim_set_rect_background_color(TuimContext* ctx, TuimColor color) {
 	assert(ctx != NULL);
 	ctx->style.rect_background_color = color;
 }
 
-void tuim_set_background_color(TuimContext* ctx, TuimAnsiColor color) {
+void tuim_set_background_color(TuimContext* ctx, TuimColor color) {
 	assert(ctx != NULL);
 	ctx->style.background_color = color;
 }
 
-void tuim_set_text_foreground_color(TuimContext* ctx, TuimAnsiColor color) {
+void tuim_set_text_foreground_color(TuimContext* ctx, TuimColor color) {
 	assert(ctx != NULL);
 	ctx->style.text_foreground_color = color;
 }

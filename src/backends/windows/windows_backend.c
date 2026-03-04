@@ -79,7 +79,7 @@ void tuim_windows_backend_set_cursor_pos(void* backend_data, int x, int y) {
 	SetConsoleCursorPosition(((TuimWindowsBackendData*)backend_data)->handle, (COORD){0, 0});
 }
 
-void tuim_windows_backend_set_foreground_color(void* backend_data, TuimAnsiColor color) {
+void tuim_windows_backend_set_foreground_color(void* backend_data, TuimColor color) {
 	TuimWindowsBackendData* data = backend_data;
 
 	WORD fg = tuim_color_to_win32(color);
@@ -91,7 +91,7 @@ void tuim_windows_backend_set_foreground_color(void* backend_data, TuimAnsiColor
 	}
 }
 
-void tuim_windows_backend_set_background_color(void* backend_data, TuimAnsiColor color) {
+void tuim_windows_backend_set_background_color(void* backend_data, TuimColor color) {
 	TuimWindowsBackendData* data = backend_data;
 
 	WORD bg = tuim_color_to_win32(color) << 4;
@@ -114,29 +114,39 @@ void tuim_windows_backend_set_console_name(void* backend_data, const char* msg) 
 	assert(SetConsoleTitle(new_title));
 }
 
-static WORD tuim_color_to_win32(const TuimAnsiColor color) {
-	if (color == TUIM_ANSI_COLOR_DEFAULT)
-		return FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-
-	int base;
-	int bright = 0;
-
-	if (color >= 90) {
-		base = color - 90;
-		bright = 1;
+// TODO: do this in a cleaner way
+static WORD tuim_color_to_win32(const TuimColor color) {
+	WORD win_color = 0;
+	if (color.type == TUIM_COLOR_TYPE_INDEXED) {
+		switch (color.indexed_color) {
+			case TUIM_BLACK: win_color = 0; break;
+			case TUIM_RED: win_color = 4; break;
+			case TUIM_GREEN: win_color = 2; break;
+			case TUIM_YELLOW: win_color = 6; break;
+			case TUIM_BLUE: win_color = 1; break;
+			case TUIM_MAGENTA: win_color = 5; break;
+			case TUIM_CYAN: win_color = 3; break;
+			case TUIM_WHITE: win_color = 7; break;
+			case TUIM_BRIGHT_BLACK: win_color = 8; break;
+			case TUIM_BRIGHT_RED: win_color = 12; break;
+			case TUIM_BRIGHT_GREEN: win_color = 10; break;
+			case TUIM_BRIGHT_YELLOW: win_color = 14; break;
+			case TUIM_BRIGHT_BLUE: win_color = 9; break;
+			case TUIM_BRIGHT_MAGENTA: win_color = 13; break;
+			case TUIM_BRIGHT_CYAN: win_color = 11; break;
+			case TUIM_BRIGHT_WHITE: win_color = 15; break;
+			default:
+				win_color = color.indexed_color % 16;
+				break;
+		}
+	} else if (color.type == TUIM_COLOR_TYPE_RGB) {
+		win_color |= (color.rgb_color.red > 128) ? FOREGROUND_RED : 0;
+		win_color |= (color.rgb_color.green > 128) ? FOREGROUND_GREEN : 0;
+		win_color |= (color.rgb_color.blue > 128) ? FOREGROUND_BLUE : 0;
+		if (color.rgb_color.red > 128 || color.rgb_color.green > 128 || color.rgb_color.blue > 128)
+			win_color |= FOREGROUND_INTENSITY;
 	}
-	else {
-		base = color - 30;
-	}
-
-	WORD result = 0;
-
-	if (base & 1) result |= FOREGROUND_RED;
-	if (base & 2) result |= FOREGROUND_GREEN;
-	if (base & 4) result |= FOREGROUND_BLUE;
-	if (bright)   result |= FOREGROUND_INTENSITY;
-
-	return result;
+	return win_color;
 }
 
 TuimBackend tuim_windows_backend() {

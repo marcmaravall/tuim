@@ -49,8 +49,8 @@ void tuim_end_frame		(TuimContext* context);
 void tuim_init_context	(TuimContext* ctx);
 void tuim_destroy_context(TuimContext* ctx);
 
-void tuim_set_rect_background_color (TuimContext* ctx, TuimAnsiColor color);
-void tuim_set_background_color		(TuimContext* ctx, TuimAnsiColor color);
-void tuim_set_text_foreground_color (TuimContext* ctx, TuimAnsiColor color);
+void tuim_set_rect_background_color (TuimContext* ctx, TuimColor color);
+void tuim_set_background_color		(TuimContext* ctx, TuimColor color);
+void tuim_set_text_foreground_color (TuimContext* ctx, TuimColor color);
 
 #endif //TUIM_CONTEXT_H
