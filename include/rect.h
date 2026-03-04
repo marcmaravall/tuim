@@ -2,8 +2,10 @@
 #define TUIM_RECT_H
 
 #include <assert.h>
-#include <context.h>
+#include <stdlib.h>
 #include <stdbool.h>
+
+#include "context.h"
 
 typedef struct {
 	int x;

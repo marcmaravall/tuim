@@ -34,6 +34,7 @@ TuimRect tuim_rect_lerp(TuimRect r1, TuimRect r2, float t) {
 	return rect;
 }
 
+// TODO: implement with framebuffer backend
 void tuim_draw_rect(TuimContext* ctx, TuimRect rect) {
 	assert(ctx != NULL);
 	assert(tuim_rect_is_valid(rect));
@@ -43,21 +44,26 @@ void tuim_draw_rect(TuimContext* ctx, TuimRect rect) {
 	const int end_x = rect.x + rect.width;
 	const int end_y = rect.y + rect.height;
 
-	ctx->backend.set_cursor_pos(ctx->backend.data, start_x, start_y);
+	// ctx->backend.set_cursor_pos(ctx->backend.data, start_x, start_y);
 
-	char* mem_buff = malloc(sizeof(char)*rect.width+1);
-	memset(mem_buff, ' ', rect.width);
+	char* mem_buff = malloc(sizeof(char)*(rect.width+1));
+	assert(mem_buff != NULL);
+	if (!memset(mem_buff, ' ', rect.width)) {
+		free(mem_buff);
+		assert(0);
+		return;
+	}
 	mem_buff[rect.width] = 0x00;
 
-	ctx->backend.set_background_color(ctx->backend.data, ctx->style.rect_background_color);
+	// ctx->backend.set_background_color(ctx->backend.data, ctx->style.rect_background_color);
 
 	for (int i = start_y; i < end_y; i++) {
-		ctx->backend.set_cursor_pos(ctx->backend.data, start_x, i);
-		ctx->backend.render_text(ctx->backend.data, mem_buff);
-		ctx->backend.render_text(ctx->backend.data, "\n");
+		// ctx->backend.set_cursor_pos(ctx->backend.data, start_x, i);
+		// ctx->backend.render_text(ctx->backend.data, mem_buff);
+		// ctx->backend.render_text(ctx->backend.data, "\n");
 	}
 
-	ctx->backend.set_background_color(ctx->backend.data, ctx->style.background_color);
+	// ctx->backend.set_background_color(ctx->backend.data, ctx->style.background_color);
 }
 
 bool tuim_rect_is_valid(TuimRect rect) {

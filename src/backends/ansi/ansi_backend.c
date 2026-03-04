@@ -78,7 +78,6 @@ void tuim_ansi_backend_set_cursor_pos(void* backend_data, int x, int y) {
 	printf("\033[%d;%dH", y, x);
 }
 
-// TODO: do with TuimColor
 void tuim_ansi_backend_set_foreground_color(void* backend_data, TuimColor color) {
 	(void)backend_data;
 
@@ -95,10 +94,5 @@ TuimBackend tuim_ansi_backend() {
 	TuimBackend backend;
 	backend.init = tuim_ansi_backend_init;
 	backend.destroy = tuim_ansi_backend_destroy;
-	backend.clear = tuim_ansi_backend_clear;
-	backend.render_text = tuim_ansi_backend_render_text;
-	backend.set_cursor_pos = tuim_ansi_backend_set_cursor_pos;
-	backend.set_foreground_color = tuim_ansi_backend_set_foreground_color;
-	backend.set_background_color = tuim_ansi_backend_set_background_color;
 	return backend;
 }

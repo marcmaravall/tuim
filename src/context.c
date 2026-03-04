@@ -1,11 +1,11 @@
-#include <context.h>
+#include "context.h"
 
 void tuim_set_alginment(TuimContext* ctx, TuimAlgin al) {
 	ctx->algin = al;
 }
 
 void tuim_begin_frame(TuimContext* ctx) {
-	ctx->backend.clear(ctx->backend.data);
+	// ctx->backend.clear(ctx->backend.data);
 }
 
 void tuim_end_frame(TuimContext* ctx) {

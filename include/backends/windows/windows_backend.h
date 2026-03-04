@@ -10,9 +10,9 @@
 #include <tchar.h>
 #include <strsafe.h>
 #include <assert.h>
-
 #include <stdlib.h>
-#include <backend.h>
+
+#include "backend.h"
 
 typedef struct {
 	HWND   window;
@@ -20,14 +20,9 @@ typedef struct {
 	WORD   current_attributes;
 } TuimWindowsBackendData;
 
-void tuim_windows_backend_init(void* backend_data);
-void tuim_windows_backend_destroy(void* backend_data);
-void tuim_windows_backend_clear(void* backend_data);
-void tuim_windows_backend_render_text(void* backend_data, const char* msg);
-void tuim_windows_backend_set_cursor_pos(void* backend_data, int x, int y);
-void tuim_windows_backend_set_foreground_color(void* backend_data, TuimColor color);
-void tuim_windows_backend_set_background_color(void* backend_data, TuimColor color);
-void tuim_windows_backend_set_console_name(void* backend_data, const char* msg);
+void tuim_windows_backend_init(void* data);
+void tuim_windows_backend_destroy(void* data);
+void tuim_windows_backend_pass_frame_buffer(void* data, const TuimFrameBuffer* frame_buffer);
 
 static WORD tuim_color_to_win32(const TuimColor color);
 

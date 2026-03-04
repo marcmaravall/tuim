@@ -5,9 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include <backend.h>
-#include <style.h>
-#include <os.h>
+#include "backend.h"
 
 typedef enum {
 	TUIM_LEFT,
@@ -36,7 +34,6 @@ typedef struct TuimContext {
 	TuimAlgin algin;
 	TuimStyle style;
 
-	TuimOsData os_data;		// TODO: move os data to backend
 	TuimBackend backend;
 
 } TuimContext;

@@ -2,11 +2,10 @@
 
 #include "tuim.h"
 #include "context.h"
-#include "os.h"
 #include "rect.h"
 
 #include "backend.h"
-#include "backends/ansi/ansi_backend.h"
+#include "backends/windows/windows_backend.h"
 
 #include "text.h"
 #include <stdio.h>
@@ -14,7 +13,7 @@
 int main(void) {
     TuimContext ctx;
     tuim_init_context(&ctx);
-    TuimBackend b = tuim_ansi_backend();
+    TuimBackend b = tuim_windows_backend();
     b.init(b.data);
     ctx.backend = b;
 

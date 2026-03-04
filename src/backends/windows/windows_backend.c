@@ -1,6 +1,5 @@
-#include <backends/windows/windows_backend.h>
+#include "backends/windows/windows_backend.h"
 
-// TODO: implement:
 void tuim_windows_backend_init(void* backend_data) {
 	assert(backend_data);
 	
@@ -38,80 +37,13 @@ void tuim_windows_backend_init(void* backend_data) {
 	// TODO: remove cursor
 }
 
-void tuim_windows_backend_destroy(void* backend_data) {
-	
+void tuim_windows_backend_destroy(void* data) {
+
 }
 
-// thanks to https://learn.microsoft.com/en-us/windows/console/clearing-the-screen
-void tuim_windows_backend_clear(void* backend_data) {
-	TuimWindowsBackendData* data = backend_data;
-	assert(data);
-	
-	COORD coord = { 0, 0 };
-	DWORD chars_written;
-	CONSOLE_SCREEN_BUFFER_INFO buffer_info;
+void tuim_windows_backend_pass_frame_buffer(void* data, const TuimFrameBuffer* frame_buffer) {
+	// TODO: implement:
 
-	if (!GetConsoleScreenBufferInfo(data->handle, &buffer_info))
-		return;
-
-	DWORD size = buffer_info.dwSize.X * buffer_info.dwSize.Y;
-
-	if (!FillConsoleOutputCharacter(data->handle, ' ', size, coord, &chars_written)) {
-		return;
-	}
-
-	if (!GetConsoleScreenBufferInfo(data->handle, &buffer_info)) {
-		return;
-	}
-
-	if (!FillConsoleOutputAttribute(data->handle, buffer_info.wAttributes, size, coord, &chars_written)) {
-		return;
-	}
-
-	SetConsoleCursorPosition(data->handle, coord);
-}
-
-void tuim_windows_backend_render_text(void* backend_data, const char* msg) {
-	printf("%s", msg);
-}
-
-void tuim_windows_backend_set_cursor_pos(void* backend_data, int x, int y) {
-	SetConsoleCursorPosition(((TuimWindowsBackendData*)backend_data)->handle, (COORD){0, 0});
-}
-
-void tuim_windows_backend_set_foreground_color(void* backend_data, TuimColor color) {
-	TuimWindowsBackendData* data = backend_data;
-
-	WORD fg = tuim_color_to_win32(color);
-	WORD attributes = (data->current_attributes & 0xF0) | fg;
-
-	if (attributes != data->current_attributes) {
-		SetConsoleTextAttribute(data->handle, attributes);
-		data->current_attributes = attributes;
-	}
-}
-
-void tuim_windows_backend_set_background_color(void* backend_data, TuimColor color) {
-	TuimWindowsBackendData* data = backend_data;
-
-	WORD bg = tuim_color_to_win32(color) << 4;
-	WORD attributes = (data->current_attributes & 0x0F) | bg;
-
-	if (attributes != data->current_attributes) {
-		SetConsoleTextAttribute(data->handle, attributes);
-		data->current_attributes = attributes;
-	}
-}
-
-void tuim_windows_backend_set_console_name(void* backend_data, const char* msg) {
-	TCHAR old_title[MAX_PATH];
-	TCHAR new_title[MAX_PATH];
-
-	assert(GetConsoleTitle(old_title, MAX_PATH));
-
-	StringCchPrintf(new_title, MAX_PATH, TEXT("%s"), msg);
-
-	assert(SetConsoleTitle(new_title));
 }
 
 // TODO: do this in a cleaner way
@@ -154,14 +86,9 @@ TuimBackend tuim_windows_backend() {
 
 	backend.data = malloc(sizeof(TuimWindowsBackendData));
 
-	backend.init				 = tuim_windows_backend_init;
-	backend.destroy				 = tuim_windows_backend_destroy;
-	backend.clear			     = tuim_windows_backend_clear;
-	backend.render_text			 = tuim_windows_backend_render_text;
-	backend.set_cursor_pos		 = tuim_windows_backend_set_cursor_pos;
-	backend.set_foreground_color = tuim_windows_backend_set_foreground_color;
-	backend.set_background_color = tuim_windows_backend_set_background_color;
-	backend.set_console_name	 = tuim_windows_backend_set_console_name;
+	backend.init	= tuim_windows_backend_init;
+	backend.destroy	= tuim_windows_backend_destroy;
+	backend.pass_frame_buffer = tuim_windows_backend_pass_frame_buffer;
 	
 	return backend;
 }
