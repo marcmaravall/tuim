@@ -27,6 +27,7 @@ typedef struct TuimFrameContext {
 } TuimFrameContext;
 
 typedef struct TuimContext {
+	TuimFrameBuffer frame_buffer;
 	TuimFrameContext frame_context;
 
 	int available_width;

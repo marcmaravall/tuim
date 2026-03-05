@@ -37,16 +37,72 @@ void tuim_windows_backend_init(void* backend_data) {
 	// TODO: remove cursor
 }
 
+void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y) {
+	assert(backend_data != NULL);
+	
+	TuimWindowsBackendData* data = backend_data;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+	if (!GetConsoleScreenBufferInfo(data->handle, &csbi)) {
+		return;
+	}
+
+	*x = csbi.dwSize.X;
+	*y = csbi.dwSize.Y;
+}
+
 void tuim_windows_backend_destroy(void* data) {
 
 }
 
-void tuim_windows_backend_pass_frame_buffer(void* data, const TuimFrameBuffer* frame_buffer) {
-	// TODO: implement:
+void tuim_windows_backend_pass_frame_buffer(void* backend_data, const TuimFrameBuffer* frame_buffer) {
+	assert(backend_data != NULL);
+	assert(frame_buffer != NULL);
 
+	TuimWindowsBackendData* data = backend_data;
+
+	size_t width = frame_buffer->width;
+	size_t height = frame_buffer->height;
+
+	if (height != data->buffer_size.Y || width != data->buffer_size.X) {
+
+		CHAR_INFO* new_buffer = realloc(
+			data->buffer,
+			width * height * sizeof(CHAR_INFO)
+		);
+
+		assert(new_buffer != NULL);
+
+		data->buffer = new_buffer;
+
+		data->buffer_size.X = (SHORT)width;
+		data->buffer_size.Y = (SHORT)height;
+	}
+
+	size_t total = width * height;
+
+	for (size_t i = 0; i < total; i++) {
+		data->buffer[i].Char.AsciiChar = frame_buffer->cells[i].state;
+
+		data->buffer[i].Attributes = FOREGROUND_GREEN;	// TODO: do with attributes conversion
+	}
 }
 
-// TODO: do this in a cleaner way
+void tuim_windows_backend_render(void* backend_data) {
+	TuimWindowsBackendData* data = backend_data;
+
+	COORD bufferCoord = { 0,0 };
+	SMALL_RECT region = { 0,0, data->buffer_size.X - 1, data->buffer_size.Y- 1 };
+
+	WriteConsoleOutput(
+		data->handle,
+		data->buffer,
+		data->buffer_size,
+		bufferCoord,
+		&region
+	);
+}
+
 static WORD tuim_color_to_win32(const TuimColor color) {
 	WORD win_color = 0;
 	if (color.type == TUIM_COLOR_TYPE_INDEXED) {
@@ -84,11 +140,23 @@ static WORD tuim_color_to_win32(const TuimColor color) {
 TuimBackend tuim_windows_backend() {
 	TuimBackend backend;
 
-	backend.data = malloc(sizeof(TuimWindowsBackendData));
+	TuimWindowsBackendData* data = malloc(sizeof(TuimWindowsBackendData));
+	if (!data) return backend;
 
-	backend.init	= tuim_windows_backend_init;
-	backend.destroy	= tuim_windows_backend_destroy;
+	data->buffer = NULL;
+	data->buffer_size.X = 0;
+	data->buffer_size.Y = 0;
+	data->window = NULL;
+	data->handle = NULL;
+	data->current_attributes = 0;
+
+	backend.data = data;
+
+	backend.init = tuim_windows_backend_init;
+	backend.destroy = tuim_windows_backend_destroy;
+	backend.render = tuim_windows_backend_render;
+	backend.get_size = tuim_windows_backend_get_size;
 	backend.pass_frame_buffer = tuim_windows_backend_pass_frame_buffer;
-	
+
 	return backend;
 }

@@ -6,37 +6,22 @@
 
 #include "backend.h"
 #include "backends/windows/windows_backend.h"
-
 #include "text.h"
+
 #include <stdio.h>
 
 int main(void) {
     TuimContext ctx;
-    tuim_init_context(&ctx);
     TuimBackend b = tuim_windows_backend();
-    b.init(b.data);
     ctx.backend = b;
-
-    TuimRect rect;
-    rect.x = 10;
-    rect.y = 2;
-
-    rect.width = 10;
-    rect.height = 10;
-
-    TuimRect rect1;
-    rect1.x = 20;
-    rect1.y = 6;
-
-    rect1.width = 13;
-    rect1.height = 5;
+    
+    tuim_init_context(&ctx);
 
     while (1) {
         tuim_begin_frame(&ctx);
-        tuim_set_rect_background_color(&ctx, TUIM_RED_STRUCT_INDEXED);
-        tuim_draw_rect(&ctx, rect);
-        tuim_set_rect_background_color(&ctx, TUIM_GREEN_STRUCT_INDEXED);
-        tuim_draw_rect(&ctx, rect1);
+
+        tuim_frame_buffer_print(&ctx.frame_buffer, "Hello, world!", 0, 0);
+        tuim_frame_buffer_print(&ctx.frame_buffer, "Hello, world!", 53, 15);
 
         Sleep(10);
 

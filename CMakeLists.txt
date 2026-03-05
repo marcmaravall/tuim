@@ -7,7 +7,7 @@ endif()
 
 project ("tuim")
 
-file(GLOB tuim_src "src/*.c" "src/backends/ansi/ansi_backend.c")
-add_executable(tuim ${tuim_src} "src/backends/windows/windows_backend.c")
+file(GLOB tuim_src "src/*.c" "src/backends/windows/windows_backend.c")
+add_executable(tuim ${tuim_src})
 
 target_include_directories (tuim PRIVATE include)
