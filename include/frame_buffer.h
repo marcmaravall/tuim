@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <assert.h>
+#include <stdbool.h>
+#include <math.h>
 
 #include "color.h"
 
@@ -36,7 +38,12 @@ typedef struct {
 
 void tuim_frame_buffer_init		(TuimFrameBuffer* state, const size_t width, const size_t height);
 void tuim_frame_buffer_clear	(TuimFrameBuffer* state);
+
 void tuim_frame_buffer_print	(TuimFrameBuffer* state, const char* msg, const size_t x, const size_t y);
-void tuim_frame_buffer_destroy	(TuimFrameBuffer* state);
+void tuim_frame_buffer_draw_line(TuimFrameBuffer* state, int x0, int y0, const int x1, const int y1);
+void tuim_frame_buffer_draw_rect(TuimFrameBuffer* state, const size_t x, const size_t y, const size_t width, const size_t height);
+void tuim_frame_buffer_draw_equation_line (TuimFrameBuffer* state, const double m, const double n);
+
+void tuim_frame_buffer_destroy(TuimFrameBuffer* state);
 
 #endif //TUIM_STATE_H

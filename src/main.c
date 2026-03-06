@@ -20,8 +20,9 @@ int main(void) {
     while (1) {
         tuim_begin_frame(&ctx);
 
-        tuim_frame_buffer_print(&ctx.frame_buffer, "Hello, world!", 0, 0);
-        tuim_frame_buffer_print(&ctx.frame_buffer, "Hello, world!", 53, 15);
+		tuim_frame_buffer_draw_equation_line(&ctx.frame_buffer, 0.2, 0);
+		tuim_frame_buffer_draw_rect(&ctx.frame_buffer, 52, 12, 20, 5);
+        tuim_frame_buffer_print(&ctx.frame_buffer, " Hello, world! ", 53, 15);
 
         Sleep(10);
 
