@@ -82,9 +82,11 @@ void tuim_windows_backend_pass_frame_buffer(void* backend_data, const TuimFrameB
 	size_t total = width * height;
 
 	for (size_t i = 0; i < total; i++) {
-		data->buffer[i].Char.AsciiChar = frame_buffer->cells[i].state;
+		TuimFrameBufferCell cell = frame_buffer->cells[i];
+		data->buffer[i].Char.AsciiChar = cell.ascii_char;
 
-		data->buffer[i].Attributes = FOREGROUND_GREEN;	// TODO: do with attributes conversion
+		data->buffer[i].Attributes = tuim_color_to_win32(cell.foreground_color)
+			| (tuim_color_to_win32(cell.background_color) << 4);
 	}
 }
 
@@ -137,6 +139,47 @@ static WORD tuim_color_to_win32(const TuimColor color) {
 	return win_color;
 }
 
+void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimInputState* input_state) {
+	assert(record);
+	assert(input_state);
+
+	if (record->EventType == KEY_EVENT) {
+		const KEY_EVENT_RECORD* key = &record->Event.KeyEvent;
+
+		size_t key_code = key->wVirtualKeyCode;
+
+		if (key_code < TUIM_KEY_COUNT) {
+			input_state->current[key_code] = key->bKeyDown;
+		}
+	}
+}
+
+void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input_state) {
+	assert(backend_data);
+	assert(input_state);
+
+	HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
+
+	DWORD events = 0;
+	GetNumberOfConsoleInputEvents(input, &events);
+
+	if (events == 0)
+		return;
+
+	INPUT_RECORD record;
+	DWORD read = 0;
+
+	while (events--) {
+		if (!ReadConsoleInput(input, &record, 1, &read))
+			break;
+
+		tuim_windows_backend_input_record_to_input_state(
+			&record,
+			input_state
+		);
+	}
+}
+
 TuimBackend tuim_windows_backend() {
 	TuimBackend backend;
 
@@ -157,6 +200,7 @@ TuimBackend tuim_windows_backend() {
 	backend.render = tuim_windows_backend_render;
 	backend.get_size = tuim_windows_backend_get_size;
 	backend.pass_frame_buffer = tuim_windows_backend_pass_frame_buffer;
+	backend.update_input = tuim_windows_backend_update_input;
 
 	return backend;
 }

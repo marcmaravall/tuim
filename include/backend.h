@@ -3,6 +3,7 @@
 
 #include "frame_buffer.h"
 #include "style.h"
+#include "input.h"
 
 typedef struct {
 	void (*init)	(void* data);
@@ -11,6 +12,8 @@ typedef struct {
 
 	void (*get_size)(void* data, size_t* x, size_t* y);
 	void (*pass_frame_buffer)(void* data, const TuimFrameBuffer* frame_buffer);
+
+	void (*update_input)(void* data, TuimInputState* input_state);
 
 	void* data;
 } TuimBackend;

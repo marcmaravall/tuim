@@ -10,22 +10,13 @@
 #include <math.h>
 
 #include "color.h"
+#include "style.h"
 
 typedef struct {
 	TuimColor foreground_color;
 	TuimColor background_color;
-	uint8_t text_attributes;
-	char state;
+	char ascii_char;
 } TuimFrameBufferCell;
-
-#define TUIM_TEXT_ATTR_BOLD				0x01
-#define TUIM_TEXT_ATTR_UNDERLINE		0x02
-#define TUIM_TEXT_ATTR_REVERSED			0x04
-#define TUIM_TEXT_ATTR_BLINK			0x08
-#define TUIM_TEXT_ATTR_DIM				0x10
-#define TUIM_TEXT_ATTR_HIDDEN			0x20
-#define TUIM_TEXT_ATTR_STRIKETHROUGH	0x40
-#define TUIM_TEXT_ATTR_ITALIC			0x80
 
 typedef struct {
 	size_t width;
@@ -33,17 +24,17 @@ typedef struct {
 	TuimFrameBufferCell* cells;
 } TuimFrameBuffer;
 
-#define TUIM_FRAME_BUFFER_AT(state, x, y) ((state)->cells[(y) * (state)->width + (x)])
-#define TUIM_FRAME_BUFFER_SET_AT(state, x, y, cell) (state)->cells[(y) * (state)->width + (x)] = (cell); \
+#define TUIM_FRAME_BUFFER_AT(fb, x, y) ((fb)->cells[(y) * (fb)->width + (x)])
+#define TUIM_FRAME_BUFFER_SET_AT(fb, x, y, cell) (fb)->cells[(y) * (fb)->width + (x)] = (cell);
 
-void tuim_frame_buffer_init		(TuimFrameBuffer* state, const size_t width, const size_t height);
-void tuim_frame_buffer_clear	(TuimFrameBuffer* state);
+void tuim_frame_buffer_init		(TuimFrameBuffer* ascii_char, const size_t width, const size_t height);
+void tuim_frame_buffer_clear	(const TuimStyle* const style, TuimFrameBuffer* ascii_char);
 
-void tuim_frame_buffer_print	(TuimFrameBuffer* state, const char* msg, const size_t x, const size_t y);
-void tuim_frame_buffer_draw_line(TuimFrameBuffer* state, int x0, int y0, const int x1, const int y1);
-void tuim_frame_buffer_draw_rect(TuimFrameBuffer* state, const size_t x, const size_t y, const size_t width, const size_t height);
-void tuim_frame_buffer_draw_equation_line (TuimFrameBuffer* state, const double m, const double n);
+void tuim_frame_buffer_print	 (const TuimStyle* style, TuimFrameBuffer* fb, const char* msg, const size_t x, const size_t y);
+void tuim_frame_buffer_draw_line (const TuimStyle* style, TuimFrameBuffer* fb, int x0, int y0, const int x1, const int y1);
+void tuim_frame_buffer_draw_rect (const TuimStyle* style, TuimFrameBuffer* fb, const size_t x, const size_t y, const size_t width, const size_t height);
+void tuim_frame_buffer_draw_equation_line (const TuimStyle* style, TuimFrameBuffer* fb, const double m, const double n);
 
-void tuim_frame_buffer_destroy(TuimFrameBuffer* state);
+void tuim_frame_buffer_destroy(TuimFrameBuffer* ascii_char);
 
 #endif //TUIM_STATE_H

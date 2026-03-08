@@ -5,7 +5,7 @@ void tuim_set_alginment(TuimContext* ctx, TuimAlgin al) {
 }
 
 void tuim_begin_frame(TuimContext* ctx) {
-	tuim_frame_buffer_clear(&ctx->frame_buffer);
+	tuim_frame_buffer_clear(&ctx->style, &ctx->frame_buffer);
 }
 
 void tuim_init_context(TuimContext* ctx) {
@@ -14,10 +14,11 @@ void tuim_init_context(TuimContext* ctx) {
 	size_t width, height;
 	ctx->backend.get_size(ctx->backend.data, &width, &height);
 
+	tuim_clear_input(&ctx->input_state);
 	tuim_frame_buffer_init(&ctx->frame_buffer, width, height);
 
 	ctx->algin = TUIM_ALGIN_DEFAULT;
-	ctx->style = tuim_style_set_default();
+	ctx->style = tuim_style_default();
 }
 
 void tuim_end_frame(TuimContext* ctx) {
@@ -27,19 +28,4 @@ void tuim_end_frame(TuimContext* ctx) {
 
 void tuim_destroy_context(TuimContext* ctx) {
 
-}
-
-void tuim_set_rect_background_color(TuimContext* ctx, TuimColor color) {
-	assert(ctx != NULL);
-	ctx->style.rect_background_color = color;
-}
-
-void tuim_set_background_color(TuimContext* ctx, TuimColor color) {
-	assert(ctx != NULL);
-	ctx->style.background_color = color;
-}
-
-void tuim_set_text_foreground_color(TuimContext* ctx, TuimColor color) {
-	assert(ctx != NULL);
-	ctx->style.text_foreground_color = color;
 }

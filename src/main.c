@@ -7,22 +7,37 @@
 #include "backend.h"
 #include "backends/windows/windows_backend.h"
 #include "text.h"
+#include "string_format.h"
 
 #include <stdio.h>
 
 int main(void) {
     TuimContext ctx;
-    TuimBackend b = tuim_windows_backend();
-    ctx.backend = b;
+    ctx.backend = tuim_windows_backend();
     
     tuim_init_context(&ctx);
-
+    
+    int x = 56;
+    int y = 12;
+    
     while (1) {
         tuim_begin_frame(&ctx);
+		tuim_update_input(&ctx);
 
-		tuim_frame_buffer_draw_equation_line(&ctx.frame_buffer, 0.2, 0);
-		tuim_frame_buffer_draw_rect(&ctx.frame_buffer, 52, 12, 20, 5);
-        tuim_frame_buffer_print(&ctx.frame_buffer, " Hello, world! ", 53, 15);
+        if (tuim_is_key_pressed(&ctx, 'W')) {
+            y--;
+        }
+        if (tuim_is_key_pressed(&ctx, 'A')) {
+            x--;
+        }
+        if (tuim_is_key_pressed(&ctx, 'S')) {
+            y++;
+        }
+        if (tuim_is_key_pressed(&ctx, 'D')) {
+            x++;
+        }
+
+        tuim_frame_buffer_draw_rect(&ctx.style, &ctx.frame_buffer, x, y, 5, 5);
 
         Sleep(10);
 

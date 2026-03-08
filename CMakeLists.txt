@@ -8,6 +8,6 @@ endif()
 project ("tuim")
 
 file(GLOB tuim_src "src/*.c" "src/backends/windows/windows_backend.c")
-add_executable(tuim ${tuim_src})
+add_executable(tuim ${tuim_src} "src/string_format.c" "src/input.c")
 
 target_include_directories (tuim PRIVATE include)
