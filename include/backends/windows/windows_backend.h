@@ -13,6 +13,7 @@
 #include <stdlib.h>
 
 #include "backend.h"
+#include "keyboard.h"
 
 typedef struct {
 	HWND   window;
@@ -31,10 +32,49 @@ void tuim_windows_backend_pass_frame_buffer(void* data, const TuimFrameBuffer* f
 void tuim_windows_backend_render(void* data);
 void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y);
 
-void tuim_windows_backend_update_input(void* data, TuimInputState* input_state);
-void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimInputState* input_state);
+void tuim_windows_backend_update_input(void* data, TuimKeyboardState* input_state);
+void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimKeyboardState* input_state);
 
 static WORD tuim_color_to_win32(const TuimColor color);
+
+static const TuimVirtualKey tuim_win32_vk_to_tuim[256] = {
+    [VK_UP] = TUIM_KEY_UP,
+    [VK_DOWN] = TUIM_KEY_DOWN,
+    [VK_LEFT] = TUIM_KEY_LEFT,
+    [VK_RIGHT] = TUIM_KEY_RIGHT,
+
+    [VK_ESCAPE] = TUIM_KEY_ESCAPE,
+
+    [VK_SHIFT] = TUIM_KEY_SHIFT,
+    [VK_CONTROL] = TUIM_KEY_CTRL,
+    [VK_MENU] = TUIM_KEY_ALT,
+
+    [VK_RETURN] = TUIM_KEY_ENTER,
+    [VK_BACK] = TUIM_KEY_BACKSPACE,
+    [VK_TAB] = TUIM_KEY_TAB,
+    [VK_DELETE] = TUIM_KEY_DELETE,
+    [VK_INSERT] = TUIM_KEY_INSERT,
+
+    [VK_HOME] = TUIM_KEY_HOME,
+    [VK_END] = TUIM_KEY_END,
+    [VK_PRIOR] = TUIM_KEY_PAGEUP,
+    [VK_NEXT] = TUIM_KEY_PAGEDOWN,
+
+    [VK_F1] = TUIM_KEY_F1,
+    [VK_F2] = TUIM_KEY_F2,
+    [VK_F3] = TUIM_KEY_F3,
+    [VK_F4] = TUIM_KEY_F4,
+    [VK_F5] = TUIM_KEY_F5,
+    [VK_F6] = TUIM_KEY_F6,
+    [VK_F7] = TUIM_KEY_F7,
+    [VK_F8] = TUIM_KEY_F8,
+    [VK_F9] = TUIM_KEY_F9,
+    [VK_F10] = TUIM_KEY_F10,
+    [VK_F11] = TUIM_KEY_F11,
+    [VK_F12] = TUIM_KEY_F12,
+};
+
+TuimVirtualKey tuim_windows_backend_win32_to_virtual_key(const uint8_t key);
 
 TuimBackend tuim_windows_backend();
 

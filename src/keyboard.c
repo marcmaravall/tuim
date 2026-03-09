@@ -1,7 +1,7 @@
-#include "input.h"
+#include "keyboard.h"
 #include "context.h"
 
-void tuim_clear_input(TuimInputState* state) {
+void tuim_clear_input(TuimKeyboardState* state) {
 	for (size_t i = 0; i < TUIM_KEY_COUNT; i++) {
 		state->current[i] = false;
 		state->last[i]    = false;

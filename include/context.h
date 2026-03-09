@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "input.h"
+#include "keyboard.h"
 #include "backend.h"
 
 typedef enum {
@@ -37,7 +37,7 @@ typedef struct TuimContext {
 	TuimStyle style;
 
 	TuimBackend backend;
-	TuimInputState input_state;
+	TuimKeyboardState input_state;
 
 } TuimContext;
 

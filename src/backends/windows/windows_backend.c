@@ -8,11 +8,18 @@ void tuim_windows_backend_init(void* backend_data) {
 	data->handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	data->current_attributes = 0x07;
 
-	DWORD dwMode = 0;
-	if (data->handle == INVALID_HANDLE_VALUE)
+	HWND input_handle = GetStdHandle(STD_INPUT_HANDLE);
+	DWORD mode = 0;
+	if (input_handle == INVALID_HANDLE_VALUE)
 		return;
-	if (!GetConsoleMode(data->handle, &dwMode))
+	if (!GetConsoleMode(data->handle, &mode))
 		return;
+
+	mode |= ENABLE_EXTENDED_FLAGS;
+	mode |= ENABLE_MOUSE_INPUT;
+	mode &= ~ENABLE_QUICK_EDIT_MODE;
+
+	SetConsoleMode(input_handle, mode);
 
 	// remove resize:
 	LONG style = GetWindowLong(data->window, GWL_STYLE);
@@ -105,6 +112,7 @@ void tuim_windows_backend_render(void* backend_data) {
 	);
 }
 
+// TODO: do with table:
 static WORD tuim_color_to_win32(const TuimColor color) {
 	WORD win_color = 0;
 	if (color.type == TUIM_COLOR_TYPE_INDEXED) {
@@ -139,7 +147,7 @@ static WORD tuim_color_to_win32(const TuimColor color) {
 	return win_color;
 }
 
-void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimInputState* input_state) {
+void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimKeyboardState* input_state) {
 	assert(record);
 	assert(input_state);
 
@@ -147,14 +155,25 @@ void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record
 		const KEY_EVENT_RECORD* key = &record->Event.KeyEvent;
 
 		size_t key_code = key->wVirtualKeyCode;
+		size_t to_tuim = tuim_windows_backend_win32_to_virtual_key(key_code);
 
-		if (key_code < TUIM_KEY_COUNT) {
+		if (to_tuim != TUIM_KEY_UNKNOWN && key_code < TUIM_KEY_COUNT) {
+			input_state->current[to_tuim] = key->bKeyDown;
+		}
+		else if (key_code < TUIM_KEY_COUNT) {
 			input_state->current[key_code] = key->bKeyDown;
 		}
 	}
 }
 
-void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input_state) {
+TuimVirtualKey tuim_windows_backend_win32_to_virtual_key(const uint8_t key) {
+	if (key < 256)
+		return tuim_win32_vk_to_tuim[key];
+
+	return TUIM_KEY_UNKNOWN;
+}
+
+void tuim_windows_backend_update_input(void* backend_data, TuimKeyboardState* input_state) {
 	assert(backend_data);
 	assert(input_state);
 
@@ -170,8 +189,11 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 	DWORD read = 0;
 
 	while (events--) {
-		if (!ReadConsoleInput(input, &record, 1, &read))
-			break;
+		ReadConsoleInput(input, &record, 1, &read);
+
+		if (record.EventType == MOUSE_EVENT) {
+
+		}
 
 		tuim_windows_backend_input_record_to_input_state(
 			&record,
