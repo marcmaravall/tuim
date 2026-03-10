@@ -10,6 +10,7 @@ typedef struct {
 	TuimMouseState mouse_state;
 } TuimInputState;
 
+void tuim_clear_input(TuimInputState* state);
 void tuim_update_input(TuimContext* ctx);
 
 #endif // TUIM_INPUT_H

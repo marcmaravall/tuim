@@ -81,8 +81,6 @@ typedef struct {
 	bool current [TUIM_KEY_COUNT];
 } TuimKeyboardState;
 
-void tuim_clear_input(TuimKeyboardState* state);
-
 typedef struct TuimContext TuimContext;
 
 bool tuim_is_key_down	  (const TuimContext* ctx, const size_t key_code);

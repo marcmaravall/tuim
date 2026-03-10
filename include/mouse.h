@@ -5,16 +5,21 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define TUIM_MOUSE_BUTTON_LEFT 0x01
-#define TUIM_MOUSE_BUTTON_RIGHT 0x02
+#define TUIM_MOUSE_BUTTON_LEFT	 0x01
+#define TUIM_MOUSE_BUTTON_RIGHT  0x02
 #define TUIM_MOUSE_BUTTON_MIDDLE 0x04
 
 typedef struct {
+	int mouse_x;
+	int mouse_y;
+
 	uint8_t previous;
 	uint8_t current;
 } TuimMouseState;
 
 typedef struct TuimContext TuimContext;
+
+void tuim_get_mouse_position(const TuimContext* state, int* x, int* y);
 
 void tuim_clear_mouse_state(TuimMouseState* state);
 void tuim_update_mouse_state (TuimMouseState* state);

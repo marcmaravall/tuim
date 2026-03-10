@@ -1,6 +1,12 @@
 #include "mouse.h"
 #include "context.h"
 
+void tuim_get_mouse_position(const TuimContext* state, int* x, int* y) {
+    assert(state);
+    *x = state->input_state.mouse_state.mouse_x;
+    *y = state->input_state.mouse_state.mouse_y;
+}
+
 void tuim_update_mouse_state(TuimMouseState* state) {
 	assert(state);
 	state->previous = state->current;

@@ -20,10 +20,14 @@ int main(void) {
     
     int x = 56;
     int y = 12;
+
+	int mouse_x = 0, mouse_y = 0;
     
     while (1) {
         tuim_begin_frame(&ctx);
 		tuim_update_input(&ctx);
+
+		tuim_get_mouse_position(&ctx, &mouse_x, &mouse_y);
 
         if (tuim_is_key_pressed(&ctx, TUIM_KEY_UP)) {
             y--;
@@ -46,7 +50,10 @@ int main(void) {
             x++;
         }
 
-        tuim_frame_buffer_draw_rect(&ctx.style, &ctx.frame_buffer, x, y, 5, 5);
+        // print mouse position:
+        char mouse_pos_str[64];
+        snprintf(mouse_pos_str, 64, "Mouse: %d:%d", mouse_x, mouse_y);
+        tuim_frame_buffer_print(&ctx.style, &ctx.frame_buffer, mouse_pos_str, mouse_x, mouse_y);
 
         Sleep(10);
 

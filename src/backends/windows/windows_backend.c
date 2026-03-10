@@ -192,6 +192,13 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 		ReadConsoleInput(input, &record, 1, &read);
 
 		if (record.EventType == MOUSE_EVENT) {
+			MOUSE_EVENT_RECORD mouse = record.Event.MouseEvent;
+
+			COORD pos = mouse.dwMousePosition;
+
+			input_state->mouse_state.mouse_x = pos.X;
+			input_state->mouse_state.mouse_y = pos.Y;
+
 			if (record.Event.MouseEvent.dwEventFlags == 0) {
 				if (record.Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED) {
 					input_state->mouse_state.current |= TUIM_MOUSE_BUTTON_LEFT;
@@ -222,7 +229,9 @@ TuimBackend tuim_windows_backend() {
 	TuimBackend backend;
 
 	TuimWindowsBackendData* data = malloc(sizeof(TuimWindowsBackendData));
-	if (!data) return backend;
+	
+	if (!data) 
+		return backend;
 
 	data->buffer = NULL;
 	data->buffer_size.X = 0;
