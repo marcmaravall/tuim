@@ -85,8 +85,6 @@ void tuim_clear_input(TuimKeyboardState* state);
 
 typedef struct TuimContext TuimContext;
 
-void tuim_update_input(TuimContext* ctx);
-
 bool tuim_is_key_down	  (const TuimContext* ctx, const size_t key_code);
 bool tuim_is_key_pressed  (const TuimContext* ctx, const size_t key_code);
 bool tuim_is_key_up       (const TuimContext* ctx, const size_t key_code);

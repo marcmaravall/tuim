@@ -173,7 +173,7 @@ TuimVirtualKey tuim_windows_backend_win32_to_virtual_key(const uint8_t key) {
 	return TUIM_KEY_UNKNOWN;
 }
 
-void tuim_windows_backend_update_input(void* backend_data, TuimKeyboardState* input_state) {
+void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input_state) {
 	assert(backend_data);
 	assert(input_state);
 
@@ -192,12 +192,28 @@ void tuim_windows_backend_update_input(void* backend_data, TuimKeyboardState* in
 		ReadConsoleInput(input, &record, 1, &read);
 
 		if (record.EventType == MOUSE_EVENT) {
-
+			if (record.Event.MouseEvent.dwEventFlags == 0) {
+				if (record.Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED) {
+					input_state->mouse_state.current |= TUIM_MOUSE_BUTTON_LEFT;
+				} else {
+					input_state->mouse_state.current &= ~TUIM_MOUSE_BUTTON_LEFT;
+				}
+				if (record.Event.MouseEvent.dwButtonState & RIGHTMOST_BUTTON_PRESSED) {
+					input_state->mouse_state.current |= TUIM_MOUSE_BUTTON_RIGHT;
+				} else {
+					input_state->mouse_state.current &= ~TUIM_MOUSE_BUTTON_RIGHT;
+				}
+				if (record.Event.MouseEvent.dwButtonState & FROM_LEFT_2ND_BUTTON_PRESSED) {
+					input_state->mouse_state.current |= TUIM_MOUSE_BUTTON_MIDDLE;
+				} else {
+					input_state->mouse_state.current &= ~TUIM_MOUSE_BUTTON_MIDDLE;
+				}
+			}
 		}
 
 		tuim_windows_backend_input_record_to_input_state(
 			&record,
-			input_state
+			&input_state->keyboard_state
 		);
 	}
 }

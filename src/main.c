@@ -3,6 +3,7 @@
 #include "tuim.h"
 #include "context.h"
 #include "rect.h"
+#include "input.h"
 
 #include "backend.h"
 #include "backends/windows/windows_backend.h"
@@ -39,6 +40,10 @@ int main(void) {
 
         if (tuim_is_key_down(&ctx, TUIM_KEY_ESCAPE)) {
             break;
+        }
+
+        if (tuim_is_mouse_button_pressed(&ctx, TUIM_MOUSE_BUTTON_RIGHT)) {
+            x++;
         }
 
         tuim_frame_buffer_draw_rect(&ctx.style, &ctx.frame_buffer, x, y, 5, 5);

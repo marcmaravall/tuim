@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 #include "backend.h"
-#include "keyboard.h"
+#include "input.h"
 
 typedef struct {
 	HWND   window;
@@ -33,7 +33,7 @@ void tuim_windows_backend_render(void* data);
 void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y);
 
 void tuim_windows_backend_update_input(void* data, TuimKeyboardState* input_state);
-void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimKeyboardState* input_state);
+void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimInputState* input_state);
 
 static WORD tuim_color_to_win32(const TuimColor color);
 
