@@ -8,5 +8,6 @@
 #include "text.h"
 #include "backend.h"
 #include "rect.h"
+#include "input.h"
 
 #endif //TUIM_H

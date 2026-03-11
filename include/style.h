@@ -19,6 +19,7 @@ typedef struct TuimStyle {
 } TuimStyle;
 
 TuimStyle tuim_style_default();
+TuimStyle tuim_style_default_dark();
 
 typedef struct TuimContext TuimContext;
 
