@@ -3,7 +3,6 @@
 
 #include "frame_buffer.h"
 #include "style.h"
-#include "input.h"
 
 typedef struct {
 	void (*init)	(void* data);

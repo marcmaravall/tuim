@@ -1,7 +1,9 @@
 #ifndef TUIM_MOUSE_INPUT_H
 #define TUIM_MOUSE_INPUT_H
 
-#include <assert.h>s
+#include "rect.h"
+
+#include <assert.h>
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -23,6 +25,8 @@ void tuim_get_mouse_position(const TuimContext* state, int* x, int* y);
 
 void tuim_clear_mouse_state(TuimMouseState* state);
 void tuim_update_mouse_state (TuimMouseState* state);
+
+bool tuim_is_mouse_inside(const TuimMouseState* state, const TuimRect area);
 
 bool tuim_is_mouse_button_down		(const TuimContext* state, const size_t button);
 bool tuim_is_mouse_button_pressed	(const TuimContext* state, const size_t button);

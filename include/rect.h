@@ -26,4 +26,4 @@ bool tuim_rect_overlaps_p(int x1, int y1, int w1, int h1, int x2, int y2, int w2
 
 TuimRect tuim_rect_lerp(TuimRect r1, TuimRect r2, float t);
 
-#endif //TUIM_RECT_H
+#endif // TUIM_RECT_H

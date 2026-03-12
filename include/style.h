@@ -7,6 +7,8 @@
 #include "color.h"
 
 typedef struct TuimStyle {
+    TuimColor window_background_color;
+
     TuimColor rect_background_color;
     TuimColor rect_foreground_color;
 
@@ -14,7 +16,6 @@ typedef struct TuimStyle {
     TuimColor text_foreground_color;
 
     TuimColor line_color;
-
     TuimColor clear_color;
 } TuimStyle;
 

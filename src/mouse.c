@@ -1,5 +1,12 @@
 #include "mouse.h"
-#include "context.h"
+
+bool tuim_is_mouse_inside(const TuimMouseState* state, const TuimRect area) {
+    if (state->mouse_x < area.x || state->mouse_y < state->mouse_y ||
+        state->mouse_x > area.x + area.width || state->mouse_y > area.y + area.height)
+        return false;
+
+    return true;
+}
 
 void tuim_get_mouse_position(const TuimContext* state, int* x, int* y) {
     assert(state);

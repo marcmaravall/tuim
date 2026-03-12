@@ -4,6 +4,7 @@
 TuimStyle tuim_style_default() {
 	TuimStyle style;
 
+	style.window_background_color = TUIM_BLACK_STRUCT_INDEXED;
 	style.line_color = TUIM_WHITE_STRUCT_INDEXED;
 	style.rect_background_color = TUIM_BLUE_STRUCT_INDEXED;
 	style.rect_foreground_color = TUIM_WHITE_STRUCT_INDEXED;
@@ -16,6 +17,7 @@ TuimStyle tuim_style_default() {
 
 TuimStyle tuim_style_default_dark() {
 	TuimStyle style;
+	style.window_background_color = TUIM_BLACK_STRUCT_INDEXED;
 	style.line_color = TUIM_WHITE_STRUCT_INDEXED;
 	style.rect_background_color = TUIM_BLACK_STRUCT_INDEXED;
 	style.rect_foreground_color = TUIM_WHITE_STRUCT_INDEXED;

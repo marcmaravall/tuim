@@ -21,8 +21,6 @@ void tuim_frame_buffer_clear(const TuimStyle* const style, TuimFrameBuffer* asci
 void tuim_frame_buffer_print(const TuimStyle* style, TuimFrameBuffer* fb, const char* msg, const size_t x, const size_t y) {
 	assert(fb != NULL);
 	assert(msg != NULL);
-	// assert(x < fb->width);
-	// assert(y < fb->height);
 	
 	if (x >= fb->width || y >= fb->height) {
 		return;

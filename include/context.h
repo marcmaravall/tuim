@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "input.h"
 #include "backend.h"
 
 typedef enum {
@@ -17,7 +16,7 @@ typedef enum {
 #define TUIM_ALGIN_DEFAULT TUIM_LEFT
 
 // TODO: implement
-typedef struct TuimFrameContext {
+typedef struct {
 	int frame_index;
 
 	int cursor_x;
