@@ -5,26 +5,31 @@
 
 int main(void) {
     TuimContext ctx;
-    tuim_init_context(&ctx);
     ctx.backend = tuim_windows_backend();
+    tuim_init_context(&ctx);
     
     tuim_init_context(&ctx);
 	ctx.style = tuim_style_default_dark();
     
-    TuimWidget example;
+    TuimWidget example = tuim_default_widget();
+    example.title = "This is an example window!";
     example.rect.x = 0;
     example.rect.y = 0;
-    example.rect.width  = 20;
-    example.rect.height = 5;
-    example.flags = 0;
-    example.id = 69;
+
+    TuimWidget example1 = tuim_default_widget();
+    example1.title = "This is another example";
+    example1.rect.x = 60;
+    example1.rect.y = 12;
 
     while (1) {
 		tuim_begin_frame(&ctx);
 		tuim_update_input(&ctx);
 
-        tuim_widget_draw(&example, &ctx.frame_buffer);
-        tuim_widget_update(&example, &ctx.input_state.mouse_state);
+        tuim_widget_draw(&ctx, &example);
+        tuim_widget_update(&ctx, &example);
+
+        tuim_widget_draw(&ctx, &example1);
+        tuim_widget_update(&ctx, &example1);
 
 		tuim_end_frame(&ctx);
     }

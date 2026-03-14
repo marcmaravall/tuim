@@ -4,6 +4,8 @@
 #include "keyboard.h"
 #include "mouse.h"
 
+typedef struct TuimContext TuimContext;
+
 typedef struct {
 	TuimKeyboardState keyboard_state;
 	TuimMouseState mouse_state;

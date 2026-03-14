@@ -5,13 +5,17 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "context.h"
-
 typedef struct {
-	int x;
-	int y;
-	int width;
-	int height;
+	union {
+		struct {
+			int x;
+			int y;
+			int width;
+			int height;
+		};
+
+		char raw[16];
+	};
 } TuimRect;
 
 #define TUIM_RECT_AREA(x) (x.width*x.height)
@@ -25,5 +29,9 @@ bool tuim_rect_overlaps(const TuimRect* r1, const TuimRect* r2);
 bool tuim_rect_overlaps_p(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2);
 
 TuimRect tuim_rect_lerp(TuimRect r1, TuimRect r2, float t);
+
+typedef struct TuimContext TuimContext;
+
+void tuim_rect_draw(const TuimContext* ctx, const TuimRect rect);
 
 #endif // TUIM_RECT_H

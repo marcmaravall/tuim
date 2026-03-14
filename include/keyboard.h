@@ -84,7 +84,7 @@ typedef struct {
 typedef struct TuimContext TuimContext;
 
 bool tuim_is_key_down	  (const TuimContext* ctx, const size_t key_code);
-bool tuim_is_key_pressed  (const TuimContext* ctx, const size_t key_code);
+bool tuim_is_key          (const TuimContext* ctx, const size_t key_code);
 bool tuim_is_key_up       (const TuimContext* ctx, const size_t key_code);
 
 #endif // TUIM_KEYBOARD_H

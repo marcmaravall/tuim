@@ -1,4 +1,5 @@
 #include "mouse.h"
+#include "context.h"
 
 bool tuim_is_mouse_inside(const TuimMouseState* state, const TuimRect area) {
     if (state->mouse_x < area.x || state->mouse_y < state->mouse_y ||
@@ -31,7 +32,7 @@ bool tuim_is_mouse_button_down(const TuimContext* state, const size_t button) {
         !(state->input_state.mouse_state.previous & button);
 }
 
-bool tuim_is_mouse_button_pressed(const TuimContext* state, const size_t button) {
+bool tuim_is_mouse_button(const TuimContext* state, const size_t button) {
     assert(state);
     return (state->input_state.mouse_state.current & button);
 }

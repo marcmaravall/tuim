@@ -32,7 +32,7 @@ void tuim_frame_buffer_clear	(const TuimStyle* const style, TuimFrameBuffer* asc
 
 void tuim_frame_buffer_print	 (const TuimStyle* style, TuimFrameBuffer* fb, const char* msg, const size_t x, const size_t y);
 void tuim_frame_buffer_draw_line (const TuimStyle* style, TuimFrameBuffer* fb, int x0, int y0, const int x1, const int y1);
-void tuim_frame_buffer_draw_rect (const TuimStyle* style, TuimFrameBuffer* fb, const size_t x, const size_t y, const size_t width, const size_t height);
+void tuim_frame_buffer_draw_rect (const TuimStyle* style, TuimFrameBuffer* fb, const int x, const int y, const int width, const int height);
 void tuim_frame_buffer_draw_equation_line (const TuimStyle* style, TuimFrameBuffer* fb, const double m, const double n);
 
 void tuim_frame_buffer_destroy(TuimFrameBuffer* ascii_char);

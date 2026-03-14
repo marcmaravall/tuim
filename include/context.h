@@ -6,6 +6,7 @@
 #include <stdbool.h>
 
 #include "backend.h"
+#include "frame_buffer.h"
 
 typedef enum {
 	TUIM_LEFT,

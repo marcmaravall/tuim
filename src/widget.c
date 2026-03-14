@@ -1,24 +1,127 @@
 #include "widget.h"
 
-void tuim_widget_begin(TuimWidget* widget, const char* title) {
-	widget->name = title;
+TuimWidget tuim_default_widget() {
+	TuimWidget w;
+	w.drag_offset_x = -1;
+	w.drag_offset_y = -1;
+	w.is_dragging = false;
+	w.is_resizing = false;
+
+	w.rect.x = 0;
+	w.rect.y = 0;
+	w.rect.width  = TUIM_WIDGET_DEFAULT_WIDTH;
+	w.rect.height = TUIM_WIDGET_DEFAULT_HEIGHT;
+
+	w.start_mouse_resize_x = -1;
+	w.start_mouse_resize_y = -1;
+
+	return w;
 }
 
-void tuim_widget_draw(TuimWidget* widget, const TuimFrameBuffer* fb) {
-	assert(widget);
-	assert(fb);
-}
+// TODO: use less malloc and shit for speed
+// TODO: use TuimWidgetStyle for custom window styles
+void tuim_widget_draw(TuimContext* ctx, TuimWidget* widget) {
+	assert(ctx && widget);
+	assert(widget->title);
 
-void tuim_widget_update(TuimWidget* widget, const TuimInputState* state) {
-	assert(state);
-	assert(widget);
+	const size_t title_size = strlen(widget->title);
+	char* title_to_render;
 
-	if (tuim_is_mouse_inside(widget, state->mouse_state) && state->mouse_state.current) {
-		widget->rect.x = state->mouse_state.mouse_x;
-		widget->rect.y = state->mouse_state.mouse_y;
+	if (title_size > widget->rect.width) {
+		title_to_render = malloc(widget->rect.width + 1);
+		assert(title_to_render);
+
+		strncpy(title_to_render, widget->title, widget->rect.width);
+
+		size_t from = widget->rect.width - 3;
+		for (size_t i = from; i < widget->rect.width; ++i) {
+			title_to_render[i] = '.';
+		}
+
+		title_to_render[widget->rect.width] = '\0';
+
+		assert(title_to_render);
 	}
+	else {
+		title_to_render = widget->title;
+	}
+
+	tuim_rect_draw(ctx, widget->rect);
+	
+	const int x0 = widget->rect.x;
+	const int y0 = widget->rect.y;
+	const int x1 = widget->rect.x + widget->rect.width - 1;
+	const int y1 = widget->rect.y + widget->rect.height-1;
+	
+	tuim_frame_buffer_draw_line (
+		&ctx->style, &ctx->frame_buffer, 
+		x1, y0, x1, y1
+	);
+
+	tuim_frame_buffer_draw_line (
+		&ctx->style, &ctx->frame_buffer,
+		x0, y0, x1, y0
+	);
+
+	tuim_frame_buffer_print (
+		&ctx->style, &ctx->frame_buffer,
+		title_to_render, widget->rect.x, widget->rect.y
+	);
 }
 
-void tuim_widget_end(TuimWidget* widget) {
+void tuim_widget_update(TuimContext* ctx, TuimWidget* widget) {
+	assert(ctx && widget);
 
+	int mouse_x, mouse_y;
+	tuim_get_mouse_position(ctx, &mouse_x, &mouse_y);
+
+	bool mouse_inside = tuim_is_mouse_inside(&ctx->input_state.mouse_state, widget->rect);
+
+	bool left_down = tuim_is_mouse_button_down(ctx, TUIM_MOUSE_BUTTON_LEFT);
+	bool left_pressed = tuim_is_mouse_button(ctx, TUIM_MOUSE_BUTTON_LEFT);
+	bool left_released = tuim_is_mouse_button_up(ctx, TUIM_MOUSE_BUTTON_LEFT);
+
+	int right = widget->rect.x + widget->rect.width - 1;
+	int bottom = widget->rect.y + widget->rect.height - 1;
+
+	bool on_resize_corner = (mouse_x == right && mouse_y == bottom);
+
+	// start action
+	if (left_down && mouse_inside) {
+
+		if (on_resize_corner) {
+			widget->is_resizing = true;
+			widget->is_dragging = false;
+
+			widget->start_mouse_resize_x = mouse_x;
+			widget->start_mouse_resize_y = mouse_y;
+		}
+		else {
+			widget->is_dragging = true;
+			widget->is_resizing = false;
+
+			widget->drag_offset_x = mouse_x - widget->rect.x;
+			widget->drag_offset_y = mouse_y - widget->rect.y;
+		}
+	}
+
+	if (left_released) {
+		widget->is_dragging = false;
+		widget->is_resizing = false;
+	}
+
+	// dragging 
+	if (widget->is_dragging && left_pressed) {
+		widget->rect.x = mouse_x - widget->drag_offset_x;
+		widget->rect.y = mouse_y - widget->drag_offset_y;
+	}
+
+	// resizing
+	else if (widget->is_resizing && left_pressed) {
+		int new_w = mouse_x - widget->rect.x + 1;
+		int new_h = mouse_y - widget->rect.y + 1;
+
+		widget->rect.width = max(1, new_w);
+		widget->rect.height = max(1, new_h);
+	}
 }

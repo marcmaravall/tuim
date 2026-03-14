@@ -88,7 +88,8 @@ void tuim_frame_buffer_draw_equation_line(const TuimStyle* style, TuimFrameBuffe
 	}
 }
 
-void tuim_frame_buffer_draw_rect(const TuimStyle* style, TuimFrameBuffer* fb, const size_t x, const size_t y, const size_t width, const size_t height) {
+// TODO: solve negative x and y not drawing
+void tuim_frame_buffer_draw_rect(const TuimStyle* style, TuimFrameBuffer* fb, const int x, const int y, const int width, const int height) {
 	assert(fb != NULL);
 
 	for (size_t j = y; j < y + height; j++) {
@@ -96,6 +97,7 @@ void tuim_frame_buffer_draw_rect(const TuimStyle* style, TuimFrameBuffer* fb, co
 			if (i >= fb->width || j >= fb->height) {
 				continue;
 			}
+
 			TUIM_FRAME_BUFFER_AT(fb, i, j).background_color = style->rect_background_color;
 			TUIM_FRAME_BUFFER_AT(fb, i, j).foreground_color = style->rect_foreground_color;
 			TUIM_FRAME_BUFFER_AT(fb, i, j).ascii_char = ' ';
