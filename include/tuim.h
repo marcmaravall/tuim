@@ -7,7 +7,7 @@
 #include "style.h"
 #include "rect.h"
 #include "text.h"
-#include "widget.h"
+#include "window.h"
 #include "color.h"
 
 #endif //TUIM_H

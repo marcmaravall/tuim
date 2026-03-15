@@ -1,16 +1,18 @@
 #include "text.h"
 
-void tuim_draw_text(TuimContext* context, char* msg) {
-	/*context->backend.set_foreground_color(
-		context->backend.data, 
-		context->style.text_foreground_color
-	);
+TuimText tuim_default_text() {
+	TuimText text;
 
-	context->backend.set_background_color(
-		context->backend.data,
-		context->style.background_color
-	);
+	text.background = TUIM_BLACK_STRUCT_INDEXED;
+	text.foreground = TUIM_WHITE_STRUCT_INDEXED;
 
-	context->backend.render_text(context->backend.data, msg);
-	*/
+	return text;
+}
+
+void tuim_draw_text(TuimContext* ctx, const TuimText text) {
+	assert(ctx);
+
+	tuim_frame_buffer_print_color (
+		&ctx->style, text.foreground, text.background, text.text, 0, 0
+	);
 }

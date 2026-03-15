@@ -38,6 +38,7 @@ typedef struct {
             uint8_t green;
             uint8_t blue;
         } rgb_color;
+        int raw;
     };
     TuimColorType type;
 } TuimColor;

@@ -1,7 +1,7 @@
-#include "widget.h"
+#include "window.h"
 
-TuimWidget tuim_default_widget() {
-	TuimWidget w;
+TuimWindow tuim_default_window() {
+	TuimWindow w;
 	w.drag_offset_x = -1;
 	w.drag_offset_y = -1;
 	w.is_dragging = false;
@@ -9,18 +9,22 @@ TuimWidget tuim_default_widget() {
 
 	w.rect.x = 0;
 	w.rect.y = 0;
-	w.rect.width  = TUIM_WIDGET_DEFAULT_WIDTH;
-	w.rect.height = TUIM_WIDGET_DEFAULT_HEIGHT;
+	w.rect.width  = TUIM_WINDOW_DEFAULT_WIDTH;
+	w.rect.height = TUIM_WINDOW_DEFAULT_HEIGHT;
 
 	w.start_mouse_resize_x = -1;
 	w.start_mouse_resize_y = -1;
 
+	w.border_color = TUIM_BRIGHT_BLUE_STRUCT_INDEXED;
+	w.title_bar_color = TUIM_BLUE_STRUCT_INDEXED;
+	w.title_color = TUIM_WHITE_STRUCT_INDEXED;
+	w.background = TUIM_BLACK_STRUCT_INDEXED;
+
 	return w;
 }
 
-// TODO: use less malloc and shit for speed
-// TODO: use TuimWidgetStyle for custom window styles
-void tuim_widget_draw(TuimContext* ctx, TuimWidget* widget) {
+// TODO: use less malloc and shit 
+void tuim_window_draw(TuimContext* ctx, TuimWindow* widget) {
 	assert(ctx && widget);
 	assert(widget->title);
 
@@ -46,30 +50,38 @@ void tuim_widget_draw(TuimContext* ctx, TuimWidget* widget) {
 		title_to_render = widget->title;
 	}
 
-	tuim_rect_draw(ctx, widget->rect);
-	
 	const int x0 = widget->rect.x;
 	const int y0 = widget->rect.y;
 	const int x1 = widget->rect.x + widget->rect.width - 1;
 	const int y1 = widget->rect.y + widget->rect.height-1;
+
+	tuim_frame_buffer_draw_rect_color(
+		&ctx->frame_buffer, widget->background, x0, y0, 
+		widget->rect.width, widget->rect.height
+	);
 	
-	tuim_frame_buffer_draw_line (
-		&ctx->style, &ctx->frame_buffer, 
+	tuim_frame_buffer_draw_line_color (
+		&ctx->frame_buffer, widget->border_color,
 		x1, y0, x1, y1
 	);
 
-	tuim_frame_buffer_draw_line (
-		&ctx->style, &ctx->frame_buffer,
+	tuim_frame_buffer_draw_line_color(
+		&ctx->frame_buffer, widget->border_color,
+		x0, y1, x1, y1
+	);
+
+	tuim_frame_buffer_draw_line_color (
+		&ctx->frame_buffer, widget->title_bar_color,
 		x0, y0, x1, y0
 	);
 
-	tuim_frame_buffer_print (
-		&ctx->style, &ctx->frame_buffer,
+	tuim_frame_buffer_print_color (
+		&ctx->frame_buffer, widget->title_color, widget->title_bar_color,
 		title_to_render, widget->rect.x, widget->rect.y
 	);
 }
 
-void tuim_widget_update(TuimContext* ctx, TuimWidget* widget) {
+void tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 	assert(ctx && widget);
 
 	int mouse_x, mouse_y;
@@ -124,4 +136,12 @@ void tuim_widget_update(TuimContext* ctx, TuimWidget* widget) {
 		widget->rect.width = max(1, new_w);
 		widget->rect.height = max(1, new_h);
 	}
+}
+
+bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* widget) {
+	assert(ctx && widget);
+
+	if (widget->is_dragging || widget->is_resizing)
+		return true;
+	return false;
 }
