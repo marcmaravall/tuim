@@ -1,2 +1,7 @@
 # TODO: 
 
+- Change TuimColor to enum because it sucks with rgb and enum combined.
+- Create a window manager struct that holds all the windows and their z-indexes.
+- Implement buttons.
+
+# continue

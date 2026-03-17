@@ -9,10 +9,10 @@ TuimText tuim_default_text() {
 	return text;
 }
 
-void tuim_draw_text(TuimContext* ctx, const TuimText text) {
+void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
 	assert(ctx);
 
-	tuim_frame_buffer_print_color (
-		&ctx->style, text.foreground, text.background, text.text, 0, 0
+	tuim_frame_buffer_print (
+		&ctx->frame_buffer, text->foreground, text->background, text->text, text->x, text->y
 	);
 }

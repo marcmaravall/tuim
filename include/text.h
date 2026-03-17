@@ -11,13 +11,16 @@ typedef struct {
 	TuimColor foreground;
 	TuimColor background;
 
-	TuimRect area;	// TODO: do width rect
+	// TuimRect area;	// TODO: do width rect
 	// if you dont undestand a shit fuch you from the past
+
+	int x;
+	int y;
 
 	char* text;
 } TuimText;
 
 TuimText tuim_default_text();
-void tuim_draw_text(TuimContext* ctx, const TuimText text);
+void tuim_draw_text(TuimContext* ctx, const TuimText* text);
 
 #endif //TUIM_TEXT_H

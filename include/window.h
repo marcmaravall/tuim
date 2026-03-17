@@ -47,7 +47,7 @@ typedef struct {
 TuimWindow tuim_default_window();
 
 void tuim_window_draw  (TuimContext* ctx, TuimWindow* widget);
-void tuim_window_update(TuimContext* ctx, TuimWindow* widget);
+int tuim_window_update(TuimContext* ctx, TuimWindow* widget);
 bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* widget);
 
 #endif // TUIM_WIDGET_H

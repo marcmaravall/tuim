@@ -32,6 +32,4 @@ TuimRect tuim_rect_lerp(TuimRect r1, TuimRect r2, float t);
 
 typedef struct TuimContext TuimContext;
 
-void tuim_rect_draw(const TuimContext* ctx, const TuimRect rect);
-
 #endif // TUIM_RECT_H

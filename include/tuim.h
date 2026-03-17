@@ -7,6 +7,7 @@
 #include "style.h"
 #include "rect.h"
 #include "text.h"
+#include "button.h"
 #include "window.h"
 #include "color.h"
 

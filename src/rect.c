@@ -48,10 +48,3 @@ bool tuim_rect_is_valid(TuimRect rect) {
 		return false;
 	return true;
 }
-
-void tuim_rect_draw(const TuimContext* ctx, const TuimRect rect) {
-	tuim_frame_buffer_draw_rect (
-		&ctx->style, &ctx->frame_buffer, 
-		rect.x, rect.y, rect.width, rect.height
-	);
-}

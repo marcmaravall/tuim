@@ -5,7 +5,7 @@ void tuim_set_alginment(TuimContext* ctx, TuimAlgin al) {
 }
 
 void tuim_begin_frame(TuimContext* ctx) {
-	tuim_frame_buffer_clear(&ctx->style, &ctx->frame_buffer);
+	tuim_frame_buffer_clear(&ctx->frame_buffer, ctx->style.clear_color);
 }
 
 void tuim_init_context(TuimContext* ctx) {

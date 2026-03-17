@@ -26,7 +26,7 @@ void tuim_get_mouse_position(const TuimContext* state, int* x, int* y);
 void tuim_clear_mouse_state(TuimMouseState* state);
 void tuim_update_mouse_state (TuimMouseState* state);
 
-bool tuim_is_mouse_inside(const TuimMouseState* state, const TuimRect area);
+bool tuim_is_mouse_inside(const TuimContext* state, const TuimRect area);
 
 bool tuim_is_mouse_button_down		(const TuimContext* state, const size_t button);
 bool tuim_is_mouse_button_up		(const TuimContext* state, const size_t button);

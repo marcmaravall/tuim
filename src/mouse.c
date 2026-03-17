@@ -1,13 +1,14 @@
 #include "mouse.h"
 #include "context.h"
 
-// yay solved stupid error!
-bool tuim_is_mouse_inside(const TuimMouseState* state, const TuimRect area) {
-    if (state->mouse_x < area.x || state->mouse_y < area.y ||
-        state->mouse_x > area.x + area.width || state->mouse_y > area.y + area.height)
-        return false;
-
-    return true;
+bool tuim_is_mouse_inside(const TuimContext* state, const TuimRect area) {
+    int x;
+    int y;
+	tuim_get_mouse_position(state, &x, &y);
+    return x >= area.x &&
+        x < area.x + area.width-1 &&
+        y >= area.y &&
+        y < area.y + area.height-1;
 }
 
 void tuim_get_mouse_position(const TuimContext* state, int* x, int* y) {

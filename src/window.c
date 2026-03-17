@@ -55,33 +55,34 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* widget) {
 	const int x1 = widget->rect.x + widget->rect.width - 1;
 	const int y1 = widget->rect.y + widget->rect.height-1;
 
-	tuim_frame_buffer_draw_rect_color(
+	tuim_frame_buffer_draw_rect (
 		&ctx->frame_buffer, widget->background, x0, y0, 
 		widget->rect.width, widget->rect.height
 	);
 	
-	tuim_frame_buffer_draw_line_color (
+	tuim_frame_buffer_draw_line (
 		&ctx->frame_buffer, widget->border_color,
 		x1, y0, x1, y1
 	);
 
-	tuim_frame_buffer_draw_line_color(
+	tuim_frame_buffer_draw_line (
 		&ctx->frame_buffer, widget->border_color,
 		x0, y1, x1, y1
 	);
 
-	tuim_frame_buffer_draw_line_color (
+	tuim_frame_buffer_draw_line (
 		&ctx->frame_buffer, widget->title_bar_color,
 		x0, y0, x1, y0
 	);
 
-	tuim_frame_buffer_print_color (
+	tuim_frame_buffer_print (
 		&ctx->frame_buffer, widget->title_color, widget->title_bar_color,
 		title_to_render, widget->rect.x, widget->rect.y
 	);
 }
 
-void tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
+// returns 1 if the window was updated, 0 otherwise
+int tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 	assert(ctx && widget);
 
 	int mouse_x, mouse_y;
@@ -97,6 +98,8 @@ void tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 	int bottom = widget->rect.y + widget->rect.height - 1;
 
 	bool on_resize_corner = (mouse_x == right && mouse_y == bottom);
+
+	int res = 0;
 
 	// start action
 	if (left_down && mouse_inside) {
@@ -115,6 +118,7 @@ void tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 			widget->drag_offset_x = mouse_x - widget->rect.x;
 			widget->drag_offset_y = mouse_y - widget->rect.y;
 		}
+		res = 1;
 	}
 
 	if (left_released) {
@@ -126,6 +130,7 @@ void tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 	if (widget->is_dragging && left_pressed) {
 		widget->rect.x = mouse_x - widget->drag_offset_x;
 		widget->rect.y = mouse_y - widget->drag_offset_y;
+		res = 1;
 	}
 
 	// resizing
@@ -135,7 +140,10 @@ void tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 
 		widget->rect.width = max(1, new_w);
 		widget->rect.height = max(1, new_h);
+		res = 1;
 	}
+
+	return res;
 }
 
 bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* widget) {
