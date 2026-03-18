@@ -2,6 +2,7 @@
 
 TuimWindow tuim_default_window() {
 	TuimWindow w;
+	w.title = "hello, world!";
 	w.drag_offset_x = -1;
 	w.drag_offset_y = -1;
 	w.is_dragging = false;
@@ -99,9 +100,9 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 
 	bool on_resize_corner = (mouse_x == right && mouse_y == bottom);
 
-	int res = 0;
+	int res = TUIM_WINDOW_UPDATE_NONE;
 
-	if (on_resize_corner) {
+	if (left_down && on_resize_corner) {
 		widget->is_resizing = true;
 		widget->is_dragging = false;
 
@@ -116,20 +117,20 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 	
 		widget->drag_offset_x = mouse_x - widget->rect.x;
 		widget->drag_offset_y = mouse_y - widget->rect.y;
-		
-		res = 1;
 	}
 
 	if (left_released) {
 		widget->is_dragging = false;
 		widget->is_resizing = false;
+
+		res = TUIM_WINDOW_UPDATE_RELEASED;
 	}
 
 	// dragging 
 	if (widget->is_dragging && left_pressed) {
 		widget->rect.x = mouse_x - widget->drag_offset_x;
 		widget->rect.y = mouse_y - widget->drag_offset_y;
-		res = 1;
+		res = TUIM_WINDOW_UPDATE_DRAGGED;
 	}
 
 	// resizing
@@ -139,7 +140,7 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 
 		widget->rect.width = max(1, new_w);
 		widget->rect.height = max(1, new_h);
-		res = 1;
+		res = TUIM_WINDOW_UPDATE_RESIZED;
 	}
 
 	return res;

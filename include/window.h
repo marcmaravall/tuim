@@ -48,7 +48,14 @@ typedef struct {
 TuimWindow tuim_default_window();
 
 void tuim_window_draw  (TuimContext* ctx, TuimWindow* widget);
+
+// values for tuim_window_update
+#define TUIM_WINDOW_UPDATE_NONE 0
+#define TUIM_WINDOW_UPDATE_RESIZED 1
+#define TUIM_WINDOW_UPDATE_DRAGGED 2
+#define TUIM_WINDOW_UPDATE_RELEASED 3
 int tuim_window_update(TuimContext* ctx, TuimWindow* widget);
+
 bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* widget);
 
 #endif // TUIM_WIDGET_H

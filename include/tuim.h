@@ -9,6 +9,7 @@
 #include "text.h"
 #include "button.h"
 #include "window.h"
+#include "window_manager.h"
 #include "color.h"
 
 #endif //TUIM_H
