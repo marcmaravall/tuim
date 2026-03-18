@@ -23,7 +23,7 @@ TuimWindow tuim_default_window() {
 	return w;
 }
 
-// TODO: use less malloc and shit 
+// TODO: use less malloc 
 void tuim_window_draw(TuimContext* ctx, TuimWindow* widget) {
 	assert(ctx && widget);
 	assert(widget->title);
@@ -88,7 +88,7 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 	int mouse_x, mouse_y;
 	tuim_get_mouse_position(ctx, &mouse_x, &mouse_y);
 
-	bool mouse_inside = tuim_is_mouse_inside(&ctx->input_state.mouse_state, widget->rect);
+	bool mouse_inside = tuim_is_mouse_inside(&ctx, widget->rect);
 
 	bool left_down = tuim_is_mouse_button_down(ctx, TUIM_MOUSE_BUTTON_LEFT);
 	bool left_pressed = tuim_is_mouse_button(ctx, TUIM_MOUSE_BUTTON_LEFT);
@@ -103,7 +103,6 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 
 	// start action
 	if (left_down && mouse_inside) {
-
 		if (on_resize_corner) {
 			widget->is_resizing = true;
 			widget->is_dragging = false;

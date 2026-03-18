@@ -7,20 +7,15 @@ int main(void) {
     tuim_init_context(&ctx);
     ctx.style = tuim_style_default_dark();
 
-	TuimButton button = tuim_default_button();
-	button.area.x = 10;
-	button.area.y = 10;
-    button.label = "Clicked";
-	button.area.width = 20;
-    button.area.height = 2;
-    button.toggled = true;
+    TuimWindow example = tuim_default_window();
+    example.title = "This is an example window!";
 
     while (1) {
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
 
-		tuim_button_update  (&ctx, &button);
-		tuim_button_draw    (&ctx, &button);
+		tuim_window_update(&ctx, &example);
+		tuim_window_draw(&ctx, &example);
 
         tuim_end_frame(&ctx);
     }

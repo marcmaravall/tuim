@@ -2,6 +2,7 @@
 #include "context.h"
 
 bool tuim_is_mouse_inside(const TuimContext* state, const TuimRect area) {
+	assert(state);
     int x;
     int y;
 	tuim_get_mouse_position(state, &x, &y);

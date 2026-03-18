@@ -7,6 +7,7 @@
 #include "input.h"
 #include "context.h"
 
+#include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
 

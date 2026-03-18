@@ -14,7 +14,7 @@ TuimButton tuim_default_button() {
 	button.style.background = TUIM_BLACK_STRUCT_INDEXED;
 	button.style.foreground = TUIM_WHITE_STRUCT_INDEXED;
 	button.style.hover_background = TUIM_GREEN_STRUCT_INDEXED;
-	button.style.hover_foreground = TUIM_WHITE_STRUCT_INDEXED;
+	button.style.hover_foreground = TUIM_WHITE_STRUCT_INDEXED;  
 	button.style.active_background = TUIM_BLUE_STRUCT_INDEXED;
 	button.style.active_foreground = TUIM_WHITE_STRUCT_INDEXED;
 
@@ -25,17 +25,13 @@ void tuim_button_draw(const TuimContext* ctx, const TuimButton* button) {
 	assert(ctx && button);
 
 	const char* status = button->toggled ? "[x] " : "[ ] ";
-
 	size_t len = strlen(status);
+
+	const char* label = button->label ? button->label : "";
 
 	TuimColor bg;
 	TuimColor fg;
 
-	// TODO: continue
-	if (button->pressing) {
-		bg = button->style.active_background;
-		fg = button->style.active_foreground;
-	}
 	if (button->hovered) {
 		bg = button->style.hover_background;
 		fg = button->style.hover_foreground;
@@ -48,15 +44,19 @@ void tuim_button_draw(const TuimContext* ctx, const TuimButton* button) {
 		bg = button->style.background;
 		fg = button->style.foreground;
 	}
-	
+
 	tuim_frame_buffer_print(
 		ctx, fg, bg,
-		status, button->area.x, button->area.y
+		status,
+		button->area.x,
+		button->area.y
 	);
 
 	tuim_frame_buffer_print(
-		ctx, fg, bg, 
-		button->label, button->area.x + len, button->area.y
+		ctx, fg, bg,
+		label,
+		button->area.x + len,
+		button->area.y
 	);
 }
 
