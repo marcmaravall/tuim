@@ -8,6 +8,7 @@ int main(void) {
     ctx.style = tuim_style_default_dark();
 
     TuimWindow example = tuim_default_window();
+
     example.title = "This is an example window!";
 
     while (1) {
