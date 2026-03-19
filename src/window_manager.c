@@ -80,14 +80,8 @@ int tuim_window_manager_draw(const TuimContext* ctx, const TuimWindowManager* ma
 		TuimWindow* window = manager->data[i];
 		assert(window);
 
-		if (window == manager->focused)
-			continue;
-
 		tuim_window_draw(ctx, window);
 	}
-
-	if (manager->focused)
-		tuim_window_draw(ctx, manager->focused);
 	
 	return 0;
 }
@@ -104,11 +98,28 @@ int tuim_window_manager_update(TuimContext* ctx, TuimWindowManager* manager) {
 	for (size_t i = 0; i < manager->size; i++) {
 		TuimWindow* window = manager->data[i];
 		assert(window);
-	
+
 		if (tuim_window_update(ctx, window) != TUIM_WINDOW_UPDATE_NONE) {
 			manager->focused = window;
+			tuim_window_manager_on_focus(manager, i);
 		}
 	}
+	return 0;
+}
+
+int tuim_window_manager_on_focus(TuimWindowManager* manager, size_t index) {
+	assert(manager);
+	if (!manager->focused) {
+		return -1;
+	}
+
+	while (index < manager->size - 1) {
+		TuimWindow* temp = manager->data[index];
+		manager->data[index] = manager->data[index + 1];
+		manager->data[index + 1] = temp;
+		index++;
+	}
+
 	return 0;
 }
 

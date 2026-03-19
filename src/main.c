@@ -33,6 +33,8 @@ int main(void) {
         tuim_window_manager_draw  (&ctx, &manager);
 
         tuim_end_frame(&ctx);
+
+        Sleep(16);
     }
 
     return 0;
