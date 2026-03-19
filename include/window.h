@@ -21,6 +21,19 @@
 #define TUIM_WINDOW_DEFAULT_WIDTH  20
 #define TUIM_WINDOW_DEFAULT_HEIGHT 5 
 
+#ifndef TUIM_WINDOW_DEFAULT_MIN_WIDTH
+#	define TUIM_WINDOW_DEFAULT_MIN_WIDTH 8
+#endif
+#ifndef TUIM_WINDOW_DEFAULT_MIN_HEIGHT
+#	define TUIM_WINDOW_DEFAULT_MIN_HEIGHT 3
+#endif
+#ifndef TUIM_WINDOW_DEFAULT_MAX_WIDTH
+#	define TUIM_WINDOW_DEFAULT_MAX_WIDTH 50
+#endif
+#ifndef TUIM_WINDOW_DEFAULT_MAX_HEIGHT
+#	define TUIM_WINDOW_DEFAULT_MAX_HEIGHT 20
+#endif
+
 typedef struct {
 	TuimRect rect;
 
@@ -32,6 +45,11 @@ typedef struct {
 
 		uint8_t flags;
 	};
+
+	size_t min_width;
+	size_t min_height;
+	size_t max_width;
+	size_t max_height;
 
 	char* title;
 

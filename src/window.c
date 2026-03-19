@@ -3,6 +3,12 @@
 TuimWindow tuim_default_window() {
 	TuimWindow w;
 	w.title = "hello, world!";
+	
+	w.min_height = TUIM_WINDOW_DEFAULT_MIN_HEIGHT;
+	w.min_width  = TUIM_WINDOW_DEFAULT_MIN_WIDTH;
+	w.max_height = TUIM_WINDOW_DEFAULT_MAX_HEIGHT;
+	w.max_width = TUIM_WINDOW_DEFAULT_MAX_WIDTH;
+
 	w.drag_offset_x = -1;
 	w.drag_offset_y = -1;
 	w.is_dragging = false;
@@ -138,8 +144,15 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* widget) {
 		int new_w = mouse_x - widget->rect.x + 1;
 		int new_h = mouse_y - widget->rect.y + 1;
 
-		widget->rect.width = max(1, new_w);
-		widget->rect.height = max(1, new_h);
+		int min_w = max(widget->min_width, 1);
+		int min_h = max(widget->min_height, 1);
+
+		widget->rect.width = max(min_w, new_w);
+		widget->rect.height = max(min_h, new_h);
+
+		widget->rect.width = min(widget->rect.width, widget->max_width);
+		widget->rect.height = min(widget->rect.height, widget->max_height);
+
 		res = TUIM_WINDOW_UPDATE_RESIZED;
 	}
 
