@@ -1,7 +1,16 @@
 #include <tuim.h>
 #include <backends/windows/windows_backend.h>
 
+#define MEB_LOG_TO_FILE
+#define MEB_IMPLEMENTATION
+#include <meb.h>
+
 int main(void) {
+	MebContext log_ctx;
+	meb_init(&log_ctx, "debug.txt");
+	meb_log_level(&log_ctx, MEB_INFO);
+	meb_prof_mode(&log_ctx, MEB_MILLISECONDS);
+
     TuimContext ctx;
     ctx.backend = tuim_windows_backend();
     tuim_init_context(&ctx);
@@ -25,7 +34,16 @@ int main(void) {
     tuim_window_manager_add(&manager, example1);
     tuim_window_manager_add(&manager, example2);
 
+    int frames = 0;
+
+    TuimText text = tuim_default_text();
+    text.x = 53;
+    text.y = 0;
+
     while (1) {
+		meb_log(&log_ctx, "Starting frame");
+		meb_prof_start(&log_ctx);
+
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
 
@@ -34,8 +52,12 @@ int main(void) {
 
         tuim_end_frame(&ctx);
 
-        Sleep(16);
+		meb_log(&log_ctx, "Ending frame");
+		meb_prof_end(&log_ctx);
     }
+
+	tuim_destroy_context(&ctx);
+	meb_close(&log_ctx);
 
     return 0;
 }

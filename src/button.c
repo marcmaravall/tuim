@@ -89,6 +89,10 @@ void tuim_button_update(const TuimContext* ctx, TuimButton* button) {
 	button->was_down = is_down;
 }
 
+inline bool tuim_button_get(const TuimButton* button) {
+	return button->toggled;
+}
+
 // TODO: add cases depending on flags
 TuimRect tuim_button_calculate_area(const TuimButton* button) {
 	assert(button);

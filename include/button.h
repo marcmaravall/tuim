@@ -42,6 +42,8 @@ TuimButton tuim_default_button();
 void tuim_button_draw	(const TuimContext* ctx, const TuimButton* button);
 void tuim_button_update (const TuimContext* ctx, TuimButton* button);
 
+inline bool tuim_button_get (const TuimButton* button);
+
 TuimRect tuim_button_calculate_area(const TuimButton* button);
 
 #endif // TUIM_BUTTON_H
