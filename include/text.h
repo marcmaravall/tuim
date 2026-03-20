@@ -4,17 +4,16 @@
 #include "context.h"
 #include "backend.h"
 #include "frame_buffer.h"
-
+#include "size_hint.h"
 #include "color.h"
+#include "element.h"
 
 typedef struct {
 	TuimColor foreground;
 	TuimColor background;
 
-	// TuimRect area;	// TODO: do width rect
-	// if you dont undestand a shit fuch you from the past
-
-	int x;
+	TuimRect area;
+	
 	int y;
 
 	char* text;
@@ -22,5 +21,7 @@ typedef struct {
 
 TuimText tuim_default_text();
 void tuim_draw_text(TuimContext* ctx, const TuimText* text);
+
+TuimElement tuim_text_to_element(const TuimText* text);
 
 #endif //TUIM_TEXT_H

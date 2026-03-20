@@ -8,14 +8,6 @@
 #include "backend.h"
 #include "frame_buffer.h"
 
-typedef enum {
-	TUIM_LEFT,
-	TUIM_CENTER,
-	TUIM_RIGHT,  
-} TuimAlgin;
-
-#define TUIM_ALGIN_DEFAULT TUIM_LEFT
-
 // TODO: implement
 typedef struct {
 	int frame_index;
@@ -33,15 +25,12 @@ typedef struct TuimContext {
 
 	int available_width;
 
-	TuimAlgin algin;
 	TuimStyle style;
 
 	TuimBackend backend;
 
 	TuimInputState input_state;
 } TuimContext;
-
-void tuim_set_alginment(TuimContext* ctx, TuimAlgin al);
 
 void tuim_begin_frame	(TuimContext* context);
 void tuim_end_frame		(TuimContext* context);

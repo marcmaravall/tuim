@@ -37,8 +37,8 @@ int main(void) {
     int frames = 0;
 
     TuimText text = tuim_default_text();
-    text.x = 53;
-    text.y = 0;
+    text.area.x = 53;
+    text.area.y = 0;
 
     while (1) {
 		meb_log(&log_ctx, "Starting frame");

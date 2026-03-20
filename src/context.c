@@ -1,9 +1,5 @@
 #include "context.h"
 
-void tuim_set_alginment(TuimContext* ctx, TuimAlgin al) {
-	ctx->algin = al;
-}
-
 void tuim_begin_frame(TuimContext* ctx) {
 	tuim_frame_buffer_clear(&ctx->frame_buffer, ctx->style.clear_color);
 }
@@ -17,7 +13,6 @@ void tuim_init_context(TuimContext* ctx) {
 	tuim_clear_input(&ctx->input_state);
 	tuim_frame_buffer_init(&ctx->frame_buffer, width, height);
 
-	ctx->algin = TUIM_ALGIN_DEFAULT;
 	ctx->style = tuim_style_default();
 }
 

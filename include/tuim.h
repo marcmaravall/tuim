@@ -10,6 +10,10 @@
 #include "button.h"
 #include "window.h"
 #include "window_manager.h"
+#include "layout.h"
+#include "element.h"
+#include "size_hint.h"
+#include "frame_buffer.h"
 #include "color.h"
 
 #endif //TUIM_H
