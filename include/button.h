@@ -1,6 +1,7 @@
 #ifndef TUIM_BUTTON_H
 #define TUIM_BUTTON_H
 
+#include "context.h"
 #include "rect.h"
 #include "frame_buffer.h"
 #include "input.h"
@@ -39,10 +40,8 @@ typedef struct {
 
 TuimButton tuim_default_button();
 
-void tuim_button_draw	(const TuimContext* ctx, const TuimButton* button);
+void tuim_button_draw	(TuimContext* ctx, const TuimButton* button);
 void tuim_button_update (const TuimContext* ctx, TuimButton* button);
-
-inline bool tuim_button_get (const TuimButton* button);
 
 TuimRect tuim_button_calculate_area(const TuimButton* button);
 

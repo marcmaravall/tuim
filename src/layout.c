@@ -32,6 +32,6 @@ void tuim_layout_add(TuimLayout* layout, const TuimElement* element) {
 void tuim_layout_clear(TuimLayout* layout) {
 	assert(layout);
 	
-	calloc(layout->elements, sizeof(TuimLayoutElement), layout->capacity);
+	// calloc(layout->elements, sizeof(TuimLayoutElement), layout->capacity);
 	layout->size = 0;
 }

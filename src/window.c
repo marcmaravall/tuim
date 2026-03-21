@@ -22,10 +22,10 @@ TuimWindow tuim_default_window() {
 	w.start_mouse_resize_x = -1;
 	w.start_mouse_resize_y = -1;
 
-	w.border_color = TUIM_BRIGHT_BLUE_STRUCT_INDEXED;
-	w.title_bar_color = TUIM_BLUE_STRUCT_INDEXED;
-	w.title_color = TUIM_WHITE_STRUCT_INDEXED;
-	w.background = TUIM_BLACK_STRUCT_INDEXED;
+	w.style.border_color = TUIM_BRIGHT_BLUE_STRUCT_INDEXED;
+	w.style.title_bar_color = TUIM_BLUE_STRUCT_INDEXED;
+	w.style.title_color = TUIM_WHITE_STRUCT_INDEXED;
+	w.style.background = TUIM_BLACK_STRUCT_INDEXED;
 
 	return w;
 }
@@ -63,27 +63,27 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* widget) {
 	const int y1 = widget->rect.y + widget->rect.height-1;
 
 	tuim_frame_buffer_draw_rect (
-		&ctx->frame_buffer, widget->background, x0, y0, 
+		&ctx->frame_buffer, widget->style.background, x0, y0, 
 		widget->rect.width, widget->rect.height
 	);
 	
 	tuim_frame_buffer_draw_line (
-		&ctx->frame_buffer, widget->border_color,
+		&ctx->frame_buffer, widget->style.border_color,
 		x1, y0, x1, y1
 	);
 
 	tuim_frame_buffer_draw_line (
-		&ctx->frame_buffer, widget->border_color,
+		&ctx->frame_buffer, widget->style.border_color,
 		x0, y1, x1, y1
 	);
 
 	tuim_frame_buffer_draw_line (
-		&ctx->frame_buffer, widget->title_bar_color,
+		&ctx->frame_buffer, widget->style.title_bar_color,
 		x0, y0, x1, y0
 	);
 
 	tuim_frame_buffer_print (
-		&ctx->frame_buffer, widget->title_color, widget->title_bar_color,
+		&ctx->frame_buffer, widget->style.title_color, widget->style.title_bar_color,
 		title_to_render, widget->rect.x, widget->rect.y
 	);
 }

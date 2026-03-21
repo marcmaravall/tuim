@@ -73,7 +73,7 @@ int tuim_window_manager_remove(TuimWindowManager* manager, const size_t index) {
 
 // UPDATE AND DRAW FUNCTIONS ------------
 
-int tuim_window_manager_draw(const TuimContext* ctx, const TuimWindowManager* manager) {
+int tuim_window_manager_draw(TuimContext* ctx, TuimWindowManager* manager) {
 	assert(ctx && manager);
 	
 	for (size_t i = 0; i < manager->size; i++) {

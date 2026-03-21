@@ -21,7 +21,7 @@ TuimButton tuim_default_button() {
 	return button;
 }
 
-void tuim_button_draw(const TuimContext* ctx, const TuimButton* button) {
+void tuim_button_draw(TuimContext* ctx, const TuimButton* button) {
 	assert(ctx && button);
 
 	const char* status = button->toggled ? "[x] " : "[ ] ";
@@ -46,14 +46,14 @@ void tuim_button_draw(const TuimContext* ctx, const TuimButton* button) {
 	}
 
 	tuim_frame_buffer_print(
-		ctx, fg, bg,
+		&ctx->frame_buffer, fg, bg,
 		status,
 		button->area.x,
 		button->area.y
 	);
 
 	tuim_frame_buffer_print(
-		ctx, fg, bg,
+		&ctx->frame_buffer, fg, bg,
 		label,
 		button->area.x + len,
 		button->area.y

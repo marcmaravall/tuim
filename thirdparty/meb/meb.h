@@ -6,7 +6,6 @@
 * Thanks for using my library!					  |
 * ------------------------------------------------|
 * TODO:											  |
-* - Add support for more platforms (Linux, macOS).|
 * - Add thread safety for logging.				  |
 \________________________________________________*/
 
@@ -67,17 +66,17 @@ typedef struct {
 
 double meb_get_time(const MebTimeMode mode);
 
-void meb_init(MebContext* ctx, const char* file);
+void meb_init	(MebContext* ctx, const char* file);
 
-void meb_log(MebContext* ctx, const char* message);
+void meb_log	(MebContext* ctx, const char* message);
 
-void meb_prof_start(MebContext* ctx);
-void meb_prof_end(MebContext* ctx);
+void meb_prof_start (MebContext* ctx);
+void meb_prof_end   (MebContext* ctx);
 
-void meb_prof_mode(MebContext* ctx, const MebTimeMode mode);
-void meb_log_level(MebContext* ctx, const MebLogLevel level);
+void meb_prof_mode (MebContext* ctx, const MebTimeMode mode);
+void meb_log_level (MebContext* ctx, const MebLogLevel level);
 
-void meb_close(MebContext* ctx);
+void meb_close	(MebContext* ctx);
 
 #endif // MEB_H
 
@@ -113,7 +112,7 @@ void meb_log(MebContext* ctx, const char* message) {
 	char* level_str = meb_log_level_str(ctx->log_level);
 
 #ifndef MEB_NO_LOG
-
+	
 	if (ctx->debug) {
 		fprintf(ctx->debug, "%s: %s\n", level_str, message);
 	}
@@ -136,10 +135,10 @@ void meb_prof_end(MebContext* ctx) {
 	ctx->end = meb_get_time(ctx->time_mode);
 
 	double elapsed = (double)(ctx->end - ctx->start);
-
+	
 	char buffer[MEB_BUFF_SIZE];
-	snprintf(buffer, MEB_BUFF_SIZE,
-		"[MEB_PROFILING] Meb profiling finished! Elapsed time: %.6f%c",
+	snprintf(buffer, MEB_BUFF_SIZE, 
+		"[MEB_PROFILING] Meb profiling finished! Elapsed time: %.6f%c", 
 		elapsed, meb_time_unit(ctx->time_mode));
 
 	MebLogLevel level = ctx->log_level;
@@ -162,16 +161,23 @@ double meb_get_time(const MebTimeMode mode) {
 	QueryPerformanceCounter(&counter);
 
 	double time = (double)counter.QuadPart / frequency.QuadPart;
-	switch (mode) {
-	case MEB_SECONDS:      return time;
-	case MEB_MILLISECONDS: return time * 1e3;
-	case MEB_MICROSECONDS: return time * 1e6;
-	case MEB_NANOSECONDS:  return time * 1e9;
-	}
-	return time;
+
+#elif defined __linux__ || defined __APPLE__
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    double time = (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;
+    
 #else
 #warning "High-resolution timing is not implemented for this platform."
 #endif
+    
+    switch (mode) {
+    case MEB_SECONDS:      return time;
+    case MEB_MILLISECONDS: return time * 1e3;
+    case MEB_MICROSECONDS: return time * 1e6;
+    case MEB_NANOSECONDS:  return time * 1e9;
+    }
+    return time;
 }
 
 char meb_time_unit(const MebTimeMode mode) {

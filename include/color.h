@@ -31,7 +31,7 @@ typedef enum {
 } TuimColorType;
 
 typedef struct {
-    union color {
+    union {
         TuimColorIndex indexed_color;
         struct {
             uint8_t red;
@@ -39,12 +39,12 @@ typedef struct {
             uint8_t blue;
         } rgb_color;
         int raw;
-    };
+    } color;
     TuimColorType type;
 } TuimColor;
 
 #define TUIM_DEF_COLOR(name, indexed) \
-    static const TuimColor name = { .indexed_color = indexed, .type = TUIM_COLOR_TYPE_INDEXED } 
+    static const TuimColor name = { .color.indexed_color = indexed, .type = TUIM_COLOR_TYPE_INDEXED } 
 
 // const indexed structs
 TUIM_DEF_COLOR(TUIM_BLACK_STRUCT_INDEXED, 0);

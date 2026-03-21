@@ -1,6 +1,7 @@
 #ifndef TUIM_KEYBOARD_H
 #define TUIM_KEYBOARD_H
 
+#include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 

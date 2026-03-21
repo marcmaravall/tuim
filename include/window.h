@@ -34,6 +34,13 @@
 #	define TUIM_WINDOW_DEFAULT_MAX_HEIGHT 20
 #endif
 
+#ifndef max
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#endif
+
 typedef struct {
 	TuimRect rect;
 
@@ -44,7 +51,7 @@ typedef struct {
 		TuimColor title_color;
 
 		uint8_t flags;
-	};
+	} style;
 
 	size_t min_width;
 	size_t min_height;
