@@ -1,4 +1,6 @@
-﻿cmake_minimum_required (VERSION 3.10)
+﻿# TODO: refactor for better readability
+
+cmake_minimum_required (VERSION 3.10)
 
 if (POLICY CMP0141)
   cmake_policy(SET CMP0141 NEW)
@@ -9,18 +11,27 @@ project ("tuim")
 
 if (WIN32)
 	file(GLOB tuim_src "src/*.c" "src/backends/windows/windows_backend.c")
+  add_executable(tuim ${tuim_src})
+
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c11")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined -fno-omit-frame-pointer -g")
-	set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address,undefined")	
+  file(GLOB tuim_src "src/*.c" "src/backends/linux/linux_backend.c")
 
-	file(GLOB tuim_src "src/*.c" "src/backends/linux/linux_backend.c")
+  add_executable(tuim ${tuim_src})
+
+  target_compile_options(tuim PRIVATE
+    -Wall -Wextra -pedantic -std=c11
+    -fsanitize=address,undefined
+    -fno-omit-frame-pointer -g
+  )
+
+  target_link_options(tuim PRIVATE
+    -fsanitize=address,undefined
+  )
+
 else()
 	message(FATAL_ERROR "Unsupported platform")
 endif()
-
-add_executable(tuim ${tuim_src})
 
 target_include_directories (tuim PRIVATE include)
 target_include_directories (tuim PRIVATE thirdparty/meb)

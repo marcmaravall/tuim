@@ -1,5 +1,9 @@
 #include <tuim.h>
+#ifdef __linux__
+#include <backends/linux/linux_backend.h>
+#elif defined _WIN32
 #include <backends/windows/windows_backend.h>
+#endif
 
 #define MEB_LOG_TO_FILE
 #define MEB_IMPLEMENTATION
@@ -12,7 +16,7 @@ int main(void) {
 	meb_prof_mode(&log_ctx, MEB_MILLISECONDS);
 
     TuimContext ctx;
-    ctx.backend = tuim_windows_backend();
+    ctx.backend = tuim_linux_backend();
     tuim_init_context(&ctx);
     ctx.style = tuim_style_default_dark();
 
@@ -34,11 +38,9 @@ int main(void) {
     tuim_window_manager_add(&manager, example1);
     tuim_window_manager_add(&manager, example2);
 
-    int frames = 0;
-
-    TuimText text = tuim_default_text();
-    text.area.x = 53;
-    text.area.y = 0;
+    // TuimText text = tuim_default_text();
+    // text.area.x = 53;
+    // text.area.y = 0;
 
     while (1) {
 		meb_log(&log_ctx, "Starting frame");

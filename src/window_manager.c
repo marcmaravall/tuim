@@ -69,6 +69,8 @@ int tuim_window_manager_remove(TuimWindowManager* manager, const size_t index) {
 	}
 
 	// TODO: implement
+
+	return 0;
 }
 
 // UPDATE AND DRAW FUNCTIONS ------------
