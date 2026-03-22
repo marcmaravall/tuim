@@ -7,10 +7,19 @@ endif()
 
 project ("tuim")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined -fno-omit-frame-pointer -g")
-set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address,undefined")
+if (WIN32)
+	file(GLOB tuim_src "src/*.c" "src/backends/windows/windows_backend.c")
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
-file(GLOB tuim_src "src/*.c" "src/backends/linux/linux_backend.c")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c11")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined -fno-omit-frame-pointer -g")
+	set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address,undefined")	
+
+	file(GLOB tuim_src "src/*.c" "src/backends/linux/linux_backend.c")
+else()
+	message(FATAL_ERROR "Unsupported platform")
+endif()
+
 add_executable(tuim ${tuim_src})
 
 target_include_directories (tuim PRIVATE include)

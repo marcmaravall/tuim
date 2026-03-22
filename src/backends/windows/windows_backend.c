@@ -116,7 +116,7 @@ void tuim_windows_backend_render(void* backend_data) {
 static WORD tuim_color_to_win32(const TuimColor color) {
 	WORD win_color = 0;
 	if (color.type == TUIM_COLOR_TYPE_INDEXED) {
-		switch (color.indexed_color) {
+		switch (color.color.indexed_color) {
 			case TUIM_BLACK: win_color = 0; break;
 			case TUIM_RED: win_color = 4; break;
 			case TUIM_GREEN: win_color = 2; break;
@@ -134,14 +134,14 @@ static WORD tuim_color_to_win32(const TuimColor color) {
 			case TUIM_BRIGHT_CYAN: win_color = 11; break;
 			case TUIM_BRIGHT_WHITE: win_color = 15; break;
 			default:
-				win_color = color.indexed_color % 16;
+				win_color = color.color.indexed_color % 16;
 				break;
 		}
 	} else if (color.type == TUIM_COLOR_TYPE_RGB) {
-		win_color |= (color.rgb_color.red > 128) ? FOREGROUND_RED : 0;
-		win_color |= (color.rgb_color.green > 128) ? FOREGROUND_GREEN : 0;
-		win_color |= (color.rgb_color.blue > 128) ? FOREGROUND_BLUE : 0;
-		if (color.rgb_color.red > 128 || color.rgb_color.green > 128 || color.rgb_color.blue > 128)
+		win_color |= (color.color.rgb_color.red > 128) ? FOREGROUND_RED : 0;
+		win_color |= (color.color.rgb_color.green > 128) ? FOREGROUND_GREEN : 0;
+		win_color |= (color.color.rgb_color.blue > 128) ? FOREGROUND_BLUE : 0;
+		if (color.color.rgb_color.red > 128 || color.color.rgb_color.green > 128 || color.color.rgb_color.blue > 128)
 			win_color |= FOREGROUND_INTENSITY;
 	}
 	return win_color;

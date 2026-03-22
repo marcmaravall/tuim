@@ -1,5 +1,5 @@
 #include <tuim.h>
-#include <backends/linux/linux_backend.h>
+#include <backends/windows/windows_backend.h>
 
 #define MEB_LOG_TO_FILE
 #define MEB_IMPLEMENTATION
@@ -12,7 +12,7 @@ int main(void) {
 	meb_prof_mode(&log_ctx, MEB_MILLISECONDS);
 
     TuimContext ctx;
-    ctx.backend = tuim_linux_backend();
+    ctx.backend = tuim_windows_backend();
     tuim_init_context(&ctx);
     ctx.style = tuim_style_default_dark();
 
