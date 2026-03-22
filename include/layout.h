@@ -40,7 +40,7 @@ void tuim_layout_update(const TuimContext* ctx, TuimLayout* layout);
 
 void tuim_layout_init(TuimLayout* layout, size_t capacity);
 void tuim_layout_destroy(TuimLayout* layout);
-void tuim_layout_add(TuimLayout* layout, const TuimElement* element);
+void tuim_layout_add(TuimLayout* layout, TuimElement* element);
 TuimElement* tuim_layout_get(TuimLayout* layout, const size_t index);
 void tuim_layout_clear(TuimLayout* layout);
 

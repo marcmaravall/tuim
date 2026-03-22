@@ -12,7 +12,7 @@ void tuim_layout_destroy(TuimLayout* layout) {
 	free(layout->elements);
 }
 
-void tuim_layout_add(TuimLayout* layout, const TuimElement* element) {
+void tuim_layout_add(TuimLayout* layout, TuimElement* element) {
 	assert(layout && element);
 
 	if (layout->size >= layout->capacity) {

@@ -6,7 +6,7 @@
 
 typedef struct {
 	void* data;
-	void (*measure)(void* data, TuimSizeHint* hint);
+	TuimSizeHint (*measure)(void* data);
 	void (*layout)(void* data, const TuimRect rect);
 } TuimElement;
 
