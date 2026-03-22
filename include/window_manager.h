@@ -20,6 +20,8 @@ int tuim_window_manager_init(TuimWindowManager* manager, const size_t capacity);
 int tuim_window_manager_add	(TuimWindowManager* manager, TuimWindow* window);
 int tuim_window_manager_remove(TuimWindowManager* manager, const size_t index);
 
+void tuim_window_manager_free(TuimWindowManager* manager);
+
 int tuim_window_manager_on_focus(TuimWindowManager* manager, size_t index);
 
 TuimWindow* tuim_window_manager_get(const TuimWindowManager* wm, const size_t index);

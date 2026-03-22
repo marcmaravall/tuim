@@ -24,16 +24,49 @@ void tuim_linux_backend_init(void* data) {
 	printf("\x1b[?1049h");
 }
 
+// TODO: solve attribute error
 void tuim_linux_backend_destroy(void* data) {
 	assert(data);
+	TuimLinuxBackendData* bdata = data;
+	tuim_linux_disable_raw_mode(&bdata->old);
 }
 
+// TODO: solve errors:
 void tuim_linux_backend_render(void* data) {
-	assert(data);
-	TuimLinuxBackendData* bdata = data;
+    assert(data);
+    const TuimLinuxBackendData* bdata = data;
 
-	printf("\x1b[2J");
-    printf("\x1b[H");
+	assert(bdata->fb);
+
+    const TuimFrameBuffer* fb = bdata->fb;
+
+    static char* out = NULL;
+    static size_t capacity = 0;
+
+    size_t needed = (fb->width + 1) * fb->height + 16;
+
+    if (needed > capacity) {
+        capacity = needed;
+        out = realloc(out, capacity);
+    }
+
+    char* ptr = out;
+
+    //ptr += sprintf(ptr, "\x1b[H");
+	printf("\x1b[H");
+	printf("hola");
+
+    for (size_t i = 0; i < fb->height; i++) {
+        for (size_t j = 0; j < fb->width; j++) {
+            TuimFrameBufferCell cell = TUIM_FRAME_BUFFER_AT(fb, j, i);
+            printf("#", cell.ascii_char);
+			// *ptr++ = cell.ascii_char;
+        }
+		printf("\n");
+        //*ptr++ = '\n';
+    }
+
+    //write(STDOUT_FILENO, out, ptr - out);
 }
 
 void tuim_linux_backend_get_size(void* data, size_t* width, size_t* height) {
@@ -55,13 +88,12 @@ void tuim_linux_backend_pass_frame_buffer(void* data, const TuimFrameBuffer* fra
 	assert(data && frame_buffer);
 	TuimLinuxBackendData* bdata = data;
 	bdata->fb = frame_buffer;
+	
 }
 
 void tuim_linux_update_input(void* data, TuimInputState* input_state) {
 	assert(data && input_state);
 	TuimLinuxBackendData* bdata = data;
-
-	
 }
 
 TuimBackend tuim_linux_backend() {

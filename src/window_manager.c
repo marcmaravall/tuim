@@ -134,3 +134,8 @@ TuimWindow* tuim_window_manager_get(const TuimWindowManager* wm, const size_t in
 
 	return wm->data[index];
 }
+
+void tuim_window_manager_free(TuimWindowManager* manager) {
+	assert(manager);
+	free(manager->data);
+}

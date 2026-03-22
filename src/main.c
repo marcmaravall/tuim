@@ -8,6 +8,7 @@
 #define MEB_LOG_TO_FILE
 #define MEB_IMPLEMENTATION
 #include <meb.h>
+#include <time.h>
 
 int main(void) {
 	MebContext log_ctx;
@@ -16,7 +17,11 @@ int main(void) {
 	meb_prof_mode(&log_ctx, MEB_MILLISECONDS);
 
     TuimContext ctx;
+#ifdef __linux__
     ctx.backend = tuim_linux_backend();
+#elif defined _WIN32
+    ctx.backend = tuim_windows_backend();
+#endif
     tuim_init_context(&ctx);
     ctx.style = tuim_style_default_dark();
 
@@ -38,17 +43,16 @@ int main(void) {
     tuim_window_manager_add(&manager, example1);
     tuim_window_manager_add(&manager, example2);
 
-    // TuimText text = tuim_default_text();
-    // text.area.x = 53;
-    // text.area.y = 0;
+    int frames = 0;
 
-    while (1) {
+    while (frames < 10000) {
 		meb_log(&log_ctx, "Starting frame");
 		meb_prof_start(&log_ctx);
 
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
 
+        tuim_frame_buffer_print(&ctx.frame_buffer, TUIM_BLUE_STRUCT_INDEXED, TUIM_BLUE_STRUCT_INDEXED, "hello, world!", 10, 10);
         tuim_window_manager_update(&ctx, &manager);
         tuim_window_manager_draw  (&ctx, &manager);
 
@@ -56,8 +60,14 @@ int main(void) {
 
 		meb_log(&log_ctx, "Ending frame");
 		meb_prof_end(&log_ctx);
+        frames++;
     }
 
+    free(example);
+    free(example1);
+    free(example2);
+
+    tuim_window_manager_free(&manager);
 	tuim_destroy_context(&ctx);
 	meb_close(&log_ctx);
 

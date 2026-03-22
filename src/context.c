@@ -22,5 +22,8 @@ void tuim_end_frame(TuimContext* ctx) {
 }
 
 void tuim_destroy_context(TuimContext* ctx) {
-
+	assert(ctx);
+	ctx->backend.destroy(ctx->backend.data);
+	free(ctx->frame_buffer.cells);
+	free(ctx->backend.data);
 }
