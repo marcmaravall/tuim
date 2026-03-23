@@ -1,3 +1,6 @@
+// this is only a test, not a part of the library
+// it's only used to test the library internally and its not supposed to work very well
+
 #include <tuim.h>
 #ifdef __linux__
 #include <backends/linux/linux_backend.h>
@@ -45,14 +48,14 @@ int main(void) {
 
     int frames = 0;
 
-    while (frames < 10000) {
+    while (1) {
 		meb_log(&log_ctx, "Starting frame");
 		meb_prof_start(&log_ctx);
 
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
 
-        tuim_frame_buffer_print(&ctx.frame_buffer, TUIM_BLUE_STRUCT_INDEXED, TUIM_BLUE_STRUCT_INDEXED, "hello, world!", 10, 10);
+        // tuim_frame_buffer_print(&ctx.frame_buffer, TUIM_BLUE_STRUCT_INDEXED, TUIM_BLUE_STRUCT_INDEXED, "hello, world!", 10, 10);
         tuim_window_manager_update(&ctx, &manager);
         tuim_window_manager_draw  (&ctx, &manager);
 

@@ -1,13 +1,18 @@
 #include "layout.h"
 
 void tuim_layout_draw(const TuimContext* ctx, const TuimLayout* layout) {
-
+	for (size_t i = 0; i < layout->size; ++i) {
+		TuimLayoutElement* element = &layout->elements[i];
+		if (!element->data) {
+			continue;
+		}
+		// TODO: implement
+	}
 }
 
 void tuim_layout_update(const TuimContext* ctx, TuimLayout* layout) {
-
+	
 }
-
 
 TuimElement* tuim_layout_get(TuimLayout* layout, const size_t index) {
 	assert(layout);
