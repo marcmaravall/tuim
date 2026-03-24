@@ -59,9 +59,9 @@ int main(void) {
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
 
-        tuim_frame_buffer_print(&ctx.frame_buffer, TUIM_BLUE_STRUCT_INDEXED, TUIM_BLUE_STRUCT_INDEXED, "hello, world!", 45, 14);
-        //tuim_window_manager_update(&ctx, &manager);
-        //tuim_window_manager_draw  (&ctx, &manager);
+        //tuim_frame_buffer_print(&ctx.frame_buffer, TUIM_BLUE_STRUCT_INDEXED, TUIM_BLUE_STRUCT_INDEXED, "hello, world!", 45, 14);
+        tuim_window_manager_update(&ctx, &manager);
+        tuim_window_manager_draw  (&ctx, &manager);
 
         if (tuim_is_key_down(&ctx, 'a')) {
             break;

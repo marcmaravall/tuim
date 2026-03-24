@@ -1,5 +1,48 @@
 #include "backends/linux/linux_backend.h"
 
+// code copied from 
+// https://stackoverflow.com/questions/50884685/how-to-get-cursor-position-in-c-using-ansi-code
+void tuim_linux_get_mouse_position(size_t* x, size_t* y) {
+	write(1, "\033[6n", 4);
+	char buf[30]={0};
+ 	int ret, i, pow;
+ 	char ch;
+
+ 	struct termios term, restore;
+
+ 	tcgetattr(0, &term);
+ 	tcgetattr(0, &restore);
+ 	term.c_lflag &= ~(ICANON|ECHO);
+ 	tcsetattr(0, TCSANOW, &term);
+
+ 	write(1, "\033[6n", 4);
+
+ 	for( i = 0, ch = 0; ch != 'R'; i++ )
+ 	{
+ 	   ret = read(0, &ch, 1);
+ 	   if (!ret) {
+ 	      tcsetattr(0, TCSANOW, &restore);
+ 	      fprintf(stderr, "getpos: error reading response!\n");
+ 	   }
+
+ 	   buf[i] = ch;
+ 	   printf("buf[%d]: \t%c \t%d\n", i, ch, ch);
+ 	}
+
+ 	if (i < 2) {
+ 	   tcsetattr(0, TCSANOW, &restore);
+ 	   printf("i < 2\n");
+ 	}
+
+ 	for( i -= 2, pow = 1; buf[i] != ';'; i--, pow *= 10)
+ 	    *x = *x + ( buf[i] - '0' ) * pow;
+
+ 	for( i-- , pow = 1; buf[i] != '['; i--, pow *= 10)
+ 	    *y = *y + ( buf[i] - '0' ) * pow;
+
+ 	tcsetattr(0, TCSANOW, &restore);
+}
+
 void tuim_linux_enable_raw_mode(struct termios* old, struct termios* new) {
 
     tcgetattr(STDIN_FILENO, old);
@@ -63,7 +106,7 @@ void tuim_linux_backend_render(void* data) {
     static char* out = NULL;
     static size_t capacity = 0;
 
-    size_t needed = (fb->width + 1) * fb->height + 16;
+    size_t needed = ((fb->width + 1) * fb->height)*16 + 16;
 
     if (needed > capacity) {
         capacity = needed;
@@ -75,10 +118,21 @@ void tuim_linux_backend_render(void* data) {
     ptr += sprintf(ptr, "\x1b[H");
 	//printf("\x1b[H");
 
+	// TODO: do it with safer pointer arithmetic
     for (size_t i = 0; i < fb->height; i++) {
         for (size_t j = 0; j < fb->width; j++) {
             TuimFrameBufferCell cell = TUIM_FRAME_BUFFER_AT(fb, j, i);
             //printf("%c", cell.ascii_char);
+			const char* fg = tuim_color_to_ansi_foreground[cell.foreground_color.color.indexed_color];
+			const char* bg = tuim_color_to_ansi_background[cell.background_color.color.indexed_color];
+
+			for (size_t k = 0; k < strlen(fg); k++) {
+				*ptr++ = fg[k];
+			}
+			for (size_t k = 0; k < strlen(bg); k++) {
+				*ptr++ = bg[k];
+			}
+
 			*ptr++ = cell.ascii_char;
         }
 		//printf("\n");
@@ -120,6 +174,7 @@ void tuim_linux_update_input(void* data, TuimInputState* input_state) {
     char c;
     ssize_t n;
 
+	
     while ((n = read(STDIN_FILENO, &c, 1)) > 0) {
         unsigned char uc = (unsigned char)c;
 
@@ -127,14 +182,15 @@ void tuim_linux_update_input(void* data, TuimInputState* input_state) {
             char seq[2];
             if (read(STDIN_FILENO, &seq[0], 1) == 0) continue;
             if (read(STDIN_FILENO, &seq[1], 1) == 0) continue;
-
+			
             if (seq[0] == '[') {
 				// TODO: implement special keys
             }
         } else {
-            input_state->keyboard_state.current[uc] = 1;
+			input_state->keyboard_state.current[uc] = 1;
         }
     }
+
 }
 
 TuimBackend tuim_linux_backend() {
