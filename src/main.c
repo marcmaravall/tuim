@@ -63,12 +63,16 @@ int main(void) {
         //tuim_window_manager_update(&ctx, &manager);
         //tuim_window_manager_draw  (&ctx, &manager);
 
+        if (tuim_is_key_down(&ctx, 'a')) {
+            break;
+        }
+
         tuim_end_frame(&ctx);
 
 		meb_log(&log_ctx, "Ending frame");
 		meb_prof_end(&log_ctx);
         frames++;
-        sleep(1);
+        // sleep(1);
     }
 
     free(example);

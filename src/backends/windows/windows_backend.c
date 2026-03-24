@@ -173,6 +173,7 @@ TuimVirtualKey tuim_windows_backend_win32_to_virtual_key(const uint8_t key) {
 	return TUIM_KEY_UNKNOWN;
 }
 
+// TODO: implement virtual keys for windows backend
 void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input_state) {
 	assert(backend_data);
 	assert(input_state);

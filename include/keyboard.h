@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// TODO: implement virtual keys for windows backend
 typedef enum {
     TUIM_KEY_UNKNOWN = 0,
 

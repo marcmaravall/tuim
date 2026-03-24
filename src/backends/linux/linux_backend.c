@@ -8,6 +8,9 @@ void tuim_linux_enable_raw_mode(struct termios* old, struct termios* new) {
 	new->c_lflag &= ~(ECHO | ICANON | ISIG);
 	new->c_iflag &= ~(IXON | ICRNL);
 
+	new->c_cc[VMIN] = 0;
+	new->c_cc[VTIME] = 1;
+
     tcsetattr(STDIN_FILENO, TCSANOW, new);
 }
 
@@ -22,6 +25,15 @@ void tuim_linux_backend_init(void* data) {
 
 	// fullscreen
 	printf("\x1b[?1049h");
+
+	// quit cursor
+	printf("\033[?25l");
+
+	// mouse
+	printf("\033[?1003h"); 
+	printf("\033[?1006h");
+
+	fflush(stdout);
 }
 
 // TODO: solve attribute error
@@ -29,6 +41,14 @@ void tuim_linux_backend_destroy(void* data) {
 	assert(data);
 	TuimLinuxBackendData* bdata = data;
 	tuim_linux_disable_raw_mode(&bdata->old);
+
+	// remove
+    printf("\033[?1003l");
+    printf("\033[?1006l");
+	// show cursor
+	printf("\033[?25h"); 
+
+    fflush(stdout);
 }
 
 // TODO: solve errors:
@@ -87,12 +107,34 @@ void tuim_linux_backend_pass_frame_buffer(void* data, const TuimFrameBuffer* fra
 	assert(data && frame_buffer);
 	TuimLinuxBackendData* bdata = data;
 	bdata->fb = frame_buffer;
-	
 }
 
 void tuim_linux_update_input(void* data, TuimInputState* input_state) {
-	assert(data && input_state);
-	TuimLinuxBackendData* bdata = data;
+    assert(data && input_state);
+    TuimLinuxBackendData* bdata = data;
+
+    for (int i = 0; i < 256; i++) {
+        input_state->keyboard_state.current[i] = 0;
+    }
+
+    char c;
+    ssize_t n;
+
+    while ((n = read(STDIN_FILENO, &c, 1)) > 0) {
+        unsigned char uc = (unsigned char)c;
+
+        if (uc == 27) { // ESC
+            char seq[2];
+            if (read(STDIN_FILENO, &seq[0], 1) == 0) continue;
+            if (read(STDIN_FILENO, &seq[1], 1) == 0) continue;
+
+            if (seq[0] == '[') {
+				// TODO: implement special keys
+            }
+        } else {
+            input_state->keyboard_state.current[uc] = 1;
+        }
+    }
 }
 
 TuimBackend tuim_linux_backend() {
