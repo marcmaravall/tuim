@@ -10,7 +10,7 @@ typedef struct {
 	void (*destroy)	(void* data);
 	void (*render)	(void* data);
 
-	void (*get_size)(void* data, size_t* x, size_t* y);
+	void (*get_size)(void* data, size_t* width, size_t* height);
 	void (*pass_frame_buffer)(void* data, const TuimFrameBuffer* frame_buffer);
 
 	void (*update_input)(void* data, TuimInputState* input_state);

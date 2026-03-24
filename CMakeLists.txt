@@ -23,6 +23,10 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     -Wall -Wextra -pedantic -std=c11
     -fsanitize=address,undefined
     -fno-omit-frame-pointer -g
+
+    # this should be commented
+    -Wno-unused-variable
+    -Wno-unused-parameter
   )
 
   target_link_options(tuim PRIVATE

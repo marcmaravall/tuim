@@ -3,7 +3,7 @@
 void tuim_linux_enable_raw_mode(struct termios* old, struct termios* new) {
 
     tcgetattr(STDIN_FILENO, old);
-    new = old;
+    *new = *old;
 
 	new->c_lflag &= ~(ECHO | ICANON | ISIG);
 	new->c_iflag &= ~(IXON | ICRNL);
@@ -52,29 +52,28 @@ void tuim_linux_backend_render(void* data) {
 
     char* ptr = out;
 
-    //ptr += sprintf(ptr, "\x1b[H");
-	printf("\x1b[H");
-	printf("hola");
+    ptr += sprintf(ptr, "\x1b[H");
+	//printf("\x1b[H");
 
     for (size_t i = 0; i < fb->height; i++) {
         for (size_t j = 0; j < fb->width; j++) {
             TuimFrameBufferCell cell = TUIM_FRAME_BUFFER_AT(fb, j, i);
-            printf("#", cell.ascii_char);
-			// *ptr++ = cell.ascii_char;
+            //printf("%c", cell.ascii_char);
+			*ptr++ = cell.ascii_char;
         }
-		printf("\n");
-        //*ptr++ = '\n';
+		//printf("\n");
+        *ptr++ = '\n';
     }
 
-    //write(STDOUT_FILENO, out, ptr - out);
+    write(STDOUT_FILENO, out, ptr - out);
 }
 
 void tuim_linux_backend_get_size(void* data, size_t* width, size_t* height) {
 	assert(data && width && height);
 	struct winsize w;
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0) {
-		*width = w.ws_row;
-		*height = w.ws_col;
+		*width = w.ws_col;
+		*height = w.ws_row;
 
 		TuimLinuxBackendData* bdata = data;
 		bdata->width = *width;

@@ -48,6 +48,10 @@ int main(void) {
 
     int frames = 0;
 
+    /*size_t width, height;
+    ctx.backend.get_size(ctx.backend.data, &width, &height);
+    printf("width: %ld. height: %ld\n", width, height)
+    */;
     while (1) {
 		meb_log(&log_ctx, "Starting frame");
 		meb_prof_start(&log_ctx);
@@ -55,15 +59,16 @@ int main(void) {
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
 
-        // tuim_frame_buffer_print(&ctx.frame_buffer, TUIM_BLUE_STRUCT_INDEXED, TUIM_BLUE_STRUCT_INDEXED, "hello, world!", 10, 10);
-        tuim_window_manager_update(&ctx, &manager);
-        tuim_window_manager_draw  (&ctx, &manager);
+        tuim_frame_buffer_print(&ctx.frame_buffer, TUIM_BLUE_STRUCT_INDEXED, TUIM_BLUE_STRUCT_INDEXED, "hello, world!", 45, 14);
+        //tuim_window_manager_update(&ctx, &manager);
+        //tuim_window_manager_draw  (&ctx, &manager);
 
         tuim_end_frame(&ctx);
 
 		meb_log(&log_ctx, "Ending frame");
 		meb_prof_end(&log_ctx);
         frames++;
+        sleep(1);
     }
 
     free(example);
