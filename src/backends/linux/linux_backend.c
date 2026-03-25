@@ -94,48 +94,62 @@ void tuim_linux_backend_destroy(void* data) {
     fflush(stdout);
 }
 
-// TODO: solve errors:
+// this shit runs at only 5fps
 void tuim_linux_backend_render(void* data) {
     assert(data);
     const TuimLinuxBackendData* bdata = data;
-
-	assert(bdata->fb);
+    assert(bdata->fb);
 
     const TuimFrameBuffer* fb = bdata->fb;
 
     static char* out = NULL;
     static size_t capacity = 0;
 
-    size_t needed = ((fb->width + 1) * fb->height)*16 + 16;
+    size_t needed = ((fb->width + 1) * fb->height) * 16 + 16;
 
     if (needed > capacity) {
         capacity = needed;
         out = realloc(out, capacity);
+        assert(out);
     }
 
     char* ptr = out;
 
-    ptr += sprintf(ptr, "\x1b[H");
-	//printf("\x1b[H");
+    *ptr++ = '\x1b';
+    *ptr++ = '[';
+    *ptr++ = 'H';
 
-	// TODO: do it with safer pointer arithmetic
+    int last_fg = -1;
+    int last_bg = -1;
+
     for (size_t i = 0; i < fb->height; i++) {
+        const TuimFrameBufferCell* row = &fb->cells[i * fb->width];
+
         for (size_t j = 0; j < fb->width; j++) {
-            TuimFrameBufferCell cell = TUIM_FRAME_BUFFER_AT(fb, j, i);
-            //printf("%c", cell.ascii_char);
-			const char* fg = tuim_color_to_ansi_foreground[cell.foreground_color.color.indexed_color];
-			const char* bg = tuim_color_to_ansi_background[cell.background_color.color.indexed_color];
+            const TuimFrameBufferCell cell = row[j];
 
-			for (size_t k = 0; k < strlen(fg); k++) {
-				*ptr++ = fg[k];
-			}
-			for (size_t k = 0; k < strlen(bg); k++) {
-				*ptr++ = bg[k];
-			}
+            TuimColorIndex fg_i = cell.foreground_color.color.indexed_color;
+            TuimColorIndex bg_i = cell.background_color.color.indexed_color;
 
-			*ptr++ = cell.ascii_char;
+            if (fg_i != last_fg) {
+                const char* fg = tuim_color_to_ansi_foreground[fg_i];
+                size_t len = strlen(fg);
+                memcpy(ptr, fg, len);
+                ptr += len;
+                last_fg = fg_i;
+            }
+
+            if (bg_i != last_bg) {
+                const char* bg = tuim_color_to_ansi_background[bg_i];
+                size_t len = strlen(bg);
+                memcpy(ptr, bg, len);
+                ptr += len;
+                last_bg = bg_i;
+            }
+
+            *ptr++ = cell.ascii_char;
         }
-		//printf("\n");
+
         *ptr++ = '\n';
     }
 
@@ -163,35 +177,67 @@ void tuim_linux_backend_pass_frame_buffer(void* data, const TuimFrameBuffer* fra
 	bdata->fb = frame_buffer;
 }
 
+// USED CHATGPT:
 void tuim_linux_update_input(void* data, TuimInputState* input_state) {
     assert(data && input_state);
-    TuimLinuxBackendData* bdata = data;
 
-    for (int i = 0; i < 256; i++) {
-        input_state->keyboard_state.current[i] = 0;
-    }
+    TuimMouseState* mouse = &input_state->mouse_state;
+
+    mouse->previous = mouse->current;
 
     char c;
     ssize_t n;
 
-	
     while ((n = read(STDIN_FILENO, &c, 1)) > 0) {
         unsigned char uc = (unsigned char)c;
 
         if (uc == 27) { // ESC
-            char seq[2];
-            if (read(STDIN_FILENO, &seq[0], 1) == 0) continue;
-            if (read(STDIN_FILENO, &seq[1], 1) == 0) continue;
-			
-            if (seq[0] == '[') {
-				// TODO: implement special keys
+            char seq[64];
+            int i = 0;
+
+            while (i < (int)sizeof(seq) - 1) {
+                if (read(STDIN_FILENO, &seq[i], 1) != 1)
+                    break;
+
+                if (seq[i] == 'M' || seq[i] == 'm') {
+                    i++;
+                    break;
+                }
+                i++;
             }
+            seq[i] = '\0';
+
+            if (seq[0] == '[' && seq[1] == '<') {
+                int b, x, y;
+
+                if (sscanf(seq, "[<%d;%d;%d", &b, &x, &y) == 3) {
+                    mouse->mouse_x = x;
+                    mouse->mouse_y = y;
+
+                    int btn = b & 3;
+                    int is_release = (i > 0 && seq[i-1] == 'm');
+
+                    uint8_t mask = 0;
+
+                    if (btn == 0) mask = TUIM_MOUSE_BUTTON_LEFT;
+                    if (btn == 1) mask = TUIM_MOUSE_BUTTON_MIDDLE;
+                    if (btn == 2) mask = TUIM_MOUSE_BUTTON_RIGHT;
+
+                    if (mask) {
+                        if (is_release)
+                            mouse->current &= ~mask;
+                        else
+                            mouse->current |= mask;
+                    }
+                }
+            }
+
         } else {
-			input_state->keyboard_state.current[uc] = 1;
+            input_state->keyboard_state.current[uc] = 1;
         }
     }
-
 }
+// ---
 
 TuimBackend tuim_linux_backend() {
     TuimBackend backend;
