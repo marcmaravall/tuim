@@ -1,48 +1,5 @@
 #include "backends/linux/linux_backend.h"
 
-// code copied from 
-// https://stackoverflow.com/questions/50884685/how-to-get-cursor-position-in-c-using-ansi-code
-void tuim_linux_get_mouse_position(size_t* x, size_t* y) {
-	write(1, "\033[6n", 4);
-	char buf[30]={0};
- 	int ret, i, pow;
- 	char ch;
-
- 	struct termios term, restore;
-
- 	tcgetattr(0, &term);
- 	tcgetattr(0, &restore);
- 	term.c_lflag &= ~(ICANON|ECHO);
- 	tcsetattr(0, TCSANOW, &term);
-
- 	write(1, "\033[6n", 4);
-
- 	for( i = 0, ch = 0; ch != 'R'; i++ )
- 	{
- 	   ret = read(0, &ch, 1);
- 	   if (!ret) {
- 	      tcsetattr(0, TCSANOW, &restore);
- 	      fprintf(stderr, "getpos: error reading response!\n");
- 	   }
-
- 	   buf[i] = ch;
- 	   printf("buf[%d]: \t%c \t%d\n", i, ch, ch);
- 	}
-
- 	if (i < 2) {
- 	   tcsetattr(0, TCSANOW, &restore);
- 	   printf("i < 2\n");
- 	}
-
- 	for( i -= 2, pow = 1; buf[i] != ';'; i--, pow *= 10)
- 	    *x = *x + ( buf[i] - '0' ) * pow;
-
- 	for( i-- , pow = 1; buf[i] != '['; i--, pow *= 10)
- 	    *y = *y + ( buf[i] - '0' ) * pow;
-
- 	tcsetattr(0, TCSANOW, &restore);
-}
-
 void tuim_linux_enable_raw_mode(struct termios* old, struct termios* new) {
 
     tcgetattr(STDIN_FILENO, old);

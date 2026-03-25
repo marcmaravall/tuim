@@ -63,8 +63,6 @@ static const char* tuim_color_to_ansi_background[16] = {
 void tuim_linux_enable_raw_mode(struct termios* old, struct termios* new); 
 void tuim_linux_disable_raw_mode(const struct termios* old);
 
-void tuim_linux_get_mouse_position(size_t* x, size_t* y);
-
 void tuim_linux_backend_init(void* data);
 void tuim_linux_backend_destroy(void* data);
 void tuim_linux_backend_render(void* data);
