@@ -13,26 +13,47 @@ typedef enum {
 #define TUIM_ALGIN_DEFAULT TUIM_LEFT
 
 typedef struct {
-	TuimElement* data;
+    TuimElement* data;
 
-    float flex;                      
-    
-    TuimAlign h_align;                    
-    TuimAlign v_align;                    
-    
-    int margin_start;                
-    int margin_end;                 
-    int padding;                     
-    
-    bool expand;                     
+    float flex;
+
+    int base_size;
+
+    TuimAlign h_align;
+    TuimAlign v_align;
+
+    int margin_start;
+    int margin_end;
+    int padding;
+
+    bool expand;
 
 } TuimLayoutElement;
+
+typedef enum {
+    TUIM_ROW,
+    TUIM_COLUMN,
+} TuimDirection;
+
+typedef enum {
+    TUIM_START,
+    TUIM_CENTER,
+    TUIM_END,
+    TUIM_SPACE_BETWEEN,
+    TUIM_SPACE_AROUND,
+} TuimJustify;
 
 typedef struct {
     TuimLayoutElement* elements;
     size_t capacity;
     size_t size;
 
+    TuimDirection direction;
+    TuimJustify justify;
+    TuimAlign align_items;
+
+    int spacing;
+    TuimRect bounds;
 } TuimLayout;
 
 void tuim_layout_draw(const TuimContext* ctx, const TuimLayout* layout);

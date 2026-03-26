@@ -11,7 +11,45 @@ void tuim_layout_draw(const TuimContext* ctx, const TuimLayout* layout) {
 }
 
 void tuim_layout_update(const TuimContext* ctx, TuimLayout* layout) {
-	
+	int total_fixed = 0;
+	float total_flex = 0.0f;
+
+	for (size_t i = 0; i < layout->size; i++) {
+		TuimLayoutElement current = layout->elements[i];
+
+		if (current.flex == 0.0f) {
+			total_fixed += current.base_size + current.margin_start + current.margin_end;
+		}
+		else {
+			total_flex += current.flex;
+		}
+	}
+
+	int container_size = (layout->direction == TUIM_ROW) ? layout->bounds.width : layout->bounds.height;
+	int total_spacing = (layout->size - 1) * layout->spacing;
+	int remaining = container_size - total_fixed - total_spacing;
+
+	if (remaining < 0) 
+		remaining = 0;
+
+	int* computed_sizes = malloc(sizeof(int) * layout->size);
+
+	for (size_t i = 0; i < layout->size; i++) {
+		TuimLayoutElement current = layout->elements[i];
+
+		if (current.flex > 0.0f && total_flex > 0.0f) {
+			computed_sizes[i] = (int)((current.flex / total_flex) * remaining);
+		}
+		else {
+			computed_sizes[i] = current.base_size;
+		}
+	}
+
+	int cursor = (layout->direction == TUIM_ROW)
+		? layout->bounds.x
+		: layout->bounds.y;
+
+	// TODO: set positions:
 }
 
 TuimElement* tuim_layout_get(TuimLayout* layout, const size_t index) {
