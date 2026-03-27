@@ -33,6 +33,7 @@ void tuim_layout_update(const TuimContext* ctx, TuimLayout* layout) {
 		remaining = 0;
 
 	int* computed_sizes = malloc(sizeof(int) * layout->size);
+	assert(computed_sizes);
 
 	for (size_t i = 0; i < layout->size; i++) {
 		TuimLayoutElement current = layout->elements[i];
@@ -49,7 +50,38 @@ void tuim_layout_update(const TuimContext* ctx, TuimLayout* layout) {
 		? layout->bounds.x
 		: layout->bounds.y;
 
-	// TODO: set positions:
+	for (size_t i = 0; i < layout->size; ++i) {
+		TuimLayoutElement* current = &layout->elements[i];
+		TuimElement* el = current->data;
+
+		cursor += current->margin_start;
+
+		int main_size = computed_sizes[i];
+
+		TuimRect rect;
+
+		if (layout->direction == TUIM_ROW) {
+			rect.x = cursor;
+			rect.y = layout->bounds.y;
+			rect.width = main_size;
+			rect.height = layout->bounds.height;
+		}
+		else {
+			rect.x = layout->bounds.x;
+			rect.y = cursor;
+			rect.width = layout->bounds.width;
+			rect.height = main_size;
+		}
+
+		el->layout(el->data, rect);
+
+		cursor += main_size;
+		cursor += current->margin_end;
+
+		if (i < layout->size - 1) {
+			cursor += layout->spacing;
+		}
+	}
 }
 
 TuimElement* tuim_layout_get(TuimLayout* layout, const size_t index) {

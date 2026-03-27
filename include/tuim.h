@@ -8,6 +8,7 @@
 #include "rect.h"
 #include "text.h"
 #include "button.h"
+#include "table.h"
 #include "window.h"
 #include "window_manager.h"
 #include "layout.h"
