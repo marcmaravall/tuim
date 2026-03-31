@@ -5,6 +5,8 @@ TuimText tuim_default_text() {
 
 	text.background = TUIM_BLACK_STRUCT_INDEXED;
 	text.foreground = TUIM_WHITE_STRUCT_INDEXED;
+	text.area.x = 0;
+	text.area.y = 0;
 
 	return text;
 }
@@ -45,8 +47,14 @@ TuimElement tuim_text_to_element(const TuimText* text) {
 	element.data = (void*)text;
 	element.measure = tuim_text_measure;
 	element.layout = tuim_text_layout;
+	element.draw = tuim_draw_text;
+	element.update = tuim_text_update;
 	
 	return element;
+}
+
+void tuim_text_update(TuimContext* ctx, TuimText* data) {
+	assert(ctx && data);
 }
 
 void tuim_draw_text(TuimContext* ctx, const TuimText* text) {

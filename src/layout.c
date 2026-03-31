@@ -1,16 +1,17 @@
 #include "layout.h"
 
-void tuim_layout_draw(const TuimContext* ctx, const TuimLayout* layout) {
+void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout) {
 	for (size_t i = 0; i < layout->size; ++i) {
 		TuimLayoutElement* element = &layout->elements[i];
 		if (!element->data) {
 			continue;
 		}
-		// TODO: implement
+		TuimElement* el = element->data;
+		el->draw(ctx, el->data);
 	}
 }
 
-void tuim_layout_update(const TuimContext* ctx, TuimLayout* layout) {
+void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 	int total_fixed = 0;
 	float total_flex = 0.0f;
 
@@ -81,6 +82,8 @@ void tuim_layout_update(const TuimContext* ctx, TuimLayout* layout) {
 		if (i < layout->size - 1) {
 			cursor += layout->spacing;
 		}
+
+		el->update(ctx, el->data);
 	}
 }
 
@@ -107,17 +110,21 @@ void tuim_layout_add(TuimLayout* layout, TuimElement* element) {
 	assert(layout && element);
 
 	if (layout->size >= layout->capacity) {
-		size_t new_capacity = layout->capacity * 2;
-		TuimLayoutElement* new_elements = 
+		size_t new_capacity = layout->capacity ? layout->capacity * 2 : 1;
+		TuimLayoutElement* new_elements =
 			realloc(layout->elements, sizeof(TuimLayoutElement) * new_capacity);
-		
 		assert(new_elements);
-		
 		layout->elements = new_elements;
 		layout->capacity = new_capacity;
 	}
 
 	layout->elements[layout->size].data = element;
+	layout->elements[layout->size].flex = 0.0f;
+	layout->elements[layout->size].base_size = 0;
+	layout->elements[layout->size].margin_start = 0;
+	layout->elements[layout->size].margin_end = 0;
+
+	layout->size++;
 }
 
 void tuim_layout_clear(TuimLayout* layout) {

@@ -28,25 +28,18 @@ int main(void) {
     tuim_init_context(&ctx);
     ctx.style = tuim_style_default_dark();
 
-    TuimWindow* example = malloc(sizeof(TuimWindow)); 
-    *example = tuim_default_window();
-
-    TuimWindow* example1 = malloc(sizeof(TuimWindow));
-    *example1 = tuim_default_window();
-    example1->rect.x = 10;
-
-    TuimWindow* example2 = malloc(sizeof(TuimWindow));
-    *example2 = tuim_default_window();
-    example2->rect.y = 10;
-
-
-    TuimWindowManager manager;
-	tuim_window_manager_init(&manager, 10);
-	tuim_window_manager_add(&manager, example);
-    tuim_window_manager_add(&manager, example1);
-    tuim_window_manager_add(&manager, example2);
-
     int frames = 0;
+
+	TuimText text = tuim_default_text();
+    text.text = "hello, world!";
+	text.area.x = 10;
+	text.area.y = 10;
+
+	TuimElement example = tuim_text_to_element(&text);
+
+    TuimLayout layout;
+	tuim_layout_init(&layout, 4);
+	tuim_layout_add(&layout, &example);
 
     /*size_t width, height;
     ctx.backend.get_size(ctx.backend.data, &width, &height);
@@ -63,9 +56,12 @@ int main(void) {
 
         char buffer[256];
         snprintf(buffer, 256, "pressed: %d", pressed);
-        tuim_frame_buffer_print(&ctx.frame_buffer, TUIM_WHITE_STRUCT_INDEXED, TUIM_BLUE_STRUCT_INDEXED, buffer, 45, 14);
-        tuim_window_manager_update(&ctx, &manager);
-        tuim_window_manager_draw  (&ctx, &manager);
+
+		tuim_layout_update(&ctx, &layout);
+        
+		// tuim_draw_text(&ctx, &text);
+
+		tuim_layout_draw(&ctx, &layout);
 
         if (tuim_is_key_down(&ctx, 'a')) {
             break;
@@ -78,11 +74,8 @@ int main(void) {
         frames++;
     }
 
-    free(example);
-    free(example1);
-    free(example2);
+	free(layout.elements);
 
-    tuim_window_manager_free(&manager);
 	tuim_destroy_context(&ctx);
 	meb_close(&log_ctx);
 

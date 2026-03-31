@@ -13,13 +13,13 @@ typedef struct {
 	TuimColor background;
 
 	TuimRect area;
-	
-	int y;
 
 	char* text;
 } TuimText;
 
 TuimText tuim_default_text();
+
+void tuim_text_update(TuimContext* ctx, TuimText* data);
 void tuim_draw_text(TuimContext* ctx, const TuimText* text);
 
 TuimElement tuim_text_to_element(const TuimText* text);

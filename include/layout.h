@@ -36,9 +36,9 @@ typedef enum {
 } TuimDirection;
 
 typedef enum {
-    TUIM_START,
-    TUIM_CENTER,
-    TUIM_END,
+    TUIM_START_JUSTIFY,
+    TUIM_CENTER_JUSTIFY,
+    TUIM_END_JUSTIFY,
     TUIM_SPACE_BETWEEN,
     TUIM_SPACE_AROUND,
 } TuimJustify;
@@ -56,8 +56,8 @@ typedef struct {
     TuimRect bounds;
 } TuimLayout;
 
-void tuim_layout_draw(const TuimContext* ctx, const TuimLayout* layout);
-void tuim_layout_update(const TuimContext* ctx, TuimLayout* layout);
+void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout);
+void tuim_layout_update(TuimContext* ctx, TuimLayout* layout);
 
 void tuim_layout_init(TuimLayout* layout, size_t capacity);
 void tuim_layout_destroy(TuimLayout* layout);
