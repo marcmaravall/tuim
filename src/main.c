@@ -30,21 +30,45 @@ int main(void) {
 
     int frames = 0;
 
-	TuimText text = tuim_default_text();
-    text.text = "hello, world!";
-	text.area.x = 10;
-	text.area.y = 10;
+    TuimText text1 = tuim_default_text();
+    text1.text = "left";
 
-	TuimElement example = tuim_text_to_element(&text);
+    TuimText text2 = tuim_default_text();
+    text2.text = "fixed center";
+
+    TuimText text3 = tuim_default_text();
+    text3.text = "right";
+
+    TuimElement e1 = tuim_text_to_element(&text1);
+    TuimElement e2 = tuim_text_to_element(&text2);
+    TuimElement e3 = tuim_text_to_element(&text3);
 
     TuimLayout layout;
-	tuim_layout_init(&layout, 4);
-	tuim_layout_add(&layout, &example);
+    tuim_layout_init(&layout, 4);
 
-    /*size_t width, height;
-    ctx.backend.get_size(ctx.backend.data, &width, &height);
-    printf("width: %ld. height: %ld\n", width, height)
-    */;
+    layout.bounds.x = 0;
+    layout.bounds.y = 0;
+    layout.bounds.width = 80;
+    layout.bounds.height = 10;
+
+    layout.direction = TUIM_ROW;
+    layout.spacing = 1;
+
+    tuim_layout_add(&layout, &e1);
+    tuim_layout_add(&layout, &e2);
+    tuim_layout_add(&layout, &e3);
+
+    layout.elements[0].flex = 1.0f;
+
+    layout.elements[1].flex = 0.0f;
+    layout.elements[1].base_size = 15;
+
+    layout.elements[2].flex = 2.0f;
+
+    layout.elements[0].margin_end = 1;
+    layout.elements[1].margin_start = 1;
+    layout.elements[2].margin_start = 1;
+
     while (1) {
 		meb_log(&log_ctx, "Starting frame");
 		meb_prof_start(&log_ctx);
@@ -58,8 +82,6 @@ int main(void) {
         snprintf(buffer, 256, "pressed: %d", pressed);
 
 		tuim_layout_update(&ctx, &layout);
-        
-		// tuim_draw_text(&ctx, &text);
 
 		tuim_layout_draw(&ctx, &layout);
 
