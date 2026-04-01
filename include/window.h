@@ -6,6 +6,7 @@
 #include "id.h"
 #include "input.h"
 #include "context.h"
+#include "element.h"
 
 #include <stdlib.h>
 #include <assert.h>
@@ -72,15 +73,21 @@ typedef struct {
 
 TuimWindow tuim_default_window();
 
-void tuim_window_draw  (TuimContext* ctx, TuimWindow* widget);
+TuimSizeHint tuim_window_measure(const TuimWindow* data);
+void tuim_window_draw  (TuimContext* ctx, TuimWindow* window);
+void tuim_window_destroy (TuimWindow* window);
+
+void tuim_window_layout(TuimWindow* window, const TuimRect rect);
 
 // values for tuim_window_update
 #define TUIM_WINDOW_UPDATE_NONE 0
 #define TUIM_WINDOW_UPDATE_RESIZED 1
 #define TUIM_WINDOW_UPDATE_DRAGGED 2
 #define TUIM_WINDOW_UPDATE_RELEASED 3
-int tuim_window_update(TuimContext* ctx, TuimWindow* widget);
+int tuim_window_update(TuimContext* ctx, TuimWindow* window);
 
-bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* widget);
+TuimElement tuim_window_to_element(TuimWindow* window);
+
+bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window);
 
 #endif // TUIM_WIDGET_H
