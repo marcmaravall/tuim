@@ -89,6 +89,39 @@ void tuim_button_update(const TuimContext* ctx, TuimButton* button) {
 	button->was_down = is_down;
 }
 
+void tuim_button_destroy(TuimButton* button) {
+	assert(button);
+	// idk
+}
+
+TuimElement tuim_button_to_element(TuimButton* button) {
+	assert(button);
+
+	TuimElement el;
+	el.data = button;
+	el.draw = tuim_button_draw;
+	el.update = tuim_button_update;
+	el.destroy = tuim_button_destroy;
+	el.layout = tuim_button_layout;
+	el.measure = tuim_button_measure;
+
+	return el;
+}
+
+TuimSizeHint tuim_button_measure(const TuimButton* button) {
+	assert(button);
+	TuimSizeHint size;
+
+	// TODO: implement button measure
+
+	return size;
+}
+
+void tuim_button_layout(TuimButton* button, const TuimRect rect) {
+	assert(button);
+	button->area = rect;
+}
+
 inline bool tuim_button_get(const TuimButton* button) {
 	return button->toggled;
 }
