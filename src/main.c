@@ -1,10 +1,14 @@
-// this is only a test, not a part of the library
-// it's only used to test the library internally and its not supposed to work very well
+// WARNING: this test was made totally by chatgpt
 
+// this is only a test, not a part of the library 
+// it's only used to test the library internally and its not supposed to work very well
 #include <tuim.h>
 #ifdef __linux__
 #include <backends/linux/linux_backend.h>
 #elif defined _WIN32
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include <backends/windows/windows_backend.h>
 #endif
 
@@ -12,12 +16,15 @@
 #define MEB_IMPLEMENTATION
 #include <meb.h>
 #include <time.h>
+#include <stdio.h>
 
 int main(void) {
-	MebContext log_ctx;
-	meb_init(&log_ctx, "debug.txt");
-	meb_log_level(&log_ctx, MEB_INFO);
-	meb_prof_mode(&log_ctx, MEB_MILLISECONDS);
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+    MebContext log_ctx;
+    meb_init(&log_ctx, "debug.txt");
+    meb_log_level(&log_ctx, MEB_INFO);
+    meb_prof_mode(&log_ctx, MEB_MILLISECONDS);
 
     TuimContext ctx;
 #ifdef __linux__
@@ -32,52 +39,81 @@ int main(void) {
 
     TuimWindow w = tuim_default_window();
 
-    TuimElement e1 = tuim_window_to_element(&w);
-        
-    TuimLayout layout;
-    tuim_layout_init(&layout, 4);
+    // --- TEXT 1 (static)
+    TuimText t1 = tuim_default_text();
+    t1.text = "hello, world!";
+    TuimElement el1 = tuim_text_to_element(&t1);
+    tuim_layout_add(&w.layout, &el1);
 
-    layout.bounds.x = 0;
-    layout.bounds.y = 0;
-    layout.bounds.width = 80;
-    layout.bounds.height = 10;
+    // --- TEXT 2 (dynamic mouse state)
+    TuimText t2 = tuim_default_text();
+    char buffer_mouse[64];
+    t2.text = buffer_mouse;
+    TuimElement el2 = tuim_text_to_element(&t2);
+    tuim_layout_add(&w.layout, &el2);
 
-    layout.direction = TUIM_COLUMN;
-    layout.spacing = 1;
+    // --- TEXT 3 (frame counter)
+    TuimText t3 = tuim_default_text();
+    char buffer_frames[64];
+    t3.text = buffer_frames;
+    TuimElement el3 = tuim_text_to_element(&t3);
+    tuim_layout_add(&w.layout, &el3);
 
-    tuim_layout_add(&layout, &e1);
+    // --- TEXT 4 (interactive)
+    TuimText t4 = tuim_default_text();
+    char buffer_input[64];
+    t4.text = buffer_input;
+    TuimElement el4 = tuim_text_to_element(&t4);
+    tuim_layout_add(&w.layout, &el4);
 
     while (1) {
-		meb_log(&log_ctx, "Starting frame");
-		meb_prof_start(&log_ctx);
+        meb_log(&log_ctx, "Starting frame");
+        meb_prof_start(&log_ctx);
 
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
 
         bool pressed = tuim_is_mouse_button(&ctx, TUIM_MOUSE_BUTTON_LEFT);
 
-        char buffer[256];
-        snprintf(buffer, 256, "pressed: %d", pressed);
+        // --- update dynamic text
+        snprintf(buffer_mouse, sizeof(buffer_mouse),
+            "mouse pressed: %s", pressed ? "yes" : "no");
 
-		tuim_layout_update(&ctx, &layout);
+        snprintf(buffer_frames, sizeof(buffer_frames),
+            "frames: %d", frames);
 
-		tuim_layout_draw(&ctx, &layout);
+        snprintf(buffer_input, sizeof(buffer_input),
+            "press SPACE to change text");
 
-        if (tuim_is_key_down(&ctx, 'a')) {
+        if (tuim_is_key_down(&ctx, ' ')) {
+            t1.text = "you pressed SPACE!";
+        }
+
+        if (tuim_is_key_down(&ctx, 'R')) {
+            t1.text = "hello, world!";
+        }
+
+        if (tuim_is_key_down(&ctx, 'A')) {
             break;
         }
 
+        tuim_window_update(&ctx, &w);
+        tuim_window_draw(&ctx, &w);
+
         tuim_end_frame(&ctx);
 
-		meb_log(&log_ctx, "Ending frame");
-		meb_prof_end(&log_ctx);
+        meb_log(&log_ctx, "Ending frame");
+        meb_prof_end(&log_ctx);
+
         frames++;
     }
 
-	free(layout.elements);
+    tuim_destroy_context(&ctx);
+    meb_close(&log_ctx);
 
-	tuim_destroy_context(&ctx);
-	meb_close(&log_ctx);
+    void* a = malloc(100);
+
+    _CrtDumpMemoryLeaks();
 
     return 0;
 }

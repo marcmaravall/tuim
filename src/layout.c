@@ -84,6 +84,7 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 		}
 		el->update(ctx, el->data);
 	}
+	free(computed_sizes);
 }
 
 TuimElement* tuim_layout_get(TuimLayout* layout, const size_t index) {
@@ -98,6 +99,15 @@ void tuim_layout_init(TuimLayout* layout, size_t capacity) {
 	layout->elements = malloc(sizeof(TuimLayoutElement) * capacity);
 	layout->capacity = capacity;
 	layout->size = 0;
+	
+	// TODO: change to tuim_layout_default_ajsdkajlkd macros
+	layout->bounds.x = 0;
+	layout->bounds.y = 0;
+	layout->bounds.width = 80;
+	layout->bounds.height = 10;
+
+	layout->direction = TUIM_COLUMN;
+	layout->spacing = 1;
 }
 
 void tuim_layout_destroy(TuimLayout* layout) {

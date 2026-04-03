@@ -65,4 +65,11 @@ void tuim_layout_add(TuimLayout* layout, TuimElement* element);
 TuimElement* tuim_layout_get(TuimLayout* layout, const size_t index);
 void tuim_layout_clear(TuimLayout* layout);
 
+// TODO: do in a less verbose way
+// example:
+// tuim_layout_text(layout, str);
+// or tloutext();
+// ot tlt(l,str);
+// idk
+
 #endif // TUIM_LAYOUT_H

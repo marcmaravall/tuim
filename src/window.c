@@ -70,6 +70,8 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 		&ctx->frame_buffer, window->style.background, x0, y0, 
 		window->rect.width, window->rect.height
 	);
+
+	tuim_layout_draw(ctx, &window->layout);
 	
 	tuim_frame_buffer_draw_line (
 		&ctx->frame_buffer, window->style.border_color,
@@ -168,6 +170,7 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 	if (res != TUIM_WINDOW_UPDATE_NONE)
 		// change layout settings
 		tuim_window_resize(window, window->rect);
+	tuim_layout_update(ctx, &window->layout);
 
 	return res;
 }
