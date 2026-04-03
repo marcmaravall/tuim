@@ -82,7 +82,6 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 		if (i < layout->size - 1) {
 			cursor += layout->spacing;
 		}
-
 		el->update(ctx, el->data);
 	}
 }

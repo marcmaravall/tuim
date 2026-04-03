@@ -2,6 +2,8 @@
 
 TuimWindow tuim_default_window() {
 	TuimWindow w;
+	tuim_layout_init(&w.layout, TUIM_WINDOW_LAYOUT_DEFAULT_CAPACITY);
+	
 	w.title = "hello, world!";
 	
 	w.min_height = TUIM_WINDOW_DEFAULT_MIN_HEIGHT;
@@ -18,6 +20,8 @@ TuimWindow tuim_default_window() {
 	w.rect.y = 0;
 	w.rect.width  = TUIM_WINDOW_DEFAULT_WIDTH;
 	w.rect.height = TUIM_WINDOW_DEFAULT_HEIGHT;
+
+	tuim_window_resize(&w, w.rect);
 
 	w.start_mouse_resize_x = -1;
 	w.start_mouse_resize_y = -1;
@@ -161,7 +165,21 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 		res = TUIM_WINDOW_UPDATE_RESIZED;
 	}
 
+	if (res != TUIM_WINDOW_UPDATE_NONE)
+		// change layout settings
+		tuim_window_resize(window, window->rect);
+
 	return res;
+}
+
+void tuim_window_resize(TuimWindow* window, const TuimRect rect) {
+	assert(window);
+
+	window->rect = rect;
+	window->layout.bounds.x = window->rect.x;
+	window->layout.bounds.y = window->rect.y + 1;
+	window->layout.bounds.width = window->rect.width;
+	window->layout.bounds.height = window->rect.height - 1;
 }
 
 void tuim_window_layout(TuimWindow* window, const TuimRect rect) {

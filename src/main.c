@@ -30,19 +30,10 @@ int main(void) {
 
     int frames = 0;
 
-    TuimText text1 = tuim_default_text();
-    text1.text = "left";
+    TuimWindow w = tuim_default_window();
 
-    TuimText text2 = tuim_default_text();
-    text2.text = "fixed center";
-
-    TuimText text3 = tuim_default_text();
-    text3.text = "right";
-
-    TuimElement e1 = tuim_text_to_element(&text1);
-    TuimElement e2 = tuim_text_to_element(&text2);
-    TuimElement e3 = tuim_text_to_element(&text3);
-
+    TuimElement e1 = tuim_window_to_element(&w);
+        
     TuimLayout layout;
     tuim_layout_init(&layout, 4);
 
@@ -51,23 +42,10 @@ int main(void) {
     layout.bounds.width = 80;
     layout.bounds.height = 10;
 
-    layout.direction = TUIM_ROW;
+    layout.direction = TUIM_COLUMN;
     layout.spacing = 1;
 
     tuim_layout_add(&layout, &e1);
-    tuim_layout_add(&layout, &e2);
-    tuim_layout_add(&layout, &e3);
-
-    layout.elements[0].flex = 1.0f;
-
-    layout.elements[1].flex = 0.0f;
-    layout.elements[1].base_size = 15;
-
-    layout.elements[2].flex = 2.0f;
-
-    layout.elements[0].margin_end = 1;
-    layout.elements[1].margin_start = 1;
-    layout.elements[2].margin_start = 1;
 
     while (1) {
 		meb_log(&log_ctx, "Starting frame");
