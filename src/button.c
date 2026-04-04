@@ -7,8 +7,13 @@ TuimButton tuim_default_button() {
 	button.area.x = 0;
 	button.area.y = 0;
 	button.area.width = 10;
-	button.area.height = 10;
+	button.area.height = 2;
 	button.toggled = false;
+	button.hovered = false;
+	button.clicked = false;
+	button.pressed_inside = false;
+	button.pressing = false;
+	button.was_down = false;
 	button.flags = 0;
 
 	button.style.background = TUIM_BLACK_STRUCT_INDEXED;
@@ -124,7 +129,8 @@ TuimSizeHint tuim_button_measure(const TuimButton* button) {
 
 void tuim_button_layout(TuimButton* button, const TuimRect rect) {
 	assert(button);
-	button->area = rect;
+	button->area.x = rect.x;
+	button->area.y = rect.y;
 }
 
 inline bool tuim_button_get(const TuimButton* button) {

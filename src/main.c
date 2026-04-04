@@ -1,5 +1,3 @@
-// WARNING: this test was made totally by chatgpt
-
 // this is only a test, not a part of the library 
 // it's only used to test the library internally and its not supposed to work very well
 #include <tuim.h>
@@ -70,6 +68,9 @@ int main(void) {
 	TuimElement* e = tuim_window_add_text(&w, "hi", &text);
     TuimButton button2;
     TuimElement* e2 = tuim_window_add_button(&w, "another button", &button2);
+
+    TuimButton button3;
+    TuimElement* e3 = tuim_window_add_button(&w, "button but better", &button3);
     
     TuimButton button = tuim_button("hla");
 
@@ -104,8 +105,8 @@ int main(void) {
             break;
         }
 
-        tuim_window_draw(&ctx, &w);
         tuim_window_update(&ctx, &w);
+        tuim_window_draw(&ctx, &w);
 
 		// tuim_button_draw(&ctx, &button);
         // tuim_button_update(&ctx, &button);
