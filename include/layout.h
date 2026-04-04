@@ -13,7 +13,7 @@ typedef enum {
 #define TUIM_ALGIN_DEFAULT TUIM_LEFT
 
 typedef struct {
-    TuimElement* data;
+    TuimElement data;
 
     float flex;
 
@@ -61,8 +61,8 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout);
 
 void tuim_layout_init(TuimLayout* layout, size_t capacity);
 void tuim_layout_destroy(TuimLayout* layout);
-void tuim_layout_add(TuimLayout* layout, TuimElement* element);
-TuimElement* tuim_layout_get(TuimLayout* layout, const size_t index);
+void tuim_layout_add(TuimLayout* layout, TuimElement element);
+TuimElement tuim_layout_get(TuimLayout* layout, const size_t index);
 void tuim_layout_clear(TuimLayout* layout);
 
 // TODO: do in a less verbose way

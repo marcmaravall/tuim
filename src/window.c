@@ -230,21 +230,16 @@ bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window) {
 	return false;
 }
 
-// TODO: change design to copies instead of pointers
-TuimElement* tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text) {
+TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text) {
 	*text = tuim_text(str);
-	TuimElement* el = malloc(sizeof(TuimElement));
-	assert(el);
-	*el = tuim_text_to_element(text);
+	TuimElement el = tuim_text_to_element(text);
 	tuim_layout_add(&window->layout, el);
 	return el;
 }
 
-TuimElement* tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button) {
+TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button) {
 	*button = tuim_button(str);
-	TuimElement* el = malloc(sizeof(TuimElement));
-	assert(el);
-	*el = tuim_button_to_element(button);
+	TuimElement el = tuim_button_to_element(button);
 	tuim_layout_add(&window->layout, el);
 	return el;
 }

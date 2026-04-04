@@ -68,7 +68,12 @@ int tuim_window_manager_remove(TuimWindowManager* manager, const size_t index) {
 		return -1;
 	}
 
-	// TODO: implement
+	for (size_t i = index; i < manager->size - 1; i++) {
+		manager->data[i] = manager->data[i + 1];
+	}
+
+	manager->size--;
+	manager->data[manager->size] = NULL;
 
 	return 0;
 }

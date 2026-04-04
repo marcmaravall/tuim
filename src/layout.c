@@ -3,11 +3,7 @@
 void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout) {
 	for (size_t i = 0; i < layout->size; ++i) {
 		TuimLayoutElement* element = &layout->elements[i];
-		if (!element->data) {
-			continue;
-		}
-		TuimElement* el = element->data;
-		el->draw(ctx, el->data);
+		element->data.draw(ctx, element->data.data);
 	}
 }
 
@@ -55,7 +51,7 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 	for (size_t i = 0; i < layout->size; ++i) {
 		TuimLayoutElement* current = &layout->elements[i];
 		assert(current);
-		TuimElement* el = current->data;
+		TuimElement el = current->data;
 		assert(el);
 
 		cursor += current->margin_start;
@@ -77,7 +73,7 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 			rect.height = main_size;
 		}
 
-		el->layout(el->data, rect);
+		el.layout(el.data, rect);
 
 		cursor += main_size;
 		cursor += current->margin_end;
@@ -85,12 +81,12 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 		if (i < layout->size - 1) {
 			cursor += layout->spacing;
 		}
-		el->update(ctx, el->data);
+		el.update(ctx, el.data);
 	}
 	free(computed_sizes);
 }
 
-TuimElement* tuim_layout_get(TuimLayout* layout, const size_t index) {
+TuimElement tuim_layout_get(TuimLayout* layout, const size_t index) {
 	assert(layout);
 	assert(index < layout->size);
 
@@ -118,7 +114,7 @@ void tuim_layout_destroy(TuimLayout* layout) {
 	free(layout->elements);
 }
 
-void tuim_layout_add(TuimLayout* layout, TuimElement* element) {
+void tuim_layout_add(TuimLayout* layout, TuimElement element) {
 	assert(layout && element);
 
 	if (layout->size >= layout->capacity) {

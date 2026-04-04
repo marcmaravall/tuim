@@ -65,12 +65,12 @@ int main(void) {
     tuim_layout_add(&w.layout, &el4);*/
 
     TuimText text;
-	TuimElement* e = tuim_window_add_text(&w, "hi", &text);
+	TuimElement e = tuim_window_add_text(&w, "hi", &text);
     TuimButton button2;
-    TuimElement* e2 = tuim_window_add_button(&w, "another button", &button2);
+    TuimElement e2 = tuim_window_add_button(&w, "another button", &button2);
 
     TuimButton button3;
-    TuimElement* e3 = tuim_window_add_button(&w, "button but better", &button3);
+    TuimElement e3 = tuim_window_add_button(&w, "button but better", &button3);
     
     TuimButton button = tuim_button("hla");
 

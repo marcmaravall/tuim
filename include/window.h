@@ -105,7 +105,7 @@ TuimElement tuim_window_to_element(TuimWindow* window);
 
 bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window);
 
-TuimElement* tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text);
-TuimElement* tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button);
+TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text);
+TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button);
 
 #endif // TUIM_WINDOW_H
