@@ -103,6 +103,8 @@ void tuim_window_destroy(TuimWindow* window) {
 int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 	assert(ctx && window);
 
+	tuim_layout_update(ctx, &window->layout);
+
 	int mouse_x, mouse_y;
 	tuim_get_mouse_position(ctx, &mouse_x, &mouse_y);
 
@@ -170,7 +172,6 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 	if (res != TUIM_WINDOW_UPDATE_NONE)
 		// change layout settings
 		tuim_window_resize(window, window->rect);
-	tuim_layout_update(ctx, &window->layout);
 
 	return res;
 }
@@ -227,4 +228,23 @@ bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window) {
 	if (window->is_dragging || window->is_resizing)
 		return true;
 	return false;
+}
+
+// TODO: change design to copies instead of pointers
+TuimElement* tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text) {
+	*text = tuim_text(str);
+	TuimElement* el = malloc(sizeof(TuimElement));
+	assert(el);
+	*el = tuim_text_to_element(text);
+	tuim_layout_add(&window->layout, el);
+	return el;
+}
+
+TuimElement* tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button) {
+	*button = tuim_button(str);
+	TuimElement* el = malloc(sizeof(TuimElement));
+	assert(el);
+	*el = tuim_button_to_element(button);
+	tuim_layout_add(&window->layout, el);
+	return el;
 }

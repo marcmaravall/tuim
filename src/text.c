@@ -8,7 +8,15 @@ TuimText tuim_default_text() {
 	text.foreground = TUIM_WHITE_STRUCT_INDEXED;
 	text.area.x = 0;
 	text.area.y = 0;
+	text.area.height = 1;
+	// text.area.width = strlen(text.text);
 
+	return text;
+}
+
+TuimText tuim_text(char* str) {
+	TuimText text = tuim_default_text();
+	text.text = (char*)str;
 	return text;
 }
 

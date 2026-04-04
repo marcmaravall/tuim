@@ -40,7 +40,7 @@ int main(void) {
     TuimWindow w = tuim_default_window();
 
     // --- TEXT 1 (static)
-    TuimText t1 = tuim_default_text();
+    /*TuimText t1 = tuim_default_text();
     t1.text = "hello, world!";
     TuimElement el1 = tuim_text_to_element(&t1);
     tuim_layout_add(&w.layout, &el1);
@@ -64,7 +64,14 @@ int main(void) {
     char buffer_input[64];
     t4.text = buffer_input;
     TuimElement el4 = tuim_text_to_element(&t4);
-    tuim_layout_add(&w.layout, &el4);
+    tuim_layout_add(&w.layout, &el4);*/
+
+    TuimText text;
+	TuimElement* e = tuim_window_add_text(&w, "hi", &text);
+    TuimButton button2;
+    TuimElement* e2 = tuim_window_add_button(&w, "another button", &button2);
+    
+    TuimButton button = tuim_button("hla");
 
     while (1) {
         meb_log(&log_ctx, "Starting frame");
@@ -76,7 +83,7 @@ int main(void) {
         bool pressed = tuim_is_mouse_button(&ctx, TUIM_MOUSE_BUTTON_LEFT);
 
         // --- update dynamic text
-        snprintf(buffer_mouse, sizeof(buffer_mouse),
+        /*snprintf(buffer_mouse, sizeof(buffer_mouse),
             "mouse pressed: %s", pressed ? "yes" : "no");
 
         snprintf(buffer_frames, sizeof(buffer_frames),
@@ -91,14 +98,17 @@ int main(void) {
 
         if (tuim_is_key_down(&ctx, 'R')) {
             t1.text = "hello, world!";
-        }
+        }*/
 
         if (tuim_is_key_down(&ctx, 'A')) {
             break;
         }
 
-        tuim_window_update(&ctx, &w);
         tuim_window_draw(&ctx, &w);
+        tuim_window_update(&ctx, &w);
+
+		// tuim_button_draw(&ctx, &button);
+        // tuim_button_update(&ctx, &button);
 
         tuim_end_frame(&ctx);
 
@@ -110,8 +120,6 @@ int main(void) {
 
     tuim_destroy_context(&ctx);
     meb_close(&log_ctx);
-
-    void* a = malloc(100);
 
     _CrtDumpMemoryLeaks();
 

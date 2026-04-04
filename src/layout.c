@@ -11,6 +11,7 @@ void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout) {
 	}
 }
 
+// TODO: optimize this function
 void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 	int total_fixed = 0;
 	float total_flex = 0.0f;
@@ -53,7 +54,9 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 
 	for (size_t i = 0; i < layout->size; ++i) {
 		TuimLayoutElement* current = &layout->elements[i];
+		assert(current);
 		TuimElement* el = current->data;
+		assert(el);
 
 		cursor += current->margin_start;
 
@@ -135,6 +138,7 @@ void tuim_layout_add(TuimLayout* layout, TuimElement* element) {
 
 	layout->size++;
 }
+
 
 void tuim_layout_clear(TuimLayout* layout) {
 	assert(layout);

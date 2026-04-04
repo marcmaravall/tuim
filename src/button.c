@@ -112,7 +112,12 @@ TuimSizeHint tuim_button_measure(const TuimButton* button) {
 	assert(button);
 	TuimSizeHint size;
 
-	// TODO: implement button measure
+	size.min_width = 4; // for "[ ] "
+	size.min_height = 1;
+	size.preferred_width = 4 + strlen(button->label);
+	size.preferred_height = 1;
+	size.max_width = size.preferred_width;
+	size.max_height = size.preferred_height;
 
 	return size;
 }
@@ -129,10 +134,17 @@ inline bool tuim_button_get(const TuimButton* button) {
 // TODO: add cases depending on flags
 TuimRect tuim_button_calculate_area(const TuimButton* button) {
 	assert(button);
+	assert(button->label);
 
 	TuimRect area = button->area;
 	size_t label_len = strlen(button->label);
 	area.width = 4 + label_len; 
 	
 	return area;
+}
+
+TuimButton tuim_button(char* label) {
+	TuimButton button = tuim_default_button();
+	button.label = label;
+	return button;
 }
