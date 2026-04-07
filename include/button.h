@@ -10,8 +10,6 @@
 
 #include <stdint.h>
 
-// TODO: create button flags
-
 typedef struct {
     TuimRect area;
     const char* label;
@@ -22,12 +20,7 @@ typedef struct {
 
         TuimColor hover_background;
         TuimColor hover_foreground;
-        
-        TuimColor active_background;
-        TuimColor active_foreground;
     } style;
-
-    bool toggled;
 
     bool hovered;
     bool pressing;
@@ -36,7 +29,10 @@ typedef struct {
     bool was_down;
     bool pressed_inside;
 
-    uint8_t flags;
+    void (*on_click)(void* user_data);
+    void (*on_hover)(void* user_data);
+    void (*on_release)(void* user_data);
+    void* user_data;
 } TuimButton;
 
 TuimButton tuim_default_button();

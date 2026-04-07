@@ -248,7 +248,7 @@ TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButt
 
 TuimElement tuim_window_add_checkbox(TuimWindow* window, const char* str, TuimCheckbox* check) {
 	*check = tuim_checkbox(str);
-	TuimElement el = tuim_button_to_element(check);
+	TuimElement el = tuim_checkbox_to_element(check);
 	tuim_layout_add(&window->layout, el);
 	return el;
 }

@@ -8,29 +8,27 @@ TuimButton tuim_default_button() {
 	button.area.y = 0;
 	button.area.width = 10;
 	button.area.height = 2;
-	button.toggled = false;
 	button.hovered = false;
 	button.clicked = false;
 	button.pressed_inside = false;
 	button.pressing = false;
 	button.was_down = false;
-	button.flags = 0;
 
 	button.style.background = TUIM_BLACK_STRUCT_INDEXED;
 	button.style.foreground = TUIM_WHITE_STRUCT_INDEXED;
 	button.style.hover_background = TUIM_GREEN_STRUCT_INDEXED;
-	button.style.hover_foreground = TUIM_WHITE_STRUCT_INDEXED;  
-	button.style.active_background = TUIM_BLUE_STRUCT_INDEXED;
-	button.style.active_foreground = TUIM_WHITE_STRUCT_INDEXED;
+	button.style.hover_foreground = TUIM_WHITE_STRUCT_INDEXED;
+
+	button.user_data = NULL;
+	button.on_click = NULL;
+	button.on_hover = NULL;
+	button.on_release = NULL;
 
 	return button;
 }
 
 void tuim_button_draw(TuimContext* ctx, const TuimButton* button) {
 	assert(ctx && button);
-
-	const char* status = button->toggled ? "[x] " : "[ ] ";
-	size_t len = strlen(status);
 
 	const char* label = button->label ? button->label : "";
 
@@ -41,10 +39,6 @@ void tuim_button_draw(TuimContext* ctx, const TuimButton* button) {
 		bg = button->style.hover_background;
 		fg = button->style.hover_foreground;
 	}
-	else if (button->toggled) {
-		bg = button->style.active_background;
-		fg = button->style.active_foreground;
-	}
 	else {
 		bg = button->style.background;
 		fg = button->style.foreground;
@@ -52,15 +46,8 @@ void tuim_button_draw(TuimContext* ctx, const TuimButton* button) {
 
 	tuim_frame_buffer_print(
 		&ctx->frame_buffer, fg, bg,
-		status,
-		button->area.x,
-		button->area.y
-	);
-
-	tuim_frame_buffer_print(
-		&ctx->frame_buffer, fg, bg,
 		label,
-		button->area.x + len,
+		button->area.x,
 		button->area.y
 	);
 }
@@ -87,9 +74,24 @@ void tuim_button_update(const TuimContext* ctx, TuimButton* button) {
 	if (!is_down && button->was_down) {
 		if (button->pressed_inside && is_inside) {
 			button->clicked = true;
-			button->toggled = !button->toggled;
+
+			if (button->on_release)
+				button->on_release(button->user_data);
 		}
 	}
+
+	// ---------
+	if (is_down && is_inside) {
+		if (button->on_click)
+			button->on_click(button->user_data);
+	}
+
+	if (button->hovered) {
+		if (button->on_hover)
+			button->on_hover(button->user_data);
+	}
+
+	// ---------
 
 	button->was_down = is_down;
 }
@@ -117,9 +119,9 @@ TuimSizeHint tuim_button_measure(const TuimButton* button) {
 	assert(button);
 	TuimSizeHint size;
 
-	size.min_width = 4; // for "[ ] "
+	size.min_width = 1;
 	size.min_height = 1;
-	size.preferred_width = 4 + strlen(button->label);
+	size.preferred_width = strlen(button->label);
 	size.preferred_height = 1;
 	size.max_width = size.preferred_width;
 	size.max_height = size.preferred_height;
@@ -133,18 +135,13 @@ void tuim_button_layout(TuimButton* button, const TuimRect rect) {
 	button->area.y = rect.y;
 }
 
-inline bool tuim_button_get(const TuimButton* button) {
-	return button->toggled;
-}
-
-// TODO: add cases depending on flags
 TuimRect tuim_button_calculate_area(const TuimButton* button) {
 	assert(button);
 	assert(button->label);
 
 	TuimRect area = button->area;
 	size_t label_len = strlen(button->label);
-	area.width = 4 + label_len; 
+	area.width = label_len; 
 	
 	return area;
 }

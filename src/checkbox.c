@@ -99,11 +99,11 @@ void tuim_checkbox_destroy(TuimCheckbox* checkbox) {
 	// idk
 }
 
-TuimElement tuim_checkbox_to_element(TuimCheckbox* Checkbox) {
-	assert(Checkbox);
+TuimElement tuim_checkbox_to_element(TuimCheckbox* checkbox) {
+	assert(checkbox);
 
 	TuimElement el;
-	el.data = Checkbox;
+	el.data = checkbox;
 	el.draw = tuim_checkbox_draw;
 	el.update = tuim_checkbox_update;
 	el.destroy = tuim_checkbox_destroy;
@@ -113,13 +113,13 @@ TuimElement tuim_checkbox_to_element(TuimCheckbox* Checkbox) {
 	return el;
 }
 
-TuimSizeHint tuim_checkbox_measure(const TuimCheckbox* Checkbox) {
-	assert(Checkbox);
+TuimSizeHint tuim_checkbox_measure(const TuimCheckbox* checkbox) {
+	assert(checkbox);
 	TuimSizeHint size;
 
 	size.min_width = 4; // for "[ ] "
 	size.min_height = 1;
-	size.preferred_width = 4 + strlen(Checkbox->label);
+	size.preferred_width = 4 + strlen(checkbox->label);
 	size.preferred_height = 1;
 	size.max_width = size.preferred_width;
 	size.max_height = size.preferred_height;
@@ -133,24 +133,24 @@ void tuim_checkbox_layout(TuimCheckbox* Checkbox, const TuimRect rect) {
 	Checkbox->area.y = rect.y;
 }
 
-inline bool tuim_checkbox_get(const TuimCheckbox* Checkbox) {
-	return Checkbox->toggled;
+inline bool tuim_checkbox_get(const TuimCheckbox* checkbox) {
+	return checkbox->toggled;
 }
 
 // TODO: add cases depending on flags
-TuimRect tuim_checkbox_calculate_area(const TuimCheckbox* Checkbox) {
-	assert(Checkbox);
-	assert(Checkbox->label);
+TuimRect tuim_checkbox_calculate_area(const TuimCheckbox* checkbox) {
+	assert(checkbox);
+	assert(checkbox->label);
 
-	TuimRect area = Checkbox->area;
-	size_t label_len = strlen(Checkbox->label);
-	area.width = 4 + label_len;
+	TuimRect area = checkbox->area;
+	size_t label_len = strlen(checkbox->label);
+	area.width = label_len;
 
 	return area;
 }
 
 TuimCheckbox tuim_checkbox(char* label) {
-	TuimCheckbox Checkbox = tuim_default_checkbox();
-	Checkbox.label = label;
-	return Checkbox;
+	TuimCheckbox checkbox = tuim_default_checkbox();
+	checkbox.label = label;
+	return checkbox;
 }

@@ -16,10 +16,15 @@
 #include <time.h>
 #include <stdio.h>
 
+MebContext log_ctx;
+
+void on_button_click(void* user_data) {
+	meb_log(&log_ctx, "Button clicked!");
+}
+
 int main(void) {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    MebContext log_ctx;
     meb_init(&log_ctx, "debug.txt");
     meb_log_level(&log_ctx, MEB_INFO);
     meb_prof_mode(&log_ctx, MEB_MILLISECONDS);
@@ -69,14 +74,16 @@ int main(void) {
     TuimCheckbox button2;
     TuimElement e2 = tuim_window_add_checkbox(&w, "this is a checkbox", &button2);
 
-    TuimCheckbox button3;
+    TuimButton button3;
     TuimElement e3 = tuim_window_add_button(&w, "button but better", &button3);
-    
+    button3.on_click = on_button_click;
+    button3.user_data = &button3;
+
     TuimButton button = tuim_button("hla");
 
     while (1) {
-        meb_log(&log_ctx, "Starting frame");
-        meb_prof_start(&log_ctx);
+        // meb_log(&log_ctx, "Starting frame");
+        // meb_prof_start(&log_ctx);
 
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
@@ -113,8 +120,8 @@ int main(void) {
 
         tuim_end_frame(&ctx);
 
-        meb_log(&log_ctx, "Ending frame");
-        meb_prof_end(&log_ctx);
+        // meb_log(&log_ctx, "Ending frame");
+        // meb_prof_end(&log_ctx);
 
         frames++;
     }
