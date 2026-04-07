@@ -15,6 +15,7 @@
 #include "element.h"
 #include "size_hint.h"
 #include "frame_buffer.h"
+#include "checkbox.h"
 #include "color.h"
 
 #endif //TUIM_H

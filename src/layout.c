@@ -52,7 +52,6 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 		TuimLayoutElement* current = &layout->elements[i];
 		assert(current);
 		TuimElement el = current->data;
-		assert(el);
 
 		cursor += current->margin_start;
 
@@ -115,7 +114,7 @@ void tuim_layout_destroy(TuimLayout* layout) {
 }
 
 void tuim_layout_add(TuimLayout* layout, TuimElement element) {
-	assert(layout && element);
+	assert(layout);
 
 	if (layout->size >= layout->capacity) {
 		size_t new_capacity = layout->capacity ? layout->capacity * 2 : 1;
