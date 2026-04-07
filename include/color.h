@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 
-// TODO: add colors shit
 typedef enum {
     TUIM_BLACK,
     TUIM_RED,

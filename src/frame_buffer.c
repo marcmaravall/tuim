@@ -53,7 +53,15 @@ void tuim_frame_buffer_print(TuimFrameBuffer* fb, const TuimColor fg, const Tuim
 	}
 }
 
-void tuim_frame_buffer_draw_line(TuimFrameBuffer* fb, const TuimColor color, int x0, int y0, const int x1, const int y1) {
+void tuim_frame_buffer_draw_line
+	(TuimFrameBuffer* fb, const TuimColor color, int x0, int y0, const int x1, const int y1) {
+
+	tuim_frame_buffer_draw_line_char(fb, color, ' ', x0, y0, x1, y1);
+}
+
+void tuim_frame_buffer_draw_line_char
+	(TuimFrameBuffer* fb, const TuimColor color,
+	const char c, int x0, int y0, const int x1, const int y1) {
 	assert(fb);
 
 	int dx = abs(x1 - x0);
@@ -65,7 +73,7 @@ void tuim_frame_buffer_draw_line(TuimFrameBuffer* fb, const TuimColor color, int
 	while (true) {
 		if (x0 >= 0 && x0 < fb->width && y0 >= 0 && y0 < fb->height) {
 			TuimFrameBufferCell* cell = &TUIM_FRAME_BUFFER_AT(fb, x0, y0);
-			cell->ascii_char = ' ';
+			cell->ascii_char = c;
 			cell->background_color = color;
 			cell->foreground_color = color;
 		}
@@ -108,6 +116,11 @@ void tuim_frame_buffer_draw_rect(
 	TuimFrameBuffer* fb, const TuimColor color, 
 	const int x, const int y, const int width, const int height) {
 	
+	tuim_frame_buffer_draw_rect_char(fb, color, ' ', x, y, width, height);
+}
+
+void tuim_frame_buffer_draw_rect_char(TuimFrameBuffer* fb, const TuimColor color, 
+	const char c, const int x, const int y, const int width, const int height) {
 	assert(fb);
 
 	for (int j = y; j < y + height; j++) {
@@ -118,7 +131,7 @@ void tuim_frame_buffer_draw_rect(
 
 			TUIM_FRAME_BUFFER_AT(fb, i, j).background_color = color;
 			TUIM_FRAME_BUFFER_AT(fb, i, j).foreground_color = color;
-			TUIM_FRAME_BUFFER_AT(fb, i, j).ascii_char = ' ';
+			TUIM_FRAME_BUFFER_AT(fb, i, j).ascii_char = c;
 		}
 	}
 }
