@@ -41,6 +41,8 @@ int main(void) {
     int frames = 0;
 
     TuimWindow w = tuim_default_window();
+    w.rect.width = 30;
+    w.rect.height = 10;
 
     // --- TEXT 1 (static)
     /*TuimText t1 = tuim_default_text();
@@ -70,14 +72,20 @@ int main(void) {
     tuim_layout_add(&w.layout, &el4);*/
 
     TuimText text;
-	TuimElement e = tuim_window_add_text(&w, "this is a text", &text);
+	//TuimElement e = tuim_window_add_text(&w, "this is a text", &text);
     TuimCheckbox button2;
-    TuimElement e2 = tuim_window_add_checkbox(&w, "this is a checkbox", &button2);
+    //TuimElement e2 = tuim_window_add_checkbox(&w, "this is a checkbox", &button2);
 
     TuimButton button3;
-    TuimElement e3 = tuim_window_add_button(&w, "button but better", &button3);
+    //TuimElement e3 = tuim_window_add_button(&w, "button but better", &button3);
     button3.on_click = on_button_click;
     button3.user_data = &button3;
+
+    TuimCanvas canvas;
+    tuim_canvas_init(&canvas, 10, 5);
+    tuim_canvas_fill(&canvas, TUIM_RED_STRUCT_INDEXED);
+    TuimElement cEl = tuim_canvas_to_element(&canvas);
+    tuim_layout_add(&w.layout, cEl);
 
     TuimButton button = tuim_button("hla");
 
@@ -87,7 +95,7 @@ int main(void) {
 
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
-
+        
         bool pressed = tuim_is_mouse_button(&ctx, TUIM_MOUSE_BUTTON_LEFT);
 
         // --- update dynamic text

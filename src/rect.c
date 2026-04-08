@@ -48,3 +48,7 @@ bool tuim_rect_is_valid(TuimRect rect) {
 		return false;
 	return true;
 }
+
+bool tuim_rect_equals(const TuimRect r1, const TuimRect r2) {
+	return r1.x == r2.x && r1.y == r2.y && r1.width == r2.width && r1.height == r2.height;
+}

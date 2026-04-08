@@ -95,6 +95,11 @@ TuimElement tuim_layout_get(TuimLayout* layout, const size_t index) {
 void tuim_layout_init(TuimLayout* layout, size_t capacity) {
 	assert(layout);
 	layout->elements = malloc(sizeof(TuimLayoutElement) * capacity);
+	
+	if (capacity < 1) {
+		layout->capacity = 0;
+	}
+
 	layout->capacity = capacity;
 	layout->size = 0;
 	
@@ -102,7 +107,7 @@ void tuim_layout_init(TuimLayout* layout, size_t capacity) {
 	layout->bounds.x = 0;
 	layout->bounds.y = 0;
 	layout->bounds.width = 80;
-	layout->bounds.height = 10;
+	layout->bounds.height = 20;
 
 	layout->direction = TUIM_COLUMN;
 	layout->spacing = 1;
