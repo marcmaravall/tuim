@@ -23,6 +23,7 @@ typedef struct {
 	CHAR_INFO* buffer;
 	COORD buffer_size;
 
+    bool resized;
 	bool window_active;
 } TuimWindowsBackendData;
 
@@ -36,6 +37,7 @@ void tuim_windows_backend_update_input(void* data, TuimInputState* input_state);
 void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimKeyboardState* input_state);
 
 static WORD tuim_color_to_win32(const TuimColor color);
+void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, const SHORT width, const SHORT height);
 
 static const TuimVirtualKey tuim_win32_vk_to_tuim[256] = {
     [VK_UP] = TUIM_KEY_UP,

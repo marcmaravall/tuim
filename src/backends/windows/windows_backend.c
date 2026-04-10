@@ -7,6 +7,7 @@ void tuim_windows_backend_init(void* backend_data) {
 	data->window = GetConsoleWindow();
 	data->handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	data->current_attributes = 0x07;
+	data->resized = false;
 
 	HWND input_handle = GetStdHandle(STD_INPUT_HANDLE);
 	DWORD mode = 0;
@@ -18,16 +19,20 @@ void tuim_windows_backend_init(void* backend_data) {
 	mode |= ENABLE_EXTENDED_FLAGS;
 	mode |= ENABLE_MOUSE_INPUT;
 	mode &= ~ENABLE_QUICK_EDIT_MODE;
+	
+	mode |= ENABLE_WINDOW_INPUT;
 
 	SetConsoleMode(input_handle, mode);
 
 	// remove resize:
-	LONG style = GetWindowLong(data->window, GWL_STYLE);
+	// this should be removed for certain backend user specs in the future
+	/*LONG style = GetWindowLong(data->window, GWL_STYLE);
 
 	style &= ~WS_SIZEBOX;
 	style &= ~WS_MAXIMIZEBOX;
 
 	SetWindowLong(data->window, GWL_STYLE, style);
+	*/
 
 	// remove scrollbar
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -54,13 +59,17 @@ void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y) {
 		return;
 	}
 
-	*x = csbi.dwSize.X;
-	*y = csbi.dwSize.Y;
+	*x = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+	*y = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
 void tuim_windows_backend_destroy(void* data) {
 
 }
+
+#ifndef TUIM_MAX_FRAME_BUFFER_SIZE
+#define TUIM_MAX_FRAME_BUFFER_SIZE (65535)
+#endif // TUIM_MAX_BUFFER_SIZE
 
 void tuim_windows_backend_pass_frame_buffer(void* backend_data, const TuimFrameBuffer* frame_buffer) {
 	assert(backend_data != NULL);
@@ -68,9 +77,36 @@ void tuim_windows_backend_pass_frame_buffer(void* backend_data, const TuimFrameB
 
 	TuimWindowsBackendData* data = backend_data;
 
+	if (data->resized) {
+		size_t width = data->buffer_size.X;
+		size_t height = data->buffer_size.Y;
+
+		CHAR_INFO* new_buffer = realloc(
+			data->buffer,
+			width * height * sizeof(CHAR_INFO)
+		);
+
+		assert(new_buffer);
+
+		data->buffer = new_buffer;
+
+		tuim_windows_backend_resize_console(
+			data,
+			(SHORT)width,
+			(SHORT)height
+		);
+
+		tuim_frame_buffer_resize(
+			frame_buffer,
+			width,
+			height
+		);
+
+		data->resized = false;
+	}
+
 	size_t width = frame_buffer->width;
 	size_t height = frame_buffer->height;
-
 	if (height != data->buffer_size.Y || width != data->buffer_size.X) {
 
 		CHAR_INFO* new_buffer = realloc(
@@ -78,12 +114,15 @@ void tuim_windows_backend_pass_frame_buffer(void* backend_data, const TuimFrameB
 			width * height * sizeof(CHAR_INFO)
 		);
 
-		assert(new_buffer != NULL);
+		assert(new_buffer);
 
 		data->buffer = new_buffer;
 
 		data->buffer_size.X = (SHORT)width;
 		data->buffer_size.Y = (SHORT)height;
+	}
+	else {
+		assert(data->buffer);
 	}
 
 	size_t total = width * height;
@@ -178,6 +217,8 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 	assert(backend_data);
 	assert(input_state);
 
+	TuimWindowsBackendData* data = backend_data;
+	
 	HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
 
 	DWORD events = 0;
@@ -219,11 +260,29 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 			}
 		}
 
+		else if (record.EventType == WINDOW_BUFFER_SIZE_EVENT) {
+			COORD size = record.Event.WindowBufferSizeEvent.dwSize;
+
+			data->buffer_size = size;
+			data->resized = true;
+		}
+
 		tuim_windows_backend_input_record_to_input_state(
 			&record,
 			&input_state->keyboard_state
 		);
 	}
+}
+
+void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, const SHORT width, const SHORT height) {
+	COORD size = { width, height };
+
+	SMALL_RECT rect = { 0, 0, width - 1, height - 1 };
+	SetConsoleWindowInfo(data->handle, TRUE, &rect);
+
+	SetConsoleScreenBufferSize(data->handle, size);
+
+	SetConsoleWindowInfo(data->handle, TRUE, &rect);
 }
 
 TuimBackend tuim_windows_backend() {

@@ -139,3 +139,23 @@ void tuim_frame_buffer_draw_rect_char(TuimFrameBuffer* fb, const TuimColor color
 void tuim_frame_buffer_destroy(TuimFrameBuffer* fb) {
 	free(fb);
 }
+
+void tuim_frame_buffer_resize(TuimFrameBuffer* fb, const size_t width, const size_t height) {
+	assert(fb);
+	if (width == fb->width && height == fb->height) {
+		return;
+	}
+
+	if (width == 0 || height == 0) {
+		assert(0 && "ERROR: frame_buffer size is 0");
+	}
+
+	TuimFrameBufferCell* new_ = realloc(fb->cells, sizeof(TuimFrameBufferCell) * width * height);
+	assert(new_);
+
+	fb->cells = new_;
+	fb->width = width;
+	fb->height = height;
+
+	tuim_frame_buffer_clear(fb, TUIM_WHITE_STRUCT_INDEXED);
+}

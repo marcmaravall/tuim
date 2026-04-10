@@ -53,4 +53,6 @@ void tuim_frame_buffer_draw_equation_line (const TuimColor color, TuimFrameBuffe
 
 void tuim_frame_buffer_destroy(TuimFrameBuffer* fb);
 
+void tuim_frame_buffer_resize(TuimFrameBuffer* fb, const size_t width, const size_t height);
+
 #endif //TUIM_STATE_H
