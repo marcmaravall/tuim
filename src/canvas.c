@@ -116,3 +116,40 @@ void tuim_canvas_fill(TuimCanvas* canvas, const TuimColor color) {
 		}
 	}
 }
+
+
+void tuim_canvas_rect(TuimCanvas* canvas, const TuimRect rect, const TuimColor color) {
+	assert(canvas);
+	
+	const int y0 = (int)rect.y;
+	const int x0 = (int)rect.x;
+	const int y1 = (int)rect.y + (int)rect.height;
+	const int x1 = (int)rect.x + (int)rect.width;
+	
+	const size_t width = canvas->rect.width;
+	const size_t height = canvas->rect.height;
+
+	for (int y = y0; y < y1; y++) {
+		for (int x = x0; x < x1; x++) {
+			if (x < 0 || y < 0 ||
+				x >= width || y >= height) {
+				continue;
+			}
+
+			canvas->pixels[y * width + x] = color;
+		}
+	}
+}
+
+void tuim_canvas_point(TuimCanvas* canvas, const int x, const int y, const TuimColor color) {
+	assert(canvas);
+
+	const size_t width = canvas->rect.width;
+	const size_t height = canvas->rect.height;
+
+	if (x < 0 || y < 0 || x >= width || y >= height) {
+		return;
+	}
+
+	canvas->pixels[y * canvas->rect.width + x] = color;
+}
