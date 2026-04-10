@@ -63,8 +63,9 @@ void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y) {
 	*y = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
-void tuim_windows_backend_destroy(void* data) {
-
+void tuim_windows_backend_destroy(void* backend_data) {
+	TuimWindowsBackendData* data = backend_data;
+	free(data->buffer);
 }
 
 #ifndef TUIM_MAX_FRAME_BUFFER_SIZE

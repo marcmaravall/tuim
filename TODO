@@ -1,5 +1,8 @@
 # TODO: 
 
+- Write documentation for the library.
+- Implement textbox element for user input.
+- Solve windows backend resize problems.
 - Quit repeated code on tuim_button and tuim_checkbox (make abstraction).
 - Add slider element.
 - Add dropdown element.
