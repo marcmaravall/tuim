@@ -15,7 +15,7 @@ TuimTextbox tuim_default_textbox() {
 
 	textbox.area.x = 0;
 	textbox.area.y = 0;
-	textbox.area.width = strlen(textbox.h);
+	textbox.area.width = strlen(textbox.text);
 	textbox.area.height = 1;
 
 	return textbox;

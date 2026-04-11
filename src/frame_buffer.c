@@ -1,5 +1,11 @@
 #include "frame_buffer.h"
 
+// this doesnt use rgb compare, only indexed color
+bool tuim_frame_buffer_cell_equal(const TuimFrameBufferCell a, const TuimFrameBufferCell b) {
+	return (a.ascii_char == b.ascii_char) && 
+		(a.background_color.color.indexed_color == b.background_color.color.indexed_color);
+}
+
 void tuim_frame_buffer_init(TuimFrameBuffer* fb, const size_t width, const size_t height) {
 	fb->width  = width;
 	fb->height = height;

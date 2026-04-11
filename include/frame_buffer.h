@@ -17,6 +17,8 @@ typedef struct {
 	char ascii_char;
 } TuimFrameBufferCell;
 
+bool tuim_frame_buffer_cell_equal(const TuimFrameBufferCell a, const TuimFrameBufferCell b);
+
 typedef struct {
 	size_t width;
 	size_t height;

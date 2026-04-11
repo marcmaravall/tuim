@@ -66,6 +66,7 @@ void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y) {
 void tuim_windows_backend_destroy(void* backend_data) {
 	TuimWindowsBackendData* data = backend_data;
 	free(data->buffer);
+	free(data->shadow_buffer);
 }
 
 #ifndef TUIM_MAX_FRAME_BUFFER_SIZE
@@ -81,18 +82,17 @@ void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer*
 	if (data->resized) {
 		size_t width = data->buffer_size.X;
 		size_t height = data->buffer_size.Y;
-		
+
 		if (width * height == 0)
 			return;
 
-		CHAR_INFO* new_buffer = realloc(
-			data->buffer,
-			width * height * sizeof(CHAR_INFO)
-		);
-		
+		CHAR_INFO* new_buffer = realloc(data->buffer, width * height * sizeof(CHAR_INFO));
 		data->buffer = new_buffer;
 
-		tuim_windows_backend_resize_console(
+		new_buffer = realloc(data->shadow_buffer, width * height * sizeof(CHAR_INFO));
+		data->shadow_buffer = new_buffer;
+
+		tuim_windows_backend_resize_console (
 			data,
 			(SHORT)width,
 			(SHORT)height
@@ -111,17 +111,7 @@ void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer*
 	size_t height = frame_buffer->height;
 	if (height != data->buffer_size.Y || width != data->buffer_size.X) {
 
-		CHAR_INFO* new_buffer = realloc(
-			data->buffer,
-			width * height * sizeof(CHAR_INFO)
-		);
-
-		assert(new_buffer);
-
-		data->buffer = new_buffer;
-
-		data->buffer_size.X = (SHORT)width;
-		data->buffer_size.Y = (SHORT)height;
+		tuim_windows_backend_resize_buffer(data, width, height);
 	}
 	else {
 		assert(data->buffer);
@@ -144,13 +134,38 @@ void tuim_windows_backend_render(void* backend_data) {
 	COORD bufferCoord = { 0,0 };
 	SMALL_RECT region = { 0,0, data->buffer_size.X - 1, data->buffer_size.Y- 1 };
 
-	WriteConsoleOutput(
+	const SHORT height = data->buffer_size.Y;
+	const SHORT width  = data->buffer_size.X;
+
+	for (SHORT y = 0; y < height; y++) {
+		SHORT first = -1, last = -1;
+
+		for (SHORT x = 0; x < width; x++) {
+			size_t i = y * width + x;
+
+			if (memcmp(&data->buffer[i], &data->shadow_buffer[i], sizeof(CHAR_INFO)) != 0) {
+				if (first == -1) first = x;
+				last = x;
+			}
+		}
+
+		if (first == -1) continue;
+
+		SMALL_RECT region = { first, y, last, y };
+		COORD bufferCoord = { first, y };
+
+		WriteConsoleOutput(data->handle, data->buffer, data->buffer_size, bufferCoord, &region);
+	}
+
+	memcpy(data->shadow_buffer, data->buffer, width * height * sizeof(CHAR_INFO));
+
+	/*WriteConsoleOutput(
 		data->handle,
 		data->buffer,
 		data->buffer_size,
 		bufferCoord,
 		&region
-	);
+	);*/
 }
 
 // TODO: do with table:
@@ -291,17 +306,36 @@ void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, SHORT wid
 
 	SMALL_RECT rect = { 0, 0, width - 1, height - 1 };
 	COORD newSize = { width, height };
-
+	
+	// solved by chatgpt:
 	if (width < currentSize.X || height < currentSize.Y) {
-		// 🔻 shrinking → window FIRST
 		SetConsoleWindowInfo(data->handle, TRUE, &rect);
 		SetConsoleScreenBufferSize(data->handle, newSize);
 	}
 	else {
-		// 🔺 growing → buffer FIRST
 		SetConsoleScreenBufferSize(data->handle, newSize);
 		SetConsoleWindowInfo(data->handle, TRUE, &rect);
 	}
+	// ---------
+}
+
+void tuim_windows_backend_resize_buffer(TuimWindowsBackendData* data, const SHORT width, const SHORT height) {
+	assert(data);
+
+	data->buffer_size.X = (SHORT)width;
+	data->buffer_size.Y = (SHORT)height;
+	
+	const size_t size = width * height * sizeof(CHAR_INFO);
+	if (size == 0)
+		return;
+
+	CHAR_INFO* new_buffer = realloc(data->buffer, size);
+	assert(new_buffer);
+	data->buffer = new_buffer;
+
+	CHAR_INFO* new_shadow = realloc(data->shadow_buffer, size);
+	assert(new_shadow);
+	data->shadow_buffer = new_shadow;
 }
 
 TuimBackend tuim_windows_backend() {
@@ -312,7 +346,9 @@ TuimBackend tuim_windows_backend() {
 	if (!data) 
 		return backend;
 
+	// this should be changed to init
 	data->buffer = NULL;
+	data->shadow_buffer = NULL;
 	data->buffer_size.X = 0;
 	data->buffer_size.Y = 0;
 	data->window = NULL;

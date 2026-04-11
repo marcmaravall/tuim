@@ -21,6 +21,7 @@ typedef struct {
 	WORD   current_attributes;
 
 	CHAR_INFO* buffer;
+    CHAR_INFO* shadow_buffer;
 	COORD buffer_size;
 
     bool resized;
@@ -38,6 +39,8 @@ void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record
 
 static WORD tuim_color_to_win32(const TuimColor color);
 void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, const SHORT width, const SHORT height);
+
+void tuim_windows_backend_resize_buffer(TuimWindowsBackendData* data, const SHORT width, const SHORT height);
 
 static const TuimVirtualKey tuim_win32_vk_to_tuim[256] = {
     [VK_UP] = TUIM_KEY_UP,
