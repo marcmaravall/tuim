@@ -81,14 +81,15 @@ void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer*
 	if (data->resized) {
 		size_t width = data->buffer_size.X;
 		size_t height = data->buffer_size.Y;
+		
+		if (width * height == 0)
+			return;
 
 		CHAR_INFO* new_buffer = realloc(
 			data->buffer,
 			width * height * sizeof(CHAR_INFO)
 		);
-
-		assert(new_buffer);
-
+		
 		data->buffer = new_buffer;
 
 		tuim_windows_backend_resize_console(
