@@ -29,7 +29,7 @@ typedef struct {
 
 void tuim_windows_backend_init(void* data);
 void tuim_windows_backend_destroy(void* data);
-void tuim_windows_backend_pass_frame_buffer(void* data, const TuimFrameBuffer* frame_buffer);
+void tuim_windows_backend_pass_frame_buffer(void* data, TuimFrameBuffer* frame_buffer);
 void tuim_windows_backend_render(void* data);
 void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y);
 

@@ -72,7 +72,7 @@ void tuim_windows_backend_destroy(void* backend_data) {
 #define TUIM_MAX_FRAME_BUFFER_SIZE (65535)
 #endif // TUIM_MAX_BUFFER_SIZE
 
-void tuim_windows_backend_pass_frame_buffer(void* backend_data, const TuimFrameBuffer* frame_buffer) {
+void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer* frame_buffer) {
 	assert(backend_data != NULL);
 	assert(frame_buffer != NULL);
 
@@ -262,10 +262,16 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 		}
 
 		else if (record.EventType == WINDOW_BUFFER_SIZE_EVENT) {
-			COORD size = record.Event.WindowBufferSizeEvent.dwSize;
+			CONSOLE_SCREEN_BUFFER_INFO csbi;
+			if (GetConsoleScreenBufferInfo(data->handle, &csbi)) {
+				SHORT w = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+				SHORT h = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 
-			data->buffer_size = size;
-			data->resized = true;
+				data->buffer_size.X = w;
+				data->buffer_size.Y = h;
+				
+				data->resized = true;
+			}
 		}
 
 		tuim_windows_backend_input_record_to_input_state(
@@ -275,15 +281,26 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 	}
 }
 
-void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, const SHORT width, const SHORT height) {
-	COORD size = { width, height };
+void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, SHORT width, SHORT height) {
+	COORD currentSize;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+	GetConsoleScreenBufferInfo(data->handle, &csbi);
+	currentSize = csbi.dwSize;
 
 	SMALL_RECT rect = { 0, 0, width - 1, height - 1 };
-	SetConsoleWindowInfo(data->handle, TRUE, &rect);
+	COORD newSize = { width, height };
 
-	SetConsoleScreenBufferSize(data->handle, size);
-
-	SetConsoleWindowInfo(data->handle, TRUE, &rect);
+	if (width < currentSize.X || height < currentSize.Y) {
+		// 🔻 shrinking → window FIRST
+		SetConsoleWindowInfo(data->handle, TRUE, &rect);
+		SetConsoleScreenBufferSize(data->handle, newSize);
+	}
+	else {
+		// 🔺 growing → buffer FIRST
+		SetConsoleScreenBufferSize(data->handle, newSize);
+		SetConsoleWindowInfo(data->handle, TRUE, &rect);
+	}
 }
 
 TuimBackend tuim_windows_backend() {
