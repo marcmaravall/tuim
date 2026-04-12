@@ -3,20 +3,36 @@
 TuimText tuim_default_text() {
 	TuimText text;
 
-	text.text = "[TUIM_DEFAULT_TEXT]";
+	const char* default_str = "[TUIM_DEFAULT_TEXT]";
+	size_t len = strlen(default_str);
+
+	text.length = len;
+	text.capacity = len + 1;
+	text.text = malloc(text.capacity);
+	assert(text.text);
+	memcpy(text.text, default_str, text.capacity);
+
 	text.background = TUIM_BLACK_STRUCT_INDEXED;
 	text.foreground = TUIM_WHITE_STRUCT_INDEXED;
 	text.area.x = 0;
 	text.area.y = 0;
 	text.area.height = 1;
-	// text.area.width = strlen(text.text);
 
 	return text;
 }
 
-TuimText tuim_text(char* str) {
+TuimText tuim_text(const char* str) {
 	TuimText text = tuim_default_text();
-	text.text = (char*)str;
+
+	size_t len = strlen(str);
+	text.length = len;
+	text.capacity = len + 1;
+
+	free(text.text);
+	text.text = malloc(text.capacity);
+	assert(text.text);
+	memcpy(text.text, str, text.capacity);
+
 	return text;
 }
 
@@ -59,6 +75,7 @@ TuimElement tuim_text_to_element(const TuimText* text) {
 	element.layout = tuim_text_layout;
 	element.draw = tuim_draw_text;
 	element.update = tuim_text_update;
+	element.destroy = tuim_text_destroy;
 	
 	return element;
 }
@@ -78,4 +95,38 @@ void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
 	tuim_frame_buffer_print(
 		&ctx->frame_buffer, text->foreground, text->background, text->text, text->area.x, text->area.y
 	);
+}
+
+void tuim_text_format(TuimText* text, const char* format, ...) {
+	assert(text && format);
+
+	va_list args;
+	va_start(args, format);
+	int needed = vsnprintf(NULL, 0, format, args);
+	va_end(args);
+
+	assert(needed >= 0);
+	size_t required = (size_t)needed + 1;
+
+	if (required > text->capacity) {
+		char* buf = realloc(text->text, required);
+		assert(buf);
+		text->text = buf;
+		text->capacity = required;
+	}
+
+	va_start(args, format);
+	vsnprintf(text->text, text->capacity, format, args);
+	va_end(args);
+
+	text->length = (size_t)needed;
+}
+
+void tuim_text_destroy(TuimText* text) {
+	assert(text);
+
+	free(text->text);
+	text->text = NULL;
+	text->length = 0;
+	text->capacity = 0;
 }

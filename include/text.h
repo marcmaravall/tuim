@@ -8,6 +8,9 @@
 #include "color.h"
 #include "element.h"
 
+#include <string.h>
+#include <stdarg.h>
+
 typedef struct {
 	TuimColor foreground;
 	TuimColor background;
@@ -15,6 +18,9 @@ typedef struct {
 	TuimRect area;
 
 	char* text;
+
+	size_t length;
+	size_t capacity;
 } TuimText;
 
 TuimText tuim_default_text();
@@ -22,6 +28,9 @@ TuimText tuim_text(char* str);
 
 void tuim_text_update(TuimContext* ctx, TuimText* data);
 void tuim_draw_text(TuimContext* ctx, const TuimText* text);
+void tuim_text_destroy(TuimText* text);
+
+void tuim_text_format(TuimText* text, const char* format, ...);
 
 TuimElement tuim_text_to_element(const TuimText* text);
 

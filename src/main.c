@@ -87,6 +87,7 @@ int main(void) {
 
     TuimText text;
     tuim_window_add_text(&w, "hi", &text);
+    tuim_text_format(&text, "hola %d", 5);
 
     TuimButton button = tuim_button("hla");
 

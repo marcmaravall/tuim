@@ -129,8 +129,13 @@ void tuim_layout_init(TuimLayout* layout, size_t capacity) {
 	layout->spacing = 0;
 }
 
+// i dont know if works, i havent tested it
 void tuim_layout_destroy(TuimLayout* layout) {
 	assert(layout);
+	for (size_t i = 0; i < layout->size; i++) {
+		TuimElement el = layout->elements[i].data;
+		el.destroy(el.data);
+	}
 	free(layout->elements);
 }
 
@@ -158,7 +163,12 @@ void tuim_layout_add(TuimLayout* layout, TuimElement element) {
 
 void tuim_layout_clear(TuimLayout* layout) {
 	assert(layout);
-	
+
+	for (size_t i = 0; i < layout->size; i++) {
+		TuimElement el = layout->elements[i].data;
+		el.destroy(el.data);
+	}
+
 	layout->size = 0;
 }
 
