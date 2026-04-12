@@ -71,8 +71,6 @@ int main(void) {
     TuimElement el4 = tuim_text_to_element(&t4);
     tuim_layout_add(&w.layout, &el4);*/
 
-    TuimText text;
-	//TuimElement e = tuim_window_add_text(&w, "this is a text", &text);
     TuimCheckbox button2;
     //TuimElement e2 = tuim_window_add_checkbox(&w, "this is a checkbox", &button2);
 
@@ -86,6 +84,9 @@ int main(void) {
     tuim_canvas_fill(&canvas, TUIM_RED_STRUCT_INDEXED);
     TuimElement cEl = tuim_canvas_to_element(&canvas);
     tuim_layout_add(&w.layout, cEl);
+
+    TuimText text;
+    tuim_window_add_text(&w, "hi", &text);
 
     TuimButton button = tuim_button("hla");
 
@@ -121,6 +122,8 @@ int main(void) {
         }
 
         tuim_window_update(&ctx, &w);
+        tuim_canvas_fill(&canvas, TUIM_WHITE_STRUCT_INDEXED);
+
         tuim_window_draw(&ctx, &w);
 
 		// tuim_button_draw(&ctx, &button);

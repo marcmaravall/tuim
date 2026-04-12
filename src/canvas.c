@@ -75,19 +75,18 @@ void tuim_canvas_layout(TuimCanvas* canvas, const TuimRect rect) {
 	if (tuim_rect_equals(canvas->rect, rect))
 		return;
 
-	canvas->rect.x = rect.x;
-	canvas->rect.y = rect.y;
+	canvas->rect = rect;
 
-	return;
+	if (rect.width * rect.height == 0)
+		return;
 
-	TuimColor* new_pixels = realloc(
+	TuimColor* new_pixels = realloc (
 		canvas->pixels,
 		sizeof(TuimColor) * rect.width * rect.height
 	);
 
 	assert(new_pixels);
 	canvas->pixels = new_pixels;
-	tuim_canvas_fill(canvas, TUIM_WHITE_STRUCT_INDEXED);
 }
 
 TuimElement tuim_canvas_to_element(TuimCanvas* canvas) {

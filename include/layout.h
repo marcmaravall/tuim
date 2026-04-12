@@ -4,6 +4,10 @@
 #include "element.h"
 #include "rect.h"
 
+#include "text.h"
+#include "button.h"
+#include "checkbox.h"
+
 typedef enum {
     TUIM_LEFT,
     TUIM_CENTER,
@@ -65,11 +69,9 @@ void tuim_layout_add(TuimLayout* layout, TuimElement element);
 TuimElement tuim_layout_get(TuimLayout* layout, const size_t index);
 void tuim_layout_clear(TuimLayout* layout);
 
-// TODO: do in a less verbose way
-// example:
-// tuim_layout_text(layout, str);
-// or tloutext();
-// ot tlt(l,str);
-// idk
+// ---------
+TuimElement tuim_layout_add_text(TuimLayout* layout, char* str, TuimText* text);
+TuimElement tuim_layout_add_button(TuimLayout* layout, const char* str, TuimButton* button);
+TuimElement tuim_layout_add_checkbox(TuimLayout* layout, const char* str, TuimCheckbox* checkbox);
 
 #endif // TUIM_LAYOUT_H

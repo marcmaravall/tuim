@@ -7,7 +7,6 @@ void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout) {
 	}
 }
 
-// TODO: optimize this function
 void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 	int total_fixed = 0;
 	float total_flex = 0.0f;
@@ -16,7 +15,16 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 		TuimLayoutElement current = layout->elements[i];
 
 		if (current.flex == 0.0f) {
-			total_fixed += current.base_size + current.margin_start + current.margin_end;
+			int effective_size = current.base_size;
+
+			if (effective_size == 0) {
+				TuimSizeHint hint = current.data.measure(current.data.data);
+				effective_size = (layout->direction == TUIM_ROW)
+					? hint.preferred_width
+					: hint.preferred_height;
+			}
+
+			total_fixed += effective_size + current.margin_start + current.margin_end;
 		}
 		else {
 			total_flex += current.flex;
@@ -27,7 +35,7 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 	int total_spacing = (layout->size - 1) * layout->spacing;
 	int remaining = container_size - total_fixed - total_spacing;
 
-	if (remaining < 0) 
+	if (remaining < 0)
 		remaining = 0;
 
 	int* computed_sizes = malloc(sizeof(int) * layout->size);
@@ -38,6 +46,12 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 
 		if (current.flex > 0.0f && total_flex > 0.0f) {
 			computed_sizes[i] = (int)((current.flex / total_flex) * remaining);
+		}
+		else if (current.base_size == 0) {
+			TuimSizeHint hint = current.data.measure(current.data.data);
+			computed_sizes[i] = (layout->direction == TUIM_ROW)
+				? hint.preferred_width
+				: hint.preferred_height;
 		}
 		else {
 			computed_sizes[i] = current.base_size;
@@ -80,8 +94,10 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 		if (i < layout->size - 1) {
 			cursor += layout->spacing;
 		}
+
 		el.update(ctx, el.data);
 	}
+
 	free(computed_sizes);
 }
 
@@ -106,11 +122,11 @@ void tuim_layout_init(TuimLayout* layout, size_t capacity) {
 	// TODO: change to tuim_layout_default_ajsdkajlkd macros
 	layout->bounds.x = 0;
 	layout->bounds.y = 0;
-	layout->bounds.width = 80;
-	layout->bounds.height = 20;
+	layout->bounds.width = INT_MAX;
+	layout->bounds.height = INT_MAX;
 
 	layout->direction = TUIM_COLUMN;
-	layout->spacing = 1;
+	layout->spacing = 0;
 }
 
 void tuim_layout_destroy(TuimLayout* layout) {
@@ -144,4 +160,25 @@ void tuim_layout_clear(TuimLayout* layout) {
 	assert(layout);
 	
 	layout->size = 0;
+}
+
+TuimElement tuim_layout_add_text(TuimLayout* layout, char* str, TuimText* text) {
+	*text = tuim_text(str);
+	TuimElement el = tuim_text_to_element(text);
+	tuim_layout_add(layout, el);
+	return el;
+}
+
+TuimElement tuim_layout_add_button(TuimLayout* layout, const char* str, TuimButton* button) {
+	*button = tuim_button(str);
+	TuimElement el = tuim_button_to_element(button);
+	tuim_layout_add(layout, el);
+	return el;
+}
+
+TuimElement tuim_layout_add_checkbox(TuimLayout* layout, const char* str, TuimCheckbox* checkbox) {
+	*checkbox = tuim_checkbox(str);
+	TuimElement el = tuim_checkbox_to_element(checkbox);
+	tuim_layout_add(layout, el);
+	return el;
 }

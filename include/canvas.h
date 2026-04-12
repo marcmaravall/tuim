@@ -15,8 +15,7 @@ typedef struct {
 	TuimColor* pixels;
 } TuimCanvas;
 
-void tuim_canvas_init  (TuimCanvas* canvas, const size_t width, const size_t height);
-
+void tuim_canvas_init(TuimCanvas* canvas, const size_t width, const size_t height);
 void tuim_canvas_draw  (TuimContext* ctx, const TuimCanvas* canvas);
 void tuim_canvas_update(TuimContext* ctx, TuimCanvas* canvas);
 

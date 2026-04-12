@@ -2,13 +2,12 @@
 
 - Write documentation for the library.
 - Implement textbox element for user input.
-- Solve windows backend resize problems.
 - Quit repeated code on tuim_button and tuim_checkbox (make abstraction).
 - Add slider element.
 - Add dropdown element.
 - Add input text box to elements.
-- Add basic canvas element to draw on.
 - Add radio buttons.
+- Add some project as example.
 - Change TuimColor to enum because it sucks with rgb and enum combined.
 
 # more
