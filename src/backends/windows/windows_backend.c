@@ -363,5 +363,39 @@ TuimBackend tuim_windows_backend() {
 	backend.pass_frame_buffer = tuim_windows_backend_pass_frame_buffer;
 	backend.update_input = tuim_windows_backend_update_input;
 
+	backend.set_attrib = tuim_windows_backend_set_attrib;
+	backend.attrib_supported = tuim_windows_backend_attrib_supported;
+
 	return backend;
+}
+
+void tuim_windows_backend_set_attrib(TuimWindowsBackendData* data, const tuim_backend_attrib_t attrib, const char* value) {
+	assert(data && attrib && value);
+
+	if (attrib == TUIM_BACKEND_ATTRIB_SIZE_FIXED) {
+		bool val = STR_TO_BOOL(value);
+		LONG style = GetWindowLong(data->window, GWL_STYLE);
+
+		if (val) {
+			style &= ~WS_SIZEBOX;
+			style &= ~WS_MAXIMIZEBOX;
+
+		} else {
+
+			style |= WS_SIZEBOX;
+			style |= WS_MAXIMIZEBOX;
+		}
+
+		SetWindowLong(data->window, GWL_STYLE, style);
+	}
+
+	else {
+		
+	}
+}
+
+bool tuim_windows_backend_attrib_supported(TuimWindowsBackendData* data, const tuim_backend_attrib_t attrib) {
+	assert(data && attrib);
+
+	return attrib < 2;	// currently only one attribute
 }

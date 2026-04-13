@@ -35,7 +35,18 @@ void tuim_resize_context(TuimContext* ctx, const size_t width, const size_t heig
 
 	if (!ctx->backend.set_size) {
 		// warning or something	
+		return;
 	}
 
 	ctx->backend.set_size(ctx->backend.data, width, height);
+}
+
+void tuim_set_backend_attrib(TuimContext* ctx, const char* attrib, const char* value) {
+	assert(ctx);
+
+	if (!ctx->backend.set_attrib) {
+		return;
+	}
+
+	ctx->backend.set_attrib(ctx->backend.data, attrib, value);
 }

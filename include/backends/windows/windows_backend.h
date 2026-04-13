@@ -11,6 +11,7 @@
 #include <strsafe.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "backend.h"
 #include "input.h"
@@ -33,7 +34,6 @@ void tuim_windows_backend_destroy(void* data);
 void tuim_windows_backend_pass_frame_buffer(void* data, TuimFrameBuffer* frame_buffer);
 void tuim_windows_backend_render(void* data);
 void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y);
-void tuim_windows_backend_set_size(void* backend_data, const SHORT width, const SHORT height);
 
 void tuim_windows_backend_update_input(void* data, TuimInputState* input_state);
 void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimKeyboardState* input_state);
@@ -83,5 +83,14 @@ static const TuimVirtualKey tuim_win32_vk_to_tuim[256] = {
 TuimVirtualKey tuim_windows_backend_win32_to_virtual_key(const uint8_t key);
 
 TuimBackend tuim_windows_backend();
+
+// ATTRIBUTES:
+
+// static const char* const tuim_win32_attributes_supported[12] {
+// 
+// }
+
+void tuim_windows_backend_set_attrib(TuimWindowsBackendData* data, const tuim_backend_attrib_t attrib, const char* val);
+bool tuim_windows_backend_attrib_supported(TuimWindowsBackendData* data, const tuim_backend_attrib_t attrib);
 
 #endif //_WIN32

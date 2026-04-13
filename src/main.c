@@ -91,7 +91,8 @@ int main(void) {
 
     TuimButton button = tuim_button("hla");
 
-    tuim_resize_context(&ctx, 10, 10);
+    tuim_resize_context(&ctx, 120, 30);
+    tuim_set_backend_attrib(&ctx, TUIM_BACKEND_ATTRIB_SIZE_FIXED, "true");
 
     while (1) {
         // meb_log(&log_ctx, "Starting frame");

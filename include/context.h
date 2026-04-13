@@ -40,5 +40,6 @@ void tuim_destroy_context(TuimContext* ctx);
 
 // backend calls:
 void tuim_resize_context(TuimContext* ctx, const size_t width, const size_t height);
+void tuim_set_backend_attrib (TuimContext* ctx, const char* attrib, const char* value);
 
 #endif //TUIM_CONTEXT_H
