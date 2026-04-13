@@ -44,8 +44,6 @@ void tuim_windows_backend_init(void* backend_data) {
 	newSize.X = csbi.srWindow.Right - csbi.srWindow.Left + 1;
 	newSize.Y = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 
-	SetConsoleScreenBufferSize(data->handle, newSize);
-
 	// TODO: remove cursor
 }
 
@@ -310,10 +308,10 @@ void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, SHORT wid
 	// solved by chatgpt:
 	if (width < currentSize.X || height < currentSize.Y) {
 		SetConsoleWindowInfo(data->handle, TRUE, &rect);
-		SetConsoleScreenBufferSize(data->handle, newSize);
+		(data->handle, newSize);
 	}
 	else {
-		SetConsoleScreenBufferSize(data->handle, newSize);
+		(data->handle, newSize);
 		SetConsoleWindowInfo(data->handle, TRUE, &rect);
 	}
 	// ---------
@@ -361,6 +359,7 @@ TuimBackend tuim_windows_backend() {
 	backend.destroy = tuim_windows_backend_destroy;
 	backend.render = tuim_windows_backend_render;
 	backend.get_size = tuim_windows_backend_get_size;
+	backend.set_size = tuim_windows_backend_resize_console;
 	backend.pass_frame_buffer = tuim_windows_backend_pass_frame_buffer;
 	backend.update_input = tuim_windows_backend_update_input;
 

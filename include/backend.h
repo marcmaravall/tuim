@@ -11,6 +11,8 @@ typedef struct {
 	void (*render)	(void* data);
 
 	void (*get_size)(void* data, size_t* width, size_t* height);
+	void (*set_size)(void* data, const size_t width, const size_t height);
+
 	void (*pass_frame_buffer)(void* data, const TuimFrameBuffer* frame_buffer);
 
 	void (*update_input)(void* data, TuimInputState* input_state);

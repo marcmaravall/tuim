@@ -27,3 +27,15 @@ void tuim_destroy_context(TuimContext* ctx) {
 	free(ctx->frame_buffer.cells);
 	free(ctx->backend.data);
 }
+
+// backend calls:
+
+void tuim_resize_context(TuimContext* ctx, const size_t width, const size_t height) {
+	assert(ctx);
+
+	if (!ctx->backend.set_size) {
+		// warning or something	
+	}
+
+	ctx->backend.set_size(ctx->backend.data, width, height);
+}

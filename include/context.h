@@ -38,4 +38,7 @@ void tuim_end_frame		(TuimContext* context);
 void tuim_init_context	(TuimContext* ctx);
 void tuim_destroy_context(TuimContext* ctx);
 
+// backend calls:
+void tuim_resize_context(TuimContext* ctx, const size_t width, const size_t height);
+
 #endif //TUIM_CONTEXT_H

@@ -91,6 +91,8 @@ int main(void) {
 
     TuimButton button = tuim_button("hla");
 
+    tuim_resize_context(&ctx, 10, 10);
+
     while (1) {
         // meb_log(&log_ctx, "Starting frame");
         // meb_prof_start(&log_ctx);
