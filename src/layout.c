@@ -172,6 +172,46 @@ void tuim_layout_clear(TuimLayout* layout) {
 	layout->size = 0;
 }
 
+// ---------------
+// TODO: test behaviour
+
+TuimElement tuim_layout_to_element(TuimLayout* layout) {
+	assert(layout);
+
+	TuimElement el;
+	el.data = layout;
+	el.destroy = tuim_layout_destroy;
+	el.draw = tuim_layout_draw;
+	el.update = tuim_layout_update;
+	el.measure = tuim_layout_measure;
+	el.layout = tuim_layout_layout;
+
+	return el;
+}
+
+TuimSizeHint tuim_layout_measure(const TuimLayout* layout) {
+	assert(layout);
+	
+	TuimSizeHint sh;
+
+	sh.max_width = INT_MAX;
+	sh.max_height = INT_MAX;
+	sh.preferred_width = layout->bounds.width;
+	sh.preferred_height = layout->bounds.height;
+	sh.min_width = 0;
+	sh.min_height = 0;
+
+	return sh;
+}
+
+void tuim_layout_layout(TuimLayout* layout, const TuimRect area) {
+	assert(layout);
+
+	layout->bounds = area;
+}
+
+// ---------------
+
 TuimElement tuim_layout_add_text(TuimLayout* layout, char* str, TuimText* text) {
 	*text = tuim_text(str);
 	TuimElement el = tuim_text_to_element(text);
