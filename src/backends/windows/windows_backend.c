@@ -369,6 +369,7 @@ TuimBackend tuim_windows_backend() {
 	return backend;
 }
 
+// this shit dont works on Windows 11
 void tuim_windows_backend_set_attrib(TuimWindowsBackendData* data, const tuim_backend_attrib_t attrib, const char* value) {
 	assert(data && attrib && value);
 

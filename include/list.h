@@ -1,9 +1,10 @@
 // at this moment this is only a wrapper...
 
-#ifndef TUIM_LIST_H
-#define TUIM_LIST_H
+#ifndef TUIM_TEXT_LIST_H
+#define TUIM_TEXT_LIST_H
 
 #include "layout.h"
+#include "color.h"
 #include "element.h"
 #include "context.h"
 #include "size_hint.h"
@@ -15,6 +16,10 @@ typedef struct {
 } TuimTextListElement;
 
 typedef struct {
+	TuimRect area;
+	TuimColor fg;
+	TuimColor bg;
+
 	TuimTextListElement* data;
 	size_t size;
 	size_t capacity;
@@ -37,4 +42,4 @@ void tuim_text_list_add(TuimTextList* list, char* text);
 void tuim_text_list_clear(TuimTextList* list);
 void tuim_text_list_pop_back(TuimTextList* list);
 
-#endif // TUIM_LIST_H
+#endif // TUIM_TEXT_LIST_H

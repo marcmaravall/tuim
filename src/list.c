@@ -1,6 +1,7 @@
 #include "list.h"
 
 // TODO: implement
+// TODO: test behaviour
 
 TuimTextList tuim_text_list(const size_t capacity) {
 	TuimTextList list;
@@ -30,13 +31,23 @@ TuimTextListElement tuim_text_list_get_el (TuimTextList* list, const size_t inde
 	return list->data[index];
 }
 
-void tuim_text_list_update(TuimTextList* ctx, TuimTextList* list) {
+void tuim_text_list_update(TuimContext* ctx, TuimTextList* list) {
 	assert(list);
 }
 
-void tuim_text_list_draw(TuimTextList* ctx, const TuimTextList* list) {
+void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
 	assert(ctx && list);
 
+	// renders vertical strings for simplicity on early development:
+	// TODO: continue implementing this
+
+	const size_t x = list->area.x;
+	const size_t start_y = list->area.y;
+	const size_t end_y = start_y + list->area.height;
+
+	for (size_t i = start_y; i < end_y; i++) {
+		tuim_frame_buffer_print(&ctx->frame_buffer, list->fg, list->bg, "hi", x, i);
+	}
 }
 
 void tuim_text_list_destroy(TuimTextList* list) {
@@ -52,6 +63,12 @@ void tuim_text_list_destroy(TuimTextList* list) {
 
 TuimSizeHint tuim_text_list_measure(TuimTextList* list) {
 	assert(list);
+
+	TuimSizeHint sh;
+
+	sh = tuim_size_hint_dynamic(list->area);
+
+	return sh;
 }
 
 TuimElement tuim_text_list_to_element(const TuimTextList* list) {
