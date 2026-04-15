@@ -2,48 +2,62 @@
 
 // TODO: implement
 
-TuimList tuim_list(const size_t capacity) {
-	TuimList list;
+TuimTextList tuim_text_list(const size_t capacity) {
+	TuimTextList list;
 
-	tuim_layout_init(&list.layout, capacity);
+	list.size = 1;
+	list.capacity = capacity;
+	list.data = malloc(capacity);
 
 	return list;
 }
 
-void tuim_list_update(TuimList* ctx, TuimList* list) {
-	assert(list);
-
-	tuim_list_update(ctx, &list->layout);
+TuimTextListElement tuim_text_list_get(TuimTextList* list, const size_t index) {
+	assert(el);
+	if (index > list->size) {
+		assert(0 && "ERROR: invalid index on text list!");
+	}
+	return list->data[index];
 }
 
-void tuim_list_draw(TuimList* ctx, const TuimList* list) {
+void tuim_text_list_update(TuimTextList* ctx, TuimTextList* list) {
+	assert(list);
+}
+
+void tuim_text_list_draw(TuimTextList* ctx, const TuimTextList* list) {
 	assert(ctx && list);
 
-	tuim_layout_draw(ctx, &list->layout);
 }
 
-void tuim_list_destroy(TuimList* list) {
+void tuim_text_list_destroy(TuimTextList* list) {
+	assert(list);
+
+	for (size_t i = 0; i < list->size; i++) {
+		if (list->data[i].on_heap)
+			free(list->data[i].label);
+	}
+
+	free(list->data);
+}
+
+TuimSizeHint tuim_text_list_measure(TuimTextList* list) {
 	assert(list);
 }
 
-TuimSizeHint tuim_list_measure(TuimList* list) {
-	assert(list);
-}
-
-TuimElement tuim_list_to_element(const TuimList* list) {
+TuimElement tuim_text_list_to_element(const TuimTextList* list) {
 	assert(list);
 
 	TuimElement el;
 	el.data = list;
-	el.update = tuim_list_update;
-	el.draw = tuim_list_draw;
-	el.destroy = tuim_list_destroy;
-	el.layout = tuim_list_layout;
-	el.measure = tuim_list_measure;
+	el.update = tuim_text_list_update;
+	el.draw = tuim_text_list_draw;
+	el.destroy = tuim_text_list_destroy;
+	el.layout = tuim_text_list_layout;
+	el.measure = tuim_text_list_measure;
 
 	return el;
 }
 
-void tuim_list_layout(TuimList* list, const TuimRect rect) {
+void tuim_text_list_layout(TuimTextList* list, const TuimRect rect) {
 	
 }
