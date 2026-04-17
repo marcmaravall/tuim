@@ -38,46 +38,11 @@ int main(void) {
     tuim_init_context(&ctx);
     ctx.style = tuim_style_default_dark();
 
-    int frames = 0;
-
     TuimWindow w = tuim_default_window();
-    w.rect.width = 30;
+    w.max_height = INT_MAX;
+    w.max_width = INT_MAX;
+    w.rect.width = 100;
     w.rect.height = 10;
-
-    // --- TEXT 1 (static)
-    /*TuimText t1 = tuim_default_text();
-    t1.text = "hello, world!";
-    TuimElement el1 = tuim_text_to_element(&t1);
-    tuim_layout_add(&w.layout, &el1);
-
-    // --- TEXT 2 (dynamic mouse state)
-    TuimText t2 = tuim_default_text();
-    char buffer_mouse[64];
-    t2.text = buffer_mouse;
-    TuimElement el2 = tuim_text_to_element(&t2);
-    tuim_layout_add(&w.layout, &el2);
-
-    // --- TEXT 3 (frame counter)
-    TuimText t3 = tuim_default_text();
-    char buffer_frames[64];
-    t3.text = buffer_frames;
-    TuimElement el3 = tuim_text_to_element(&t3);
-    tuim_layout_add(&w.layout, &el3);
-
-    // --- TEXT 4 (interactive)
-    TuimText t4 = tuim_default_text();
-    char buffer_input[64];
-    t4.text = buffer_input;
-    TuimElement el4 = tuim_text_to_element(&t4);
-    tuim_layout_add(&w.layout, &el4);*/
-
-    TuimCheckbox button2;
-    //TuimElement e2 = tuim_window_add_checkbox(&w, "this is a checkbox", &button2);
-
-    TuimButton button3;
-    //TuimElement e3 = tuim_window_add_button(&w, "button but better", &button3);
-    button3.on_click = on_button_click;
-    button3.user_data = &button3;
 
     TuimCanvas canvas;
     tuim_canvas_init(&canvas, 10, 5);
@@ -85,41 +50,22 @@ int main(void) {
     TuimElement cEl = tuim_canvas_to_element(&canvas);
     tuim_layout_add(&w.layout, cEl);
 
-    TuimText text;
-    tuim_window_add_text(&w, "hi", &text);
-    tuim_text_format(&text, "hola %d", 5);
-
-    TuimButton button = tuim_button("hla");
-
     tuim_resize_context(&ctx, 120, 30);
     tuim_set_backend_attrib(&ctx, TUIM_BACKEND_ATTRIB_SIZE_FIXED, "true");
 
+    TuimTextList list = tuim_text_list(10);
+    tuim_text_list_add(&list, "- hola ");
+    tuim_text_list_add(&list, "- another list ");
+    tuim_text_list_add(&list, "- another list elemet by the way ");
+
+    tuim_window_add_element(&w, tuim_text_list_to_element(&list));
+
     while (1) {
-        // meb_log(&log_ctx, "Starting frame");
-        // meb_prof_start(&log_ctx);
 
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
         
         bool pressed = tuim_is_mouse_button(&ctx, TUIM_MOUSE_BUTTON_LEFT);
-
-        // --- update dynamic text
-        /*snprintf(buffer_mouse, sizeof(buffer_mouse),
-            "mouse pressed: %s", pressed ? "yes" : "no");
-
-        snprintf(buffer_frames, sizeof(buffer_frames),
-            "frames: %d", frames);
-
-        snprintf(buffer_input, sizeof(buffer_input),
-            "press SPACE to change text");
-
-        if (tuim_is_key_down(&ctx, ' ')) {
-            t1.text = "you pressed SPACE!";
-        }
-
-        if (tuim_is_key_down(&ctx, 'R')) {
-            t1.text = "hello, world!";
-        }*/
 
         if (tuim_is_key_down(&ctx, 'A')) {
             break;
@@ -130,15 +76,7 @@ int main(void) {
 
         tuim_window_draw(&ctx, &w);
 
-		// tuim_button_draw(&ctx, &button);
-        // tuim_button_update(&ctx, &button);
-
         tuim_end_frame(&ctx);
-
-        // meb_log(&log_ctx, "Ending frame");
-        // meb_prof_end(&log_ctx);
-
-        frames++;
     }
 
     tuim_destroy_context(&ctx);

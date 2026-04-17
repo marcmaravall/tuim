@@ -6,6 +6,7 @@
 #include "layout.h"
 #include "color.h"
 #include "element.h"
+#include "color.h"
 #include "context.h"
 #include "size_hint.h"
 #include "rect.h"
@@ -21,6 +22,8 @@ typedef struct {
 	TuimColor bg;
 
 	TuimTextListElement* data;
+	size_t max_str_size;
+
 	size_t size;
 	size_t capacity;
 } TuimTextList;
@@ -30,8 +33,8 @@ TuimTextList tuim_text_list(const size_t capacity);
 char* tuim_text_list_get (TuimTextList* list, const size_t index);
 TuimTextListElement tuim_text_list_get_el (TuimTextList* list, const size_t index);
 
-void tuim_text_list_update(TuimTextList* ctx, TuimTextList* list);
-void tuim_text_list_draw(TuimTextList* ctx, const TuimTextList* list);
+void tuim_text_list_update(TuimContext* ctx, TuimTextList* list);
+void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list);
 void tuim_text_list_destroy(TuimTextList* list);
 
 TuimSizeHint tuim_text_list_measure(TuimTextList* list);

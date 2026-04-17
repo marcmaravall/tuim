@@ -1,4 +1,4 @@
-#include "list.h"
+#include "text_list.h"
 
 // TODO: implement
 // TODO: test behaviour
@@ -6,9 +6,14 @@
 TuimTextList tuim_text_list(const size_t capacity) {
 	TuimTextList list;
 
-	list.size = 1;
+	list.size = 0;
 	list.capacity = capacity;
 	list.data = malloc(capacity);
+	list.fg = TUIM_BLACK_STRUCT_INDEXED;
+	list.bg = TUIM_WHITE_STRUCT_INDEXED;
+	
+	list.area.x = 0;
+	list.area.y = 0;
 
 	return list;
 }
@@ -33,6 +38,8 @@ TuimTextListElement tuim_text_list_get_el (TuimTextList* list, const size_t inde
 
 void tuim_text_list_update(TuimContext* ctx, TuimTextList* list) {
 	assert(list);
+
+	list->area.height = list->size;
 }
 
 void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
@@ -46,7 +53,8 @@ void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
 	const size_t end_y = start_y + list->area.height;
 
 	for (size_t i = start_y; i < end_y; i++) {
-		tuim_frame_buffer_print(&ctx->frame_buffer, list->fg, list->bg, "hi", x, i);
+		TuimTextListElement el = list->data[i-start_y];
+		tuim_frame_buffer_print(&ctx->frame_buffer, list->fg, list->bg, el.label, x, i);
 	}
 }
 
@@ -86,14 +94,14 @@ TuimElement tuim_text_list_to_element(const TuimTextList* list) {
 }
 
 void tuim_text_list_layout(TuimTextList* list, const TuimRect rect) {
-	
+	list->area = rect;
 }
 
 void tuim_text_list_add(TuimTextList* list, char* text) {
 	assert(list && text);
 	
 	list->size++;
-	if (list->size > list->capacity) {
+	if (list->size >= list->capacity) {
 		list->capacity *= 2;
 		list->data = realloc(list->data, sizeof(TuimTextListElement) * list->capacity);
 		

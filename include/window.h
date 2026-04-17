@@ -12,6 +12,7 @@
 #include "text.h"
 #include "button.h"
 #include "checkbox.h"
+#include "text_list.h"
 
 #include <stdlib.h>
 #include <assert.h>
@@ -106,8 +107,11 @@ TuimElement tuim_window_to_element(TuimWindow* window);
 
 bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window);
 
+void tuim_window_add_element(TuimWindow* window, const TuimElement el);
+
 TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text);
 TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button);
-TuimElement tuim_window_add_checkbox(TuimWindow* window, const char* str, TuimCheckbox* button);
+TuimElement tuim_window_add_checkbox(TuimWindow* window, const char* str, TuimCheckbox* checkbox);
+TuimElement tuim_window_add_text_list(TuimWindow* window, const size_t capacity, TuimTextList* list);
 
 #endif // TUIM_WINDOW_H

@@ -232,7 +232,15 @@ bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window) {
 
 // helper functions
 
+void tuim_window_add_element(TuimWindow* window, const TuimElement el) {
+	assert(window);
+
+	tuim_layout_add(&window->layout, el);
+}
+
 TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text) {
+	assert(window && str && text);
+	
 	*text = tuim_text(str);
 	TuimElement el = tuim_text_to_element(text);
 	tuim_layout_add(&window->layout, el);
@@ -240,6 +248,8 @@ TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* 
 }
 
 TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button) {
+	assert(window && str && button);
+	
 	*button = tuim_button(str);
 	TuimElement el = tuim_button_to_element(button);
 	tuim_layout_add(&window->layout, el);
@@ -247,8 +257,20 @@ TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButt
 }
 
 TuimElement tuim_window_add_checkbox(TuimWindow* window, const char* str, TuimCheckbox* check) {
+	assert(window && str && check);
+	
 	*check = tuim_checkbox(str);
 	TuimElement el = tuim_checkbox_to_element(check);
 	tuim_layout_add(&window->layout, el);
+	return el;
+}
+
+TuimElement tuim_window_add_text_list(TuimWindow* window, const size_t capacity, TuimTextList* list) {
+	assert(window && list);
+	
+	*list = tuim_text_list(capacity);
+	TuimElement el = tuim_text_list_to_element(list);
+	tuim_layout_add(&window->layout, el);
+	
 	return el;
 }

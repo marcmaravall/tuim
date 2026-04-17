@@ -14,6 +14,7 @@
 #include "layout.h"
 #include "element.h"
 #include "size_hint.h"
+#include "text_list.h"
 #include "frame_buffer.h"
 #include "checkbox.h"
 #include "canvas.h"
