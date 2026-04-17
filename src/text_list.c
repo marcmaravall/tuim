@@ -21,6 +21,7 @@ TuimTextList tuim_text_list(const size_t capacity) {
 	
 	list.area.x = 0;
 	list.area.y = 0;
+	list.max_size = 0;
 
 	list.style = tuim_text_list_default_style();
 
@@ -49,6 +50,7 @@ void tuim_text_list_update(TuimContext* ctx, TuimTextList* list) {
 	assert(list);
 
 	list->area.height = list->size;
+	list->area.width = list->max_size;
 }
 
 void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
@@ -106,6 +108,8 @@ TuimElement tuim_text_list_to_element(const TuimTextList* list) {
 }
 
 void tuim_text_list_layout(TuimTextList* list, const TuimRect rect) {
+	assert(list);
+
 	list->area = rect;
 }
 
@@ -119,6 +123,10 @@ void tuim_text_list_add(TuimTextList* list, char* text) {
 		
 		assert(list->data);
 	}
+
+	size_t len = strlen(text);
+	if (list->max_size < len)
+		list->max_size = len;
 
 	list->data[list->size - 1].label = text;
 	list->data[list->size - 1].free_on_delete = false;

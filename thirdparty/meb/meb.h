@@ -23,19 +23,24 @@
 #define __USE_POSIX199309
 #include <time.h>
 
+// update for tuim
+// TODO: continue adding global context and push to meb instead of local changes on tuim
+// im going to bed now
 #ifndef MEB_NO_LOG
+#define MEB_INIT(file_path) meb_init(&meb, file_path)
 #define MEB_ASSERT(expr) assert(expr)
-#define MEB_LOG(ctx, m) meb_log(ctx, m)
-#define MEB_LOGF(ctx, fmt, ...) \
+#define MEB_LOG(m) meb_log(&meb, m)
+#define MEB_LOGF(fmt, ...) \
     do { \
         char buf[MEB_BUFF_SIZE]; \
         snprintf(buf, MEB_BUFF_SIZE, fmt, __VA_ARGS__); \
-        meb_log(ctx, buf); \
+        meb_log(&meb, buf); \
     } while(0)
 #else
+#define MEB_INIT(file_path) ((void)0)
 #define MEB_ASSERT(expr) ((void)0)
-#define MEB_LOG(ctx, m) ((void)0)
-#define MEB_LOGF(ctx, fmt, ...) ((void)0)
+#define MEB_LOG(m) ((void)0)
+#define MEB_LOGF(fmt, ...) ((void)0)
 #endif // MEB_NO_LOG
 
 #define MEB_BUFF_SIZE 256
@@ -65,6 +70,9 @@ typedef struct {
 	MebTimeMode time_mode;
 	MebLogLevel log_level;
 } MebContext;
+
+// GLOBAL CONTEXT:
+MebContext meb;
 
 double meb_get_time(const MebTimeMode mode);
 
