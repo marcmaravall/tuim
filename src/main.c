@@ -72,7 +72,7 @@ int main(void) {
         }
 
         tuim_window_update(&ctx, &w);
-        tuim_canvas_fill(&canvas, TUIM_WHITE_STRUCT_INDEXED);
+        tuim_canvas_fill(&canvas, TUIM_RED_STRUCT_INDEXED);
 
         tuim_window_draw(&ctx, &w);
 

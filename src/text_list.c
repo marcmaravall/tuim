@@ -1,5 +1,14 @@
 #include "text_list.h"
 
+TuimTextListStyle tuim_text_list_default_style() {
+	TuimTextListStyle style;
+
+	style.foreground = TUIM_LIST_STYLE_DEFAULT_FG;
+	style.background = TUIM_LIST_STYLE_DEFAULT_BG;
+
+	return style;
+}
+
 // TODO: implement
 // TODO: test behaviour
 
@@ -8,12 +17,12 @@ TuimTextList tuim_text_list(const size_t capacity) {
 
 	list.size = 0;
 	list.capacity = capacity;
-	list.data = malloc(capacity);
-	list.fg = TUIM_BLACK_STRUCT_INDEXED;
-	list.bg = TUIM_WHITE_STRUCT_INDEXED;
+	list.data = malloc(sizeof(TuimTextListElement)*capacity);
 	
 	list.area.x = 0;
 	list.area.y = 0;
+
+	list.style = tuim_text_list_default_style();
 
 	return list;
 }
@@ -54,7 +63,10 @@ void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
 
 	for (size_t i = start_y; i < end_y; i++) {
 		TuimTextListElement el = list->data[i-start_y];
-		tuim_frame_buffer_print(&ctx->frame_buffer, list->fg, list->bg, el.label, x, i);
+		tuim_frame_buffer_print (
+			&ctx->frame_buffer, list->style.foreground, 
+			list->style.background, el.label, x, i
+		);
 	}
 }
 

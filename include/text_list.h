@@ -11,15 +11,35 @@
 #include "size_hint.h"
 #include "rect.h"
 
+#include <stdint.h>
+
 typedef struct {
 	char* label;
 	bool free_on_delete;
 } TuimTextListElement;
 
+
+// style flags:
+
+#ifndef TUIM_LIST_STYLE_DEFAULT_FG
+#define TUIM_LIST_STYLE_DEFAULT_FG TUIM_WHITE_STRUCT_INDEXED
+#endif
+#ifndef TUIM_LIST_STYLE_DEFAULT_BG
+#define TUIM_LIST_STYLE_DEFAULT_BG TUIM_BLACK_STRUCT_INDEXED
+#endif
+
 typedef struct {
+	TuimColor foreground;
+	TuimColor background;
+
+	uint8_t flags;
+} TuimTextListStyle;
+
+TuimTextListStyle tuim_text_list_default_style();
+
+typedef struct {
+	TuimTextListStyle style;
 	TuimRect area;
-	TuimColor fg;
-	TuimColor bg;
 
 	TuimTextListElement* data;
 	size_t max_str_size;
