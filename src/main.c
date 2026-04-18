@@ -69,8 +69,8 @@ int main(void) {
         if (tuim_is_key_down(&ctx, TUIM_KEY_A)) {
             break;
         }
-        
-        if (tuim_is_ctrl(&ctx, TUIM_KEY_Z)) {
+
+        else if (tuim_is_ctrl(&ctx, TUIM_KEY_Z)) {
             MEB_LOG("CTRL");
         }
 

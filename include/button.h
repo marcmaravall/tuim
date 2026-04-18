@@ -37,7 +37,7 @@ typedef struct {
 } TuimButton;
 
 TuimButton tuim_default_button();
-TuimButton tuim_button(char* label);
+TuimButton tuim_button(const char* label);
 
 void tuim_button_draw	(TuimContext* ctx, const TuimButton* button);
 void tuim_button_update (const TuimContext* ctx, TuimButton* button);

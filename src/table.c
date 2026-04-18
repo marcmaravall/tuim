@@ -71,6 +71,7 @@ TuimElement tuim_table_to_element(TuimTable* table) {
 TuimSizeHint tuim_table_measure(const TuimTable* table) {
 	MEB_ASSERT(table);
 	TuimSizeHint size;
+	size.max_height = 0;	// for initialize and the warning disappears
 	
 	for (size_t i = 0; i < table->columns; i++) {
 		for (size_t j = 0; j < table->rows; j++) {

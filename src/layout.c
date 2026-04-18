@@ -8,7 +8,7 @@ void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout) {
 }
 
 void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
-	MEB_ASSERT(ctx, layout);
+	MEB_ASSERT(ctx && layout);
 
 	int total_fixed = 0;
 	float total_flex = 0.0f;
@@ -22,8 +22,8 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 			if (effective_size == 0) {
 				TuimSizeHint hint = current.data.measure(current.data.data);
 				effective_size = (layout->direction == TUIM_ROW)
-					? hint.preferred_width
-					: hint.preferred_height;
+					? (int)hint.preferred_width
+					: (int)hint.preferred_height;
 			}
 
 			total_fixed += effective_size + current.margin_start + current.margin_end;
@@ -34,7 +34,7 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 	}
 
 	int container_size = (layout->direction == TUIM_ROW) ? layout->bounds.width : layout->bounds.height;
-	int total_spacing = (layout->size - 1) * layout->spacing;
+	int total_spacing = ((int)layout->size - 1) * layout->spacing;
 	int remaining = container_size - total_fixed - total_spacing;
 
 	if (remaining < 0)
@@ -52,8 +52,8 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 		else if (current.base_size == 0) {
 			TuimSizeHint hint = current.data.measure(current.data.data);
 			computed_sizes[i] = (layout->direction == TUIM_ROW)
-				? hint.preferred_width
-				: hint.preferred_height;
+				? (int)hint.preferred_width
+				: (int)hint.preferred_height;
 		}
 		else {
 			computed_sizes[i] = current.base_size;

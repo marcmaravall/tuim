@@ -2,7 +2,7 @@
 
 // TODO: implement textbox
 
-TuimTextbox tuim_textbox(const char* str) {
+TuimTextbox tuim_textbox(char* str) {
 	TuimTextbox textbox;
 
 	textbox = tuim_default_textbox();
@@ -24,7 +24,7 @@ TuimTextbox tuim_default_textbox() {
 
 	textbox.area.x = 0;
 	textbox.area.y = 0;
-	textbox.area.width = strlen(textbox.text);
+	textbox.area.width = (int)strlen(textbox.text);
 	textbox.area.height = 1;
 
 	return textbox;
@@ -34,7 +34,7 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 	MEB_ASSERT(ctx && textbox);
 
 	// TODO: implement: 
-	bool is_mayus;
+	bool is_mayus = false;
 }
 
 void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
@@ -64,7 +64,7 @@ TuimElement tuim_textbox_to_element(TuimTextbox* textbox) {
 	return el;
 }
 
-void tuim_textbox_layout(TuimTextbox* textbox, TuimRect area) {
+void tuim_textbox_layout(TuimTextbox* textbox, const TuimRect area) {
 	MEB_ASSERT(textbox);
 
 	textbox->area = area;

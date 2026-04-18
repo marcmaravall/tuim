@@ -26,7 +26,7 @@ typedef struct {
 } TuimText;
 
 TuimText tuim_default_text();
-TuimText tuim_text(char* str);
+TuimText tuim_text(const char* str);
 
 void tuim_text_update(TuimContext* ctx, TuimText* data);
 void tuim_draw_text(TuimContext* ctx, const TuimText* text);

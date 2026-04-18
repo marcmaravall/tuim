@@ -26,15 +26,15 @@ typedef struct {
 	char* text;
 } TuimTextbox;
 
-TuimTextbox tuim_textbox(const char* str);
+TuimTextbox tuim_textbox(char* str);
 TuimTextbox tuim_default_textbox();
 
 void tuim_update_textbox (TuimContext* ctx, TuimTextbox* textbox);
 void tuim_draw_textbox   (TuimContext* ctx, const TuimTextbox* textbox);
 void tuim_destroy_textbox(TuimTextbox* textbox);
 
-TuimElement tuim_textbox_to_element(const TuimTextbox* textbox);
-void tuim_textbox_layout(TuimTextbox* textbox, TuimRect area);
+TuimElement tuim_textbox_to_element(TuimTextbox* textbox);
+void tuim_textbox_layout(TuimTextbox* textbox, const TuimRect area);
 TuimSizeHint tuim_textbox_measure(TuimTextbox* textbox);
 
 #endif // TUIM_TEXTBOX_H

@@ -39,7 +39,7 @@ typedef struct {
 } TuimCheckbox;
 
 TuimCheckbox tuim_default_checkbox();
-TuimCheckbox tuim_checkbox(char* label);
+TuimCheckbox tuim_checkbox(const char* label);
 
 void tuim_checkbox_draw(TuimContext* ctx, const TuimCheckbox* checkbox);
 void tuim_checkbox_update(const TuimContext* ctx, TuimCheckbox* checkbox);

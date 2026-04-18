@@ -26,11 +26,11 @@ bool tuim_rect_overlaps(const TuimRect* r1, const TuimRect* r2) {
 TuimRect tuim_rect_lerp(TuimRect r1, TuimRect r2, float t) {
 	TuimRect rect;
 
-	rect.x = r1.x + (r2.x - r1.x) * t;
-	rect.y = r1.y + (r2.y - r1.y) * t;
+	rect.x = r1.x + (int)((float)(r2.x - r1.x) * t);
+	rect.y = r1.y + (int)((float)(r2.y - r1.y) * t);
 
-	rect.width = r1.width + (r2.width - r1.width) * t;
-	rect.height = r1.height + (r2.height - r1.height) * t;
+	rect.width  = r1.width  + (int)((float)(r2.width - r1.width) * t);
+	rect.height = r1.height + (int)((float)(r2.height - r1.height) * t);
 
 	return rect;
 }

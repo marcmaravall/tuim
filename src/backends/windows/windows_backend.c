@@ -71,7 +71,7 @@ void tuim_windows_backend_destroy(void* backend_data) {
 #define TUIM_MAX_FRAME_BUFFER_SIZE (65535)
 #endif // TUIM_MAX_BUFFER_SIZE
 
-void tuim_windows_backend_pass_frame_buffer(void* backend_data, const TuimFrameBuffer* frame_buffer) {
+void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer* frame_buffer) {
 	MEB_ASSERT(backend_data && frame_buffer);
 
 	TuimWindowsBackendData* data = backend_data;
@@ -338,9 +338,7 @@ TuimBackend tuim_windows_backend() {
 	TuimBackend backend;
 
 	TuimWindowsBackendData* data = malloc(sizeof(TuimWindowsBackendData));
-	
-	if (!data) 
-		return backend;
+	MEB_ASSERT(data);
 
 	// this should be changed to init
 	data->buffer = NULL;

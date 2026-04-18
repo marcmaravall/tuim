@@ -107,12 +107,12 @@ void tuim_frame_buffer_draw_equation_line(const TuimColor color, TuimFrameBuffer
 	int x0 = 0;
 	int y0 = 0;
 
-	for (size_t x = 0; x < fb->width; x++) {
+	for (int x = 0; x < fb->width; x++) {
 		double y = (m * x) + n;
 
 		int yi = (int)y;
 
-		tuim_frame_buffer_draw_line(fb, color, x0, y0, x, yi);
+		tuim_frame_buffer_draw_line(fb, color, x0, y0, x, (int)yi);
 		x0 = x;
 		y0 = yi;
 	}

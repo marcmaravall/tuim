@@ -149,7 +149,7 @@ TuimRect tuim_checkbox_calculate_area(const TuimCheckbox* checkbox) {
 	return area;
 }
 
-TuimCheckbox tuim_checkbox(char* label) {
+TuimCheckbox tuim_checkbox(const char* label) {
 	TuimCheckbox checkbox = tuim_default_checkbox();
 	checkbox.label = label;
 	return checkbox;

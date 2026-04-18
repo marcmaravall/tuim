@@ -60,7 +60,7 @@ void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list);
 void tuim_text_list_destroy(TuimTextList* list);
 
 TuimSizeHint tuim_text_list_measure(TuimTextList* list);
-TuimElement tuim_text_list_to_element(const TuimTextList* list);
+TuimElement tuim_text_list_to_element(TuimTextList* list);
 void tuim_text_list_layout(TuimTextList* list, const TuimRect rect);
 
 void tuim_text_list_add(TuimTextList* list, char* text);

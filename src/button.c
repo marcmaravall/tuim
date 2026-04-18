@@ -145,7 +145,7 @@ TuimRect tuim_button_calculate_area(const TuimButton* button) {
 	return area;
 }
 
-TuimButton tuim_button(char* label) {
+TuimButton tuim_button(const char* label) {
 	MEB_ASSERT(label);
 
 	TuimButton button = tuim_default_button();

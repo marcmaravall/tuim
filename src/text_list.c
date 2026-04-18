@@ -49,8 +49,8 @@ TuimTextListElement tuim_text_list_get_el (TuimTextList* list, const size_t inde
 void tuim_text_list_update(TuimContext* ctx, TuimTextList* list) {
 	MEB_ASSERT(list);
 
-	list->area.height = list->size;
-	list->area.width = list->max_size;
+	list->area.height = (int)list->size;
+	list->area.width  = (int)list->max_size;
 }
 
 void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
@@ -67,7 +67,7 @@ void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
 		TuimTextListElement el = list->data[i-start_y];
 		tuim_frame_buffer_print (
 			&ctx->frame_buffer, list->style.foreground, 
-			list->style.background, el.label, x, i
+			list->style.background, el.label, (int)x, (int)i
 		);
 	}
 }
@@ -93,7 +93,7 @@ TuimSizeHint tuim_text_list_measure(TuimTextList* list) {
 	return sh;
 }
 
-TuimElement tuim_text_list_to_element(const TuimTextList* list) {
+TuimElement tuim_text_list_to_element(TuimTextList* list) {
 	MEB_ASSERT(list);
 
 	TuimElement el;

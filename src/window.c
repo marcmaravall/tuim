@@ -157,14 +157,14 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 		int new_w = mouse_x - window->rect.x + 1;
 		int new_h = mouse_y - window->rect.y + 1;
 
-		int min_w = max(window->min_width, 1);
-		int min_h = max(window->min_height, 1);
+		int min_w = max((int)window->min_width, 1);
+		int min_h = max((int)window->min_height, 1);
 
 		window->rect.width = max(min_w, new_w);
 		window->rect.height = max(min_h, new_h);
 
-		window->rect.width = min(window->rect.width, window->max_width);
-		window->rect.height = min(window->rect.height, window->max_height);
+		window->rect.width = (int)min(window->rect.width, (int)window->max_width);
+		window->rect.height = (int)min(window->rect.height, (int)window->max_height);
 
 		res = TUIM_WINDOW_UPDATE_RESIZED;
 	}
@@ -190,10 +190,10 @@ void tuim_window_layout(TuimWindow* window, const TuimRect rect) {
 	MEB_ASSERT(window);
 	// for now, just set window rect 
 	window->rect = rect;
-	window->rect.width = max(window->min_width, window->rect.width);
-	window->rect.height = max(window->min_height, window->rect.height);
-	window->rect.width = min(window->max_width, window->rect.width);
-	window->rect.height = min(window->max_height, window->rect.height);
+	window->rect.width  = max((int)window->min_width,  window->rect.width);
+	window->rect.height = max((int)window->min_height, window->rect.height);
+	window->rect.width  = min((int)window->max_width,  window->rect.width);
+	window->rect.height = min((int)window->max_height, window->rect.height);
 }
 
 TuimSizeHint tuim_window_measure(const TuimWindow* data) {
