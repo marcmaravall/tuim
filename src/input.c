@@ -2,6 +2,8 @@
 #include "context.h"
 
 void tuim_update_input(TuimContext* ctx) {
+	MEB_ASSERT(ctx);
+
 	for (size_t i = 0; i < TUIM_KEY_COUNT; i++) {
 		ctx->input_state.keyboard_state.last[i] = ctx->input_state.keyboard_state.current[i];
 	}
@@ -10,6 +12,8 @@ void tuim_update_input(TuimContext* ctx) {
 }
 
 void tuim_clear_input(TuimInputState* state) {
+	MEB_ASSERT(state);
+	
 	for (size_t i = 0; i < TUIM_KEY_COUNT; i++) {
 		state->keyboard_state.current[i] = false;
 		state->keyboard_state.last[i] = false;

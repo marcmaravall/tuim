@@ -1,6 +1,8 @@
 #ifndef TUIM_WINDOW_MANAGER_H
 #define TUIM_WINDOW_MANAGER_H
 
+#include <meb.h>
+
 #include "context.h"
 #include "window.h"
 

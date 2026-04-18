@@ -1,7 +1,8 @@
 #ifndef TUIM_RECT_H
 #define TUIM_RECT_H
 
-#include <assert.h>
+#include <meb.h>
+
 #include <stdlib.h>
 #include <stdbool.h>
 

@@ -1,8 +1,8 @@
-#include <rect.h>
+#include "rect.h"
 #include "context.h"
 
 bool tuim_rect_contains(const TuimRect* rect, int px, int py) {
-	assert(rect != NULL);
+	MEB_ASSERT(rect != NULL);
 	if (px <= rect->x || px >= rect->x + rect->width)
 		return false;
 	if (py <= rect->y || py >= rect->y + rect->height)
@@ -11,8 +11,8 @@ bool tuim_rect_contains(const TuimRect* rect, int px, int py) {
 }
 
 bool tuim_rect_overlaps(const TuimRect* r1, const TuimRect* r2) {
-	assert(r1 != NULL);
-	assert(r2 != NULL);
+	MEB_ASSERT(r1 != NULL);
+	MEB_ASSERT(r2 != NULL);
 
 	if (r1->x + r1->width <= r2->x) return false;
 	if (r2->x + r2->width <= r1->x) return false;

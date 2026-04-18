@@ -1,6 +1,8 @@
 #ifndef TUIM_TABLE_H
 #define TUIM_TABLE_H
 
+#include <meb.h>
+
 #include "element.h"
 #include "color.h"
 

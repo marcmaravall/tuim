@@ -1,8 +1,8 @@
 #ifndef TUIM_STYLE_H
 #define TUIM_STYLE_H
 
+#include <meb.h>
 #include <stdint.h>
-#include <assert.h>
 
 #include "color.h"
 

@@ -5,11 +5,12 @@
 #else
 #define TUIM_WINDOWS_BACKEND_H
 
+#include <meb.h>
+
 #include <windows.h>
 #include <conio.h>
 #include <tchar.h>
 #include <strsafe.h>
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 

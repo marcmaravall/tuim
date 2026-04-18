@@ -1,6 +1,8 @@
 #ifndef TUIM_STATE_H
 #define TUIM_STATE_H
 
+#include <meb.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

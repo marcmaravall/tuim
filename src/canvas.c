@@ -1,7 +1,7 @@
 #include "canvas.h"
 
 void tuim_canvas_init(TuimCanvas* canvas, const size_t width, const size_t height) {
-	assert(canvas);
+	MEB_ASSERT(canvas);
 
 	canvas->rect.x = 0;
 	canvas->rect.y = 0;
@@ -12,7 +12,7 @@ void tuim_canvas_init(TuimCanvas* canvas, const size_t width, const size_t heigh
 }
 
 void tuim_canvas_draw(TuimContext* ctx, const TuimCanvas* canvas) {
-	assert(ctx && canvas);
+	MEB_ASSERT(ctx && canvas);
 
 	const int y_from = canvas->rect.y;
 	const int y_to = y_from + canvas->rect.height;
@@ -40,7 +40,7 @@ void tuim_canvas_draw(TuimContext* ctx, const TuimCanvas* canvas) {
 }
 
 void tuim_canvas_destroy(TuimCanvas* canvas) {
-	assert(canvas);
+	MEB_ASSERT(canvas);
 
 	free(canvas->pixels);
 	canvas->rect.width = 0;
@@ -48,13 +48,13 @@ void tuim_canvas_destroy(TuimCanvas* canvas) {
 }
 
 void tuim_canvas_update(TuimContext* ctx, TuimCanvas* canvas) {
-	assert(ctx && canvas);
+	MEB_ASSERT(ctx && canvas);
 
 	// NOTHING
 }
 
 TuimSizeHint tuim_canvas_measure(const TuimCanvas* canvas) {
-	assert(canvas);
+	MEB_ASSERT(canvas);
 
 	TuimSizeHint size;
 
@@ -70,7 +70,7 @@ TuimSizeHint tuim_canvas_measure(const TuimCanvas* canvas) {
 
 // TODO: solve problems
 void tuim_canvas_layout(TuimCanvas* canvas, const TuimRect rect) {
-	assert(canvas);
+	MEB_ASSERT(canvas);
 
 	if (tuim_rect_equals(canvas->rect, rect))
 		return;
@@ -85,12 +85,12 @@ void tuim_canvas_layout(TuimCanvas* canvas, const TuimRect rect) {
 		sizeof(TuimColor) * rect.width * rect.height
 	);
 
-	assert(new_pixels);
+	MEB_ASSERT(new_pixels);
 	canvas->pixels = new_pixels;
 }
 
 TuimElement tuim_canvas_to_element(TuimCanvas* canvas) {
-	assert(canvas);
+	MEB_ASSERT(canvas);
 
 	TuimElement el;
 	el.data = canvas;
@@ -104,7 +104,7 @@ TuimElement tuim_canvas_to_element(TuimCanvas* canvas) {
 }
 
 void tuim_canvas_fill(TuimCanvas* canvas, const TuimColor color) {
-	assert(canvas);
+	MEB_ASSERT(canvas);
 
 	const size_t height = canvas->rect.height;
 	const size_t width = canvas->rect.width;
@@ -118,7 +118,7 @@ void tuim_canvas_fill(TuimCanvas* canvas, const TuimColor color) {
 
 
 void tuim_canvas_rect(TuimCanvas* canvas, const TuimRect rect, const TuimColor color) {
-	assert(canvas);
+	MEB_ASSERT(canvas);
 	
 	const int y0 = (int)rect.y;
 	const int x0 = (int)rect.x;
@@ -141,7 +141,7 @@ void tuim_canvas_rect(TuimCanvas* canvas, const TuimRect rect, const TuimColor c
 }
 
 void tuim_canvas_point(TuimCanvas* canvas, const int x, const int y, const TuimColor color) {
-	assert(canvas);
+	MEB_ASSERT(canvas);
 
 	const size_t width = canvas->rect.width;
 	const size_t height = canvas->rect.height;

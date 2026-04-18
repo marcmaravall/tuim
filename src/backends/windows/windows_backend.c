@@ -1,7 +1,7 @@
 #include "backends/windows/windows_backend.h"
 
 void tuim_windows_backend_init(void* backend_data) {
-	assert(backend_data);
+	MEB_ASSERT(backend_data);
 	
 	TuimWindowsBackendData* data = backend_data;
 	data->window = GetConsoleWindow();
@@ -48,7 +48,7 @@ void tuim_windows_backend_init(void* backend_data) {
 }
 
 void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y) {
-	assert(backend_data != NULL);
+	MEB_ASSERT(backend_data != NULL);
 	
 	TuimWindowsBackendData* data = backend_data;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -72,8 +72,7 @@ void tuim_windows_backend_destroy(void* backend_data) {
 #endif // TUIM_MAX_BUFFER_SIZE
 
 void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer* frame_buffer) {
-	assert(backend_data != NULL);
-	assert(frame_buffer != NULL);
+	MEB_ASSERT(backend_data && frame_buffer);
 
 	TuimWindowsBackendData* data = backend_data;
 
@@ -112,7 +111,7 @@ void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer*
 		tuim_windows_backend_resize_buffer(data, width, height);
 	}
 	else {
-		assert(data->buffer);
+		MEB_ASSERT(data->buffer);
 	}
 
 	size_t total = width * height;
@@ -202,8 +201,8 @@ static WORD tuim_color_to_win32(const TuimColor color) {
 }
 
 void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimKeyboardState* input_state) {
-	assert(record);
-	assert(input_state);
+	MEB_ASSERT(record);
+	MEB_ASSERT(input_state);
 
 	if (record->EventType == KEY_EVENT) {
 		const KEY_EVENT_RECORD* key = &record->Event.KeyEvent;
@@ -229,8 +228,7 @@ TuimVirtualKey tuim_windows_backend_win32_to_virtual_key(const uint8_t key) {
 
 // TODO: implement virtual keys for windows backend
 void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input_state) {
-	assert(backend_data);
-	assert(input_state);
+	MEB_ASSERT(backend_data && input_state);
 
 	TuimWindowsBackendData* data = backend_data;
 	
@@ -318,7 +316,7 @@ void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, SHORT wid
 }
 
 void tuim_windows_backend_resize_buffer(TuimWindowsBackendData* data, const SHORT width, const SHORT height) {
-	assert(data);
+	MEB_ASSERT(data);
 
 	data->buffer_size.X = (SHORT)width;
 	data->buffer_size.Y = (SHORT)height;
@@ -328,11 +326,11 @@ void tuim_windows_backend_resize_buffer(TuimWindowsBackendData* data, const SHOR
 		return;
 
 	CHAR_INFO* new_buffer = realloc(data->buffer, size);
-	assert(new_buffer);
+	MEB_ASSERT(new_buffer);
 	data->buffer = new_buffer;
 
 	CHAR_INFO* new_shadow = realloc(data->shadow_buffer, size);
-	assert(new_shadow);
+	MEB_ASSERT(new_shadow);
 	data->shadow_buffer = new_shadow;
 }
 
@@ -371,7 +369,7 @@ TuimBackend tuim_windows_backend() {
 
 // this shit dont works on Windows 11
 void tuim_windows_backend_set_attrib(TuimWindowsBackendData* data, const tuim_backend_attrib_t attrib, const char* value) {
-	assert(data && attrib && value);
+	MEB_ASSERT(data && attrib && value);
 
 	if (attrib == TUIM_BACKEND_ATTRIB_SIZE_FIXED) {
 		bool val = STR_TO_BOOL(value);
@@ -396,7 +394,7 @@ void tuim_windows_backend_set_attrib(TuimWindowsBackendData* data, const tuim_ba
 }
 
 bool tuim_windows_backend_attrib_supported(TuimWindowsBackendData* data, const tuim_backend_attrib_t attrib) {
-	assert(data && attrib);
+	MEB_ASSERT(data && attrib);
 
 	return attrib < 2;	// currently only one attribute
 }

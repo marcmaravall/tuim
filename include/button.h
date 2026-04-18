@@ -8,6 +8,7 @@
 #include "color.h"
 #include "element.h"
 
+#include <meb.h>
 #include <stdint.h>
 
 typedef struct {

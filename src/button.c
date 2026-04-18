@@ -28,7 +28,7 @@ TuimButton tuim_default_button() {
 }
 
 void tuim_button_draw(TuimContext* ctx, const TuimButton* button) {
-	assert(ctx && button);
+	MEB_ASSERT(ctx && button);
 
 	const char* label = button->label ? button->label : "";
 
@@ -53,7 +53,7 @@ void tuim_button_draw(TuimContext* ctx, const TuimButton* button) {
 }
 
 void tuim_button_update(const TuimContext* ctx, TuimButton* button) {
-	assert(ctx && button);
+	MEB_ASSERT(ctx && button);
 
 	button->area = tuim_button_calculate_area(button);
 
@@ -97,12 +97,12 @@ void tuim_button_update(const TuimContext* ctx, TuimButton* button) {
 }
 
 void tuim_button_destroy(TuimButton* button) {
-	assert(button);
+	MEB_ASSERT(button);
 	// idk
 }
 
 TuimElement tuim_button_to_element(TuimButton* button) {
-	assert(button);
+	MEB_ASSERT(button);
 
 	TuimElement el;
 	el.data = button;
@@ -116,7 +116,7 @@ TuimElement tuim_button_to_element(TuimButton* button) {
 }
 
 TuimSizeHint tuim_button_measure(const TuimButton* button) {
-	assert(button);
+	MEB_ASSERT(button);
 	TuimSizeHint size;
 
 	size.min_width = 1;
@@ -130,14 +130,13 @@ TuimSizeHint tuim_button_measure(const TuimButton* button) {
 }
 
 void tuim_button_layout(TuimButton* button, const TuimRect rect) {
-	assert(button);
+	MEB_ASSERT(button);
 	button->area.x = rect.x;
 	button->area.y = rect.y;
 }
 
 TuimRect tuim_button_calculate_area(const TuimButton* button) {
-	assert(button);
-	assert(button->label);
+	MEB_ASSERT(button && button->label);
 
 	TuimRect area = button->area;
 	size_t label_len = strlen(button->label);
@@ -147,6 +146,8 @@ TuimRect tuim_button_calculate_area(const TuimButton* button) {
 }
 
 TuimButton tuim_button(char* label) {
+	MEB_ASSERT(label);
+
 	TuimButton button = tuim_default_button();
 	button.label = label;
 	return button;

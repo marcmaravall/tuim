@@ -27,7 +27,7 @@ TuimCheckbox tuim_default_checkbox() {
 }
 
 void tuim_checkbox_draw(TuimContext* ctx, const TuimCheckbox* checkbox) {
-	assert(ctx && checkbox);
+	MEB_ASSERT(ctx && checkbox);
 
 	const char* status = checkbox->toggled ? "[x] " : "[ ] ";
 	size_t len = strlen(status);
@@ -66,7 +66,7 @@ void tuim_checkbox_draw(TuimContext* ctx, const TuimCheckbox* checkbox) {
 }
 
 void tuim_checkbox_update(const TuimContext* ctx, TuimCheckbox* checkbox) {
-	assert(ctx && checkbox);
+	MEB_ASSERT(ctx && checkbox);
 
 	checkbox->area = tuim_checkbox_calculate_area(checkbox);
 
@@ -95,12 +95,12 @@ void tuim_checkbox_update(const TuimContext* ctx, TuimCheckbox* checkbox) {
 }
 
 void tuim_checkbox_destroy(TuimCheckbox* checkbox) {
-	assert(checkbox);
+	MEB_ASSERT(checkbox);
 	// idk
 }
 
 TuimElement tuim_checkbox_to_element(TuimCheckbox* checkbox) {
-	assert(checkbox);
+	MEB_ASSERT(checkbox);
 
 	TuimElement el;
 	el.data = checkbox;
@@ -114,7 +114,7 @@ TuimElement tuim_checkbox_to_element(TuimCheckbox* checkbox) {
 }
 
 TuimSizeHint tuim_checkbox_measure(const TuimCheckbox* checkbox) {
-	assert(checkbox);
+	MEB_ASSERT(checkbox);
 	TuimSizeHint size;
 
 	size.min_width = 4; // for "[ ] "
@@ -128,7 +128,7 @@ TuimSizeHint tuim_checkbox_measure(const TuimCheckbox* checkbox) {
 }
 
 void tuim_checkbox_layout(TuimCheckbox* Checkbox, const TuimRect rect) {
-	assert(Checkbox);
+	MEB_ASSERT(Checkbox);
 	Checkbox->area.x = rect.x;
 	Checkbox->area.y = rect.y;
 }
@@ -139,8 +139,8 @@ inline bool tuim_checkbox_get(const TuimCheckbox* checkbox) {
 
 // TODO: add cases depending on flags
 TuimRect tuim_checkbox_calculate_area(const TuimCheckbox* checkbox) {
-	assert(checkbox);
-	assert(checkbox->label);
+	MEB_ASSERT(checkbox);
+	MEB_ASSERT(checkbox->label);
 
 	TuimRect area = checkbox->area;
 	size_t label_len = strlen(checkbox->label);

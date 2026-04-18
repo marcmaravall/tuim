@@ -8,7 +8,7 @@
 #include "element.h"
 
 #include <stdio.h>
-#include <assert.h>
+#include <meb.h>
 
 typedef struct {
 	TuimRect rect;

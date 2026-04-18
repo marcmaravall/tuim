@@ -22,19 +22,19 @@ TuimTextbox tuim_default_textbox() {
 }
 
 void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
-	assert(ctx && textbox);
+	MEB_ASSERT(ctx && textbox);
 }
 
 void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
-	assert(ctx && textbox);
+	MEB_ASSERT(ctx && textbox);
 }
 
 void tuim_destroy_textbox(TuimTextbox* textbox) {
-	assert(textbox);
+	MEB_ASSERT(textbox);
 }
 
 TuimElement tuim_textbox_to_element(TuimTextbox* textbox) {
-	assert(textbox);
+	MEB_ASSERT(textbox);
 	
 	TuimElement el;
 
@@ -49,13 +49,13 @@ TuimElement tuim_textbox_to_element(TuimTextbox* textbox) {
 }
 
 void tuim_textbox_layout(TuimTextbox* textbox, TuimRect area) {
-	assert(textbox);
+	MEB_ASSERT(textbox);
 
 	textbox->area = area;
 }
 
 TuimSizeHint tuim_textbox_measure(TuimTextbox* textbox) {
-	assert(textbox);
+	MEB_ASSERT(textbox);
 
 	TuimSizeHint hint;
 

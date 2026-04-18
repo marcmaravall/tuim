@@ -1,6 +1,8 @@
 #ifndef TUIM_CONTEXT_H
 #define TUIM_CONTEXT_H
 
+#include <meb.h>
+
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>

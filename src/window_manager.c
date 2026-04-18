@@ -3,7 +3,7 @@
 // TODO: check for memory leaks and UB
 
 int tuim_window_manager_init(TuimWindowManager* manager, const size_t capacity) {
-	assert(manager);
+	MEB_ASSERT(manager);
 	
 	manager->data = (TuimWindow**)calloc(capacity, sizeof(TuimWindow*));
 	
@@ -19,7 +19,7 @@ int tuim_window_manager_init(TuimWindowManager* manager, const size_t capacity) 
 }
 
 int tuim_window_manager_resize(TuimWindowManager* manager, const size_t n) {
-	assert(manager);
+	MEB_ASSERT(manager);
 	
 	manager->size = n;
 	if (manager->size > manager->capacity) {
@@ -29,7 +29,7 @@ int tuim_window_manager_resize(TuimWindowManager* manager, const size_t n) {
 }
 
 int tuim_window_manager_reserve(TuimWindowManager* manager, const size_t n) {
-	assert(manager);
+	MEB_ASSERT(manager);
 	
 	manager->capacity += n;
 	manager->data = (TuimWindow**)realloc(manager->data, sizeof(TuimWindow*) * manager->capacity);
@@ -42,7 +42,7 @@ int tuim_window_manager_reserve(TuimWindowManager* manager, const size_t n) {
 }
 
 int tuim_window_manager_add(TuimWindowManager* manager, TuimWindow* window) {
-	assert(manager && window);
+	MEB_ASSERT(manager && window);
 
 	if (manager->size >= manager->capacity) {
 		size_t newCapacity = manager->capacity ? manager->capacity * 2 : 1;
@@ -63,7 +63,7 @@ int tuim_window_manager_add(TuimWindowManager* manager, TuimWindow* window) {
 }
 
 int tuim_window_manager_remove(TuimWindowManager* manager, const size_t index) {
-	assert(manager);
+	MEB_ASSERT(manager);
 	if (index >= manager->size) {
 		return -1;
 	}
@@ -81,11 +81,11 @@ int tuim_window_manager_remove(TuimWindowManager* manager, const size_t index) {
 // UPDATE AND DRAW FUNCTIONS ------------
 
 int tuim_window_manager_draw(TuimContext* ctx, TuimWindowManager* manager) {
-	assert(ctx && manager);
+	MEB_ASSERT(ctx && manager);
 	
 	for (size_t i = 0; i < manager->size; i++) {
 		TuimWindow* window = manager->data[i];
-		assert(window);
+		MEB_ASSERT(window);
 
 		tuim_window_draw(ctx, window);
 	}
@@ -94,7 +94,7 @@ int tuim_window_manager_draw(TuimContext* ctx, TuimWindowManager* manager) {
 }
 
 int tuim_window_manager_update(TuimContext* ctx, TuimWindowManager* manager) {
-	assert(manager);
+	MEB_ASSERT(manager);
 
 	if (manager->focused) {
 		if (tuim_window_update(ctx, manager->focused) != TUIM_WINDOW_UPDATE_NONE) {
@@ -104,7 +104,7 @@ int tuim_window_manager_update(TuimContext* ctx, TuimWindowManager* manager) {
 
 	for (size_t i = 0; i < manager->size; i++) {
 		TuimWindow* window = manager->data[i];
-		assert(window);
+		MEB_ASSERT(window);
 
 		if (tuim_window_update(ctx, window) != TUIM_WINDOW_UPDATE_NONE) {
 			manager->focused = window;
@@ -115,7 +115,7 @@ int tuim_window_manager_update(TuimContext* ctx, TuimWindowManager* manager) {
 }
 
 int tuim_window_manager_on_focus(TuimWindowManager* manager, size_t index) {
-	assert(manager);
+	MEB_ASSERT(manager);
 	if (!manager->focused) {
 		return -1;
 	}
@@ -131,7 +131,7 @@ int tuim_window_manager_on_focus(TuimWindowManager* manager, size_t index) {
 }
 
 TuimWindow* tuim_window_manager_get(const TuimWindowManager* wm, const size_t index) {
-	assert(wm);
+	MEB_ASSERT(wm);
 
 	if (index >= wm->size) {
 		return NULL;
@@ -141,6 +141,6 @@ TuimWindow* tuim_window_manager_get(const TuimWindowManager* wm, const size_t in
 }
 
 void tuim_window_manager_free(TuimWindowManager* manager) {
-	assert(manager);
+	MEB_ASSERT(manager);
 	free(manager->data);
 }

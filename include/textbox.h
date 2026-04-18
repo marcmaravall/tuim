@@ -5,6 +5,7 @@
 #include "element.h"
 #include "color.h"
 
+#include <meb.h>
 #include <string.h>
 
 typedef struct {

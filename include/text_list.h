@@ -11,6 +11,7 @@
 #include "size_hint.h"
 #include "rect.h"
 
+#include <meb.h>
 #include <stdint.h>
 
 typedef struct {

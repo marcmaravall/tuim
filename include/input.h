@@ -1,6 +1,8 @@
 #ifndef TUIM_INPUT_H
 #define TUIM_INPUT_H
 
+#include <meb.h>
+
 #include "keyboard.h"
 #include "mouse.h"
 

@@ -9,7 +9,7 @@ TuimText tuim_default_text() {
 	text.length = len;
 	text.capacity = len + 1;
 	text.text = malloc(text.capacity);
-	assert(text.text);
+	MEB_ASSERT(text.text);
 	memcpy(text.text, default_str, text.capacity);
 
 	text.background = TUIM_BLACK_STRUCT_INDEXED;
@@ -30,14 +30,14 @@ TuimText tuim_text(const char* str) {
 
 	free(text.text);
 	text.text = malloc(text.capacity);
-	assert(text.text);
+	MEB_ASSERT(text.text);
 	memcpy(text.text, str, text.capacity);
 
 	return text;
 }
 
 TuimSizeHint tuim_text_measure(void* text) {
-	assert(text);
+	MEB_ASSERT(text);
 
 	TuimText* t = text;
 	size_t width = 0;
@@ -59,14 +59,14 @@ TuimSizeHint tuim_text_measure(void* text) {
 }
 
 void tuim_text_layout(void* text, TuimRect area) {
-	assert(text);
+	MEB_ASSERT(text);
 
 	TuimText* t = text;
 	t->area = area;
 }
 
 TuimElement tuim_text_to_element(const TuimText* text) {
-	assert(text);
+	MEB_ASSERT(text);
 	
 	TuimElement element;
 	
@@ -81,13 +81,13 @@ TuimElement tuim_text_to_element(const TuimText* text) {
 }
 
 void tuim_text_update(TuimContext* ctx, TuimText* data) {
-	assert(ctx && data);
+	MEB_ASSERT(ctx && data);
 }
 
 void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
-	assert(ctx);
-	assert(text);
-	assert(text->text);
+	MEB_ASSERT(ctx);
+	MEB_ASSERT(text);
+	MEB_ASSERT(text->text);
 
 	// TODO: draw in area:
 
@@ -98,19 +98,19 @@ void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
 }
 
 void tuim_text_format(TuimText* text, const char* format, ...) {
-	assert(text && format);
+	MEB_ASSERT(text && format);
 
 	va_list args;
 	va_start(args, format);
 	int needed = vsnprintf(NULL, 0, format, args);
 	va_end(args);
 
-	assert(needed >= 0);
+	MEB_ASSERT(needed >= 0);
 	size_t required = (size_t)needed + 1;
 
 	if (required > text->capacity) {
 		char* buf = realloc(text->text, required);
-		assert(buf);
+		MEB_ASSERT(buf);
 		text->text = buf;
 		text->capacity = required;
 	}
@@ -123,7 +123,7 @@ void tuim_text_format(TuimText* text, const char* format, ...) {
 }
 
 void tuim_text_destroy(TuimText* text) {
-	assert(text);
+	MEB_ASSERT(text);
 
 	free(text->text);
 	text->text = NULL;

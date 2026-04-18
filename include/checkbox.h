@@ -8,6 +8,7 @@
 #include "context.h"
 #include "mouse.h"
 
+#include <meb.h>
 #include <stdint.h>
 
 typedef struct {

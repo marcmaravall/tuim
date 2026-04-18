@@ -20,15 +20,22 @@
 #include <string.h>
 #include <assert.h>
 
+#ifndef __USE_POSIX199309
 #define __USE_POSIX199309
+#endif
+
 #include <time.h>
 
-// update for tuim
-// TODO: continue adding global context and push to meb instead of local changes on tuim
-// im going to bed now
 #ifndef MEB_NO_LOG
 #define MEB_INIT(file_path) meb_init(&meb, file_path)
+
+#define MEB_PROF_START() meb_prof_start(&meb)
+#define MEB_PROF_END() meb_prof_end(&meb)
+#define MEB_PROF_MODE(mode) meb_prof_mode(&meb, mode)
+
 #define MEB_ASSERT(expr) assert(expr)
+#define MEB_STATIC_ASSERT(a, b) static_assert(a, b)
+
 #define MEB_LOG(m) meb_log(&meb, m)
 #define MEB_LOGF(fmt, ...) \
     do { \
@@ -36,11 +43,20 @@
         snprintf(buf, MEB_BUFF_SIZE, fmt, __VA_ARGS__); \
         meb_log(&meb, buf); \
     } while(0)
+#define MEB_CLOSE() meb_close(&meb)
 #else
 #define MEB_INIT(file_path) ((void)0)
+
+#define MEB_PROF_START() ((void)0)
+#define MEB_PROF_END() ((void)0)
+#define MEB_PROF_MODE(mode) ((void)0)
+
 #define MEB_ASSERT(expr) ((void)0)
+#define MEB_STATIC_ASSERT(a, b) static_assert(a, b)
+
 #define MEB_LOG(m) ((void)0)
 #define MEB_LOGF(fmt, ...) ((void)0)
+#define MEB_CLOSE() ((void)0)
 #endif // MEB_NO_LOG
 
 #define MEB_BUFF_SIZE 256
@@ -72,21 +88,21 @@ typedef struct {
 } MebContext;
 
 // GLOBAL CONTEXT:
-MebContext meb;
+extern MebContext meb;
 
 double meb_get_time(const MebTimeMode mode);
 
-void meb_init	(MebContext* ctx, const char* file);
+void meb_init(MebContext* ctx, const char* file);
 
-void meb_log	(MebContext* ctx, const char* message);
+void meb_log(MebContext* ctx, const char* message);
 
-void meb_prof_start (MebContext* ctx);
-void meb_prof_end   (MebContext* ctx);
+void meb_prof_start(MebContext* ctx);
+void meb_prof_end(MebContext* ctx);
 
-void meb_prof_mode (MebContext* ctx, const MebTimeMode mode);
-void meb_log_level (MebContext* ctx, const MebLogLevel level);
+void meb_prof_mode(MebContext* ctx, const MebTimeMode mode);
+void meb_log_level(MebContext* ctx, const MebLogLevel level);
 
-void meb_close	(MebContext* ctx);
+void meb_close(MebContext* ctx);
 
 #endif // MEB_H
 
@@ -117,12 +133,15 @@ void meb_init(MebContext* ctx, const char* file) {
 
 #ifndef MEB_LOG_IMPLEMENTATION
 #define MEB_LOG_IMPLEMENTATION
+
+MebContext meb;
+
 void meb_log(MebContext* ctx, const char* message) {
 	MEB_ASSERT(ctx);
 	char* level_str = meb_log_level_str(ctx->log_level);
 
 #ifndef MEB_NO_LOG
-	
+
 	if (ctx->debug) {
 		fprintf(ctx->debug, "%s: %s\n", level_str, message);
 	}
@@ -145,10 +164,10 @@ void meb_prof_end(MebContext* ctx) {
 	ctx->end = meb_get_time(ctx->time_mode);
 
 	double elapsed = (double)(ctx->end - ctx->start);
-	
+
 	char buffer[MEB_BUFF_SIZE];
-	snprintf(buffer, MEB_BUFF_SIZE, 
-		"[MEB_PROFILING] Meb profiling finished! Elapsed time: %.6f%c", 
+	snprintf(buffer, MEB_BUFF_SIZE,
+		"[MEB_PROFILING] Meb profiling finished! Elapsed time: %.6f%c",
 		elapsed, meb_time_unit(ctx->time_mode));
 
 	MebLogLevel level = ctx->log_level;
@@ -173,21 +192,21 @@ double meb_get_time(const MebTimeMode mode) {
 	double time = (double)counter.QuadPart / frequency.QuadPart;
 
 #elif defined __linux__ || defined __APPLE__
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    double time = (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;
-    
+	struct timespec ts;
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	double time = (double)ts.tv_sec + (double)ts.tv_nsec * 1e-9;
+
 #else
 #warning "High-resolution timing is not implemented for this platform."
 #endif
-    
-    switch (mode) {
-    case MEB_SECONDS:      return time;
-    case MEB_MILLISECONDS: return time * 1e3;
-    case MEB_MICROSECONDS: return time * 1e6;
-    case MEB_NANOSECONDS:  return time * 1e9;
-    }
-    return time;
+
+	switch (mode) {
+	case MEB_SECONDS:      return time;
+	case MEB_MILLISECONDS: return time * 1e3;
+	case MEB_MICROSECONDS: return time * 1e6;
+	case MEB_NANOSECONDS:  return time * 1e9;
+	}
+	return time;
 }
 
 char meb_time_unit(const MebTimeMode mode) {

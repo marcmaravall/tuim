@@ -28,29 +28,29 @@ TuimStyle tuim_style_default_dark() {
 }
 
 void tuim_set_rect_background_color(TuimContext* ctx, const TuimColor color) {
-	assert(ctx != NULL);
+	MEB_ASSERT(ctx != NULL);
 	ctx->style.rect_background_color = color;
 }
 void tuim_set_rect_foreground_color(TuimContext* ctx, const TuimColor color) {
-	assert(ctx != NULL);
+	MEB_ASSERT(ctx != NULL);
 	ctx->style.rect_foreground_color = color;
 }
 
 void tuim_set_text_foreground_color(TuimContext* ctx, const TuimColor color) {
-	assert(ctx != NULL);
+	MEB_ASSERT(ctx != NULL);
 	ctx->style.text_foreground_color = color;
 }
 void tuim_set_text_background_color(TuimContext* ctx, const TuimColor color) {
-	assert(ctx != NULL);
+	MEB_ASSERT(ctx != NULL);
 	ctx->style.text_background_color = color;
 }
 
 void tuim_set_line_color(TuimContext* ctx, const TuimColor color) {
-	assert(ctx != NULL);
+	MEB_ASSERT(ctx != NULL);
 	ctx->style.line_color = color;
 }
 
 void tuim_set_clear_color(TuimContext* ctx, const TuimColor color) {
-	assert(ctx != NULL);
+	MEB_ASSERT(ctx != NULL);
 	ctx->style.clear_color = color;
 }

@@ -29,32 +29,32 @@ TuimTextList tuim_text_list(const size_t capacity) {
 }
 
 char* tuim_text_list_get(TuimTextList* list, const size_t index) {
-	assert(list);
+	MEB_ASSERT(list);
 	if (index >= list->size)
-		assert(0 && "ERROR: invalid index on text list");
+		MEB_ASSERT(0 && "ERROR: invalid index on text list");
 	
 	char* res = list->data[index].label;
-	assert(res);
+	MEB_ASSERT(res);
 	return res;
 }
 
 TuimTextListElement tuim_text_list_get_el (TuimTextList* list, const size_t index) {
-	assert(list);
+	MEB_ASSERT(list);
 	if (index >= list->size) {
-		assert(0 && "ERROR: invalid index on text list!");
+		MEB_ASSERT(0 && "ERROR: invalid index on text list!");
 	}
 	return list->data[index];
 }
 
 void tuim_text_list_update(TuimContext* ctx, TuimTextList* list) {
-	assert(list);
+	MEB_ASSERT(list);
 
 	list->area.height = list->size;
 	list->area.width = list->max_size;
 }
 
 void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
-	assert(ctx && list);
+	MEB_ASSERT(ctx && list);
 
 	// renders vertical strings for simplicity on early development:
 	// TODO: continue implementing this
@@ -73,7 +73,7 @@ void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
 }
 
 void tuim_text_list_destroy(TuimTextList* list) {
-	assert(list);
+	MEB_ASSERT(list);
 
 	for (size_t i = 0; i < list->size; i++) {
 		if (list->data[i].free_on_delete)
@@ -84,7 +84,7 @@ void tuim_text_list_destroy(TuimTextList* list) {
 }
 
 TuimSizeHint tuim_text_list_measure(TuimTextList* list) {
-	assert(list);
+	MEB_ASSERT(list);
 
 	TuimSizeHint sh;
 
@@ -94,7 +94,7 @@ TuimSizeHint tuim_text_list_measure(TuimTextList* list) {
 }
 
 TuimElement tuim_text_list_to_element(const TuimTextList* list) {
-	assert(list);
+	MEB_ASSERT(list);
 
 	TuimElement el;
 	el.data = list;
@@ -108,20 +108,20 @@ TuimElement tuim_text_list_to_element(const TuimTextList* list) {
 }
 
 void tuim_text_list_layout(TuimTextList* list, const TuimRect rect) {
-	assert(list);
+	MEB_ASSERT(list);
 
 	list->area = rect;
 }
 
 void tuim_text_list_add(TuimTextList* list, char* text) {
-	assert(list && text);
+	MEB_ASSERT(list && text);
 	
 	list->size++;
 	if (list->size >= list->capacity) {
 		list->capacity *= 2;
 		list->data = realloc(list->data, sizeof(TuimTextListElement) * list->capacity);
 		
-		assert(list->data);
+		MEB_ASSERT(list->data);
 	}
 
 	size_t len = strlen(text);
@@ -133,13 +133,13 @@ void tuim_text_list_add(TuimTextList* list, char* text) {
 }
 
 void tuim_text_list_clear(TuimTextList* list) {
-	assert(list);
+	MEB_ASSERT(list);
 
 	list->size = 0;
 }
 
 void tuim_text_list_pop_back(TuimTextList* list) {
-	assert(list);
+	MEB_ASSERT(list);
 
 	if (list->size > 0)
 		list->size--;

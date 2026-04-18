@@ -36,15 +36,15 @@ TuimWindow tuim_default_window() {
 
 // TODO: use less malloc 
 void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
-	assert(ctx && window);
-	assert(window->title);
+	MEB_ASSERT(ctx && window);
+	MEB_ASSERT(window->title);
 
 	const size_t title_size = strlen(window->title);
 	char* title_to_render;
 
 	if (title_size > window->rect.width) {
 		title_to_render = malloc(window->rect.width + 1);
-		assert(title_to_render);
+		MEB_ASSERT(title_to_render);
 
 		strncpy(title_to_render, window->title, window->rect.width);
 
@@ -55,7 +55,7 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 
 		title_to_render[window->rect.width] = '\0';
 
-		assert(title_to_render);
+		MEB_ASSERT(title_to_render);
 	}
 	else {
 		title_to_render = window->title;
@@ -95,13 +95,13 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 }
 
 void tuim_window_destroy(TuimWindow* window) {
-	assert(window);
+	MEB_ASSERT(window);
 	// window->title = NULL;
 }
 
 // returns 1 if the window was updated, 0 otherwise
 int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
-	assert(ctx && window);
+	MEB_ASSERT(ctx && window);
 
 	tuim_layout_update(ctx, &window->layout);
 
@@ -177,7 +177,7 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 }
 
 void tuim_window_resize(TuimWindow* window, const TuimRect rect) {
-	assert(window);
+	MEB_ASSERT(window);
 
 	window->rect = rect;
 	window->layout.bounds.x = window->rect.x;
@@ -187,7 +187,7 @@ void tuim_window_resize(TuimWindow* window, const TuimRect rect) {
 }
 
 void tuim_window_layout(TuimWindow* window, const TuimRect rect) {
-	assert(window);
+	MEB_ASSERT(window);
 	// for now, just set window rect 
 	window->rect = rect;
 	window->rect.width = max(window->min_width, window->rect.width);
@@ -197,7 +197,7 @@ void tuim_window_layout(TuimWindow* window, const TuimRect rect) {
 }
 
 TuimSizeHint tuim_window_measure(const TuimWindow* data) {
-	assert(data);
+	MEB_ASSERT(data);
 
 	TuimSizeHint size;
 	size.max_width = data->max_width;
@@ -211,7 +211,7 @@ TuimSizeHint tuim_window_measure(const TuimWindow* data) {
 }
 
 TuimElement tuim_window_to_element(TuimWindow* window) {
-	assert(window);
+	MEB_ASSERT(window);
 	TuimElement el;
 	el.data = window;
 	el.update = tuim_window_update;
@@ -223,7 +223,7 @@ TuimElement tuim_window_to_element(TuimWindow* window) {
 }
 
 bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window) {
-	assert(ctx && window);
+	MEB_ASSERT(ctx && window);
 
 	if (window->is_dragging || window->is_resizing)
 		return true;
@@ -233,13 +233,13 @@ bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window) {
 // helper functions
 
 void tuim_window_add_element(TuimWindow* window, const TuimElement el) {
-	assert(window);
+	MEB_ASSERT(window);
 
 	tuim_layout_add(&window->layout, el);
 }
 
 TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text) {
-	assert(window && str && text);
+	MEB_ASSERT(window && str && text);
 	
 	*text = tuim_text(str);
 	TuimElement el = tuim_text_to_element(text);
@@ -248,7 +248,7 @@ TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* 
 }
 
 TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button) {
-	assert(window && str && button);
+	MEB_ASSERT(window && str && button);
 	
 	*button = tuim_button(str);
 	TuimElement el = tuim_button_to_element(button);
@@ -257,7 +257,7 @@ TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButt
 }
 
 TuimElement tuim_window_add_checkbox(TuimWindow* window, const char* str, TuimCheckbox* check) {
-	assert(window && str && check);
+	MEB_ASSERT(window && str && check);
 	
 	*check = tuim_checkbox(str);
 	TuimElement el = tuim_checkbox_to_element(check);
@@ -266,7 +266,7 @@ TuimElement tuim_window_add_checkbox(TuimWindow* window, const char* str, TuimCh
 }
 
 TuimElement tuim_window_add_text_list(TuimWindow* window, const size_t capacity, TuimTextList* list) {
-	assert(window && list);
+	MEB_ASSERT(window && list);
 	
 	*list = tuim_text_list(capacity);
 	TuimElement el = tuim_text_list_to_element(list);

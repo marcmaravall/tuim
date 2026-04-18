@@ -8,6 +8,8 @@
 #include "color.h"
 #include "element.h"
 
+#include <meb.h>
+
 #include <string.h>
 #include <stdarg.h>
 

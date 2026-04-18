@@ -1,7 +1,7 @@
 #include "table.h"
 
 void tuim_table_init(TuimTable* table, size_t rows, size_t columns) {
-	assert(table);
+	MEB_ASSERT(table);
 
 	table->columns = columns;
 	table->rows = rows;
@@ -17,7 +17,7 @@ void tuim_table_init(TuimTable* table, size_t rows, size_t columns) {
 }
 
 void tuim_table_update(const TuimContext* ctx, TuimTable* table) {
-	assert(ctx);
+	MEB_ASSERT(ctx);
 
 	for (size_t i = 0; i < table->columns; ++i) {
 		for (size_t j = 0; j < table->rows; ++j) {
@@ -28,11 +28,11 @@ void tuim_table_update(const TuimContext* ctx, TuimTable* table) {
 }
 
 void tuim_table_draw(const TuimContext* ctx, const TuimTable* table) {
-	assert(ctx);
+	MEB_ASSERT(ctx);
 }
 
 void tuim_table_set(TuimTable* table, const size_t row, const size_t column, TuimElement* element) {
-	assert(table);
+	MEB_ASSERT(table);
 
 	if (row >= table->rows || column >= table->columns) {
 		return;
@@ -42,7 +42,7 @@ void tuim_table_set(TuimTable* table, const size_t row, const size_t column, Tui
 }
 
 TuimElement* tuim_table_get(const TuimTable* table, const size_t row, const size_t column) {
-	assert(table);
+	MEB_ASSERT(table);
 	
 	if (row >= table->rows || column >= table->columns) {
 		return NULL;
@@ -52,11 +52,11 @@ TuimElement* tuim_table_get(const TuimTable* table, const size_t row, const size
 }
 
 void tuim_table_destroy(TuimTable* table) {
-	assert(table);
+	MEB_ASSERT(table);
 }
 
 TuimElement tuim_table_to_element(TuimTable* table) {
-	assert(table);
+	MEB_ASSERT(table);
 	TuimElement el;
 	el.data = table;
 	el.destroy = tuim_table_destroy;
@@ -69,13 +69,13 @@ TuimElement tuim_table_to_element(TuimTable* table) {
 }
 
 TuimSizeHint tuim_table_measure(const TuimTable* table) {
-	assert(table);
+	MEB_ASSERT(table);
 	TuimSizeHint size;
 	
 	for (size_t i = 0; i < table->columns; i++) {
 		for (size_t j = 0; j < table->rows; j++) {
 			TuimElement* element = table->data[i][j].element;
-			assert(element);
+			MEB_ASSERT(element);
 
 			// TODO: implement
 			// i know putting todos everywhere is bad but im so lazy xD
@@ -88,7 +88,7 @@ TuimSizeHint tuim_table_measure(const TuimTable* table) {
 }
 
 void tuim_table_layout(TuimTable* table, const TuimRect rect) {
-	assert(table);
+	MEB_ASSERT(table);
 
 	// TODO: implement
 }

@@ -1,6 +1,8 @@
 #ifndef TUIM_LAYOUT_H
 #define TUIM_LAYOUT_H
 
+#include <meb.h>
+
 #include "element.h"
 #include "rect.h"
 

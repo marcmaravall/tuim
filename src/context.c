@@ -22,7 +22,7 @@ void tuim_end_frame(TuimContext* ctx) {
 }
 
 void tuim_destroy_context(TuimContext* ctx) {
-	assert(ctx);
+	MEB_ASSERT(ctx);
 	ctx->backend.destroy(ctx->backend.data);
 	free(ctx->frame_buffer.cells);
 	free(ctx->backend.data);
@@ -31,7 +31,7 @@ void tuim_destroy_context(TuimContext* ctx) {
 // backend calls:
 
 void tuim_resize_context(TuimContext* ctx, const size_t width, const size_t height) {
-	assert(ctx);
+	MEB_ASSERT(ctx);
 
 	if (!ctx->backend.set_size) {
 		// warning or something	
@@ -42,7 +42,7 @@ void tuim_resize_context(TuimContext* ctx, const size_t width, const size_t heig
 }
 
 void tuim_set_backend_attrib(TuimContext* ctx, const char* attrib, const char* value) {
-	assert(ctx);
+	MEB_ASSERT(ctx);
 
 	if (!ctx->backend.set_attrib) {
 		return;

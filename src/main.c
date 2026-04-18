@@ -16,18 +16,12 @@
 #include <time.h>
 #include <stdio.h>
 
-MebContext log_ctx;
-
 void on_button_click(void* user_data) {
-	meb_log(&log_ctx, "Button clicked!");
+    MEB_LOG("button clicked!");
 }
 
 int main(void) {
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-    meb_init(&log_ctx, "debug.txt");
-    meb_log_level(&log_ctx, MEB_INFO);
-    meb_prof_mode(&log_ctx, MEB_MILLISECONDS);
+    MEB_INIT("debug.txt");
 
     TuimContext ctx;
 #ifdef __linux__
@@ -80,9 +74,8 @@ int main(void) {
     }
 
     tuim_destroy_context(&ctx);
-    meb_close(&log_ctx);
 
-    _CrtDumpMemoryLeaks();
+    MEB_CLOSE();
 
     return 0;
 }

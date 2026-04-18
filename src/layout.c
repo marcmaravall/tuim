@@ -8,6 +8,8 @@ void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout) {
 }
 
 void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
+	MEB_ASSERT(ctx, layout);
+
 	int total_fixed = 0;
 	float total_flex = 0.0f;
 
@@ -39,7 +41,7 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 		remaining = 0;
 
 	int* computed_sizes = malloc(sizeof(int) * layout->size);
-	assert(computed_sizes);
+	MEB_ASSERT(computed_sizes);
 
 	for (size_t i = 0; i < layout->size; i++) {
 		TuimLayoutElement current = layout->elements[i];
@@ -64,7 +66,7 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 
 	for (size_t i = 0; i < layout->size; ++i) {
 		TuimLayoutElement* current = &layout->elements[i];
-		assert(current);
+		MEB_ASSERT(current);
 		TuimElement el = current->data;
 
 		cursor += current->margin_start;
@@ -102,14 +104,14 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 }
 
 TuimElement tuim_layout_get(TuimLayout* layout, const size_t index) {
-	assert(layout);
-	assert(index < layout->size);
+	MEB_ASSERT(layout);
+	MEB_ASSERT(index < layout->size);
 
 	return layout->elements[index].data;
 }
 
 void tuim_layout_init(TuimLayout* layout, size_t capacity) {
-	assert(layout);
+	MEB_ASSERT(layout);
 	layout->elements = malloc(sizeof(TuimLayoutElement) * capacity);
 	
 	if (capacity < 1) {
@@ -131,7 +133,7 @@ void tuim_layout_init(TuimLayout* layout, size_t capacity) {
 
 // i dont know if works, i havent tested it
 void tuim_layout_destroy(TuimLayout* layout) {
-	assert(layout);
+	MEB_ASSERT(layout);
 	for (size_t i = 0; i < layout->size; i++) {
 		TuimElement el = layout->elements[i].data;
 		el.destroy(el.data);
@@ -140,13 +142,13 @@ void tuim_layout_destroy(TuimLayout* layout) {
 }
 
 void tuim_layout_add(TuimLayout* layout, TuimElement element) {
-	assert(layout);
+	MEB_ASSERT(layout);
 
 	if (layout->size >= layout->capacity) {
 		size_t new_capacity = layout->capacity ? layout->capacity * 2 : 1;
 		TuimLayoutElement* new_elements =
 			realloc(layout->elements, sizeof(TuimLayoutElement) * new_capacity);
-		assert(new_elements);
+		MEB_ASSERT(new_elements);
 		layout->elements = new_elements;
 		layout->capacity = new_capacity;
 	}
@@ -162,7 +164,7 @@ void tuim_layout_add(TuimLayout* layout, TuimElement element) {
 
 
 void tuim_layout_clear(TuimLayout* layout) {
-	assert(layout);
+	MEB_ASSERT(layout);
 
 	for (size_t i = 0; i < layout->size; i++) {
 		TuimElement el = layout->elements[i].data;
@@ -176,7 +178,7 @@ void tuim_layout_clear(TuimLayout* layout) {
 // TODO: test behaviour
 
 TuimElement tuim_layout_to_element(TuimLayout* layout) {
-	assert(layout);
+	MEB_ASSERT(layout);
 
 	TuimElement el;
 	el.data = layout;
@@ -190,7 +192,7 @@ TuimElement tuim_layout_to_element(TuimLayout* layout) {
 }
 
 TuimSizeHint tuim_layout_measure(const TuimLayout* layout) {
-	assert(layout);
+	MEB_ASSERT(layout);
 	
 	TuimSizeHint sh;
 
@@ -205,7 +207,7 @@ TuimSizeHint tuim_layout_measure(const TuimLayout* layout) {
 }
 
 void tuim_layout_layout(TuimLayout* layout, const TuimRect area) {
-	assert(layout);
+	MEB_ASSERT(layout);
 
 	layout->bounds = area;
 }

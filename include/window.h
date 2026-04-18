@@ -14,8 +14,9 @@
 #include "checkbox.h"
 #include "text_list.h"
 
+#include <meb.h>
+
 #include <stdlib.h>
-#include <assert.h>
 #include <stdbool.h>
 
 #define TUIM_WINDOW_LAYOUT_DEFAULT_CAPACITY 4
