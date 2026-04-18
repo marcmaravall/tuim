@@ -3,6 +3,8 @@
 
 #include "rect.h"
 #include "element.h"
+#include "context.h"
+#include "frame_buffer.h"
 #include "color.h"
 
 #include <meb.h>
@@ -24,6 +26,7 @@ typedef struct {
 	char* text;
 } TuimTextbox;
 
+TuimTextbox tuim_textbox(const char* str);
 TuimTextbox tuim_default_textbox();
 
 void tuim_update_textbox (TuimContext* ctx, TuimTextbox* textbox);

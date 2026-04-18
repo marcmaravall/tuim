@@ -140,7 +140,7 @@ TuimRect tuim_button_calculate_area(const TuimButton* button) {
 
 	TuimRect area = button->area;
 	size_t label_len = strlen(button->label);
-	area.width = label_len; 
+	area.width = (int)label_len; 
 	
 	return area;
 }

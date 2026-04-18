@@ -60,7 +60,7 @@ void tuim_checkbox_draw(TuimContext* ctx, const TuimCheckbox* checkbox) {
 	tuim_frame_buffer_print(
 		&ctx->frame_buffer, fg, bg,
 		label,
-		checkbox->area.x + len,
+		checkbox->area.x + (int)len,
 		checkbox->area.y
 	);
 }
@@ -144,7 +144,7 @@ TuimRect tuim_checkbox_calculate_area(const TuimCheckbox* checkbox) {
 
 	TuimRect area = checkbox->area;
 	size_t label_len = strlen(checkbox->label);
-	area.width = label_len;
+	area.width = (int)label_len;
 
 	return area;
 }

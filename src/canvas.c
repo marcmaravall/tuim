@@ -5,8 +5,8 @@ void tuim_canvas_init(TuimCanvas* canvas, const size_t width, const size_t heigh
 
 	canvas->rect.x = 0;
 	canvas->rect.y = 0;
-	canvas->rect.width = width;
-	canvas->rect.height = height;
+	canvas->rect.width = (int)width;
+	canvas->rect.height = (int)height;
 
 	canvas->pixels = malloc(sizeof(TuimColor) * width*height);
 }
@@ -28,7 +28,7 @@ void tuim_canvas_draw(TuimContext* ctx, const TuimCanvas* canvas) {
 				continue;
 			}
 
-			int fb_index = y * ctx->frame_buffer.width + x;
+			int fb_index = y * (int)ctx->frame_buffer.width + x;
 			int canvas_index =
 				(y - y_from) * canvas->rect.width + (x - x_from);
 

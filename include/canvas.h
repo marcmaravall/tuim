@@ -2,7 +2,7 @@
 #define TUIM_CANVAS_H
 
 #include "color.h"
-#include "context.h";
+#include "context.h"
 #include "frame_buffer.h"
 #include "rect.h"
 #include "element.h"

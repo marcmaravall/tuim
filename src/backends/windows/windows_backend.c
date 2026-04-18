@@ -71,7 +71,7 @@ void tuim_windows_backend_destroy(void* backend_data) {
 #define TUIM_MAX_FRAME_BUFFER_SIZE (65535)
 #endif // TUIM_MAX_BUFFER_SIZE
 
-void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer* frame_buffer) {
+void tuim_windows_backend_pass_frame_buffer(void* backend_data, const TuimFrameBuffer* frame_buffer) {
 	MEB_ASSERT(backend_data && frame_buffer);
 
 	TuimWindowsBackendData* data = backend_data;
@@ -104,8 +104,8 @@ void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer*
 		data->resized = false;
 	}
 
-	size_t width = frame_buffer->width;
-	size_t height = frame_buffer->height;
+	SHORT width = (SHORT)frame_buffer->width;
+	SHORT height = (SHORT)frame_buffer->height;
 	if (height != data->buffer_size.Y || width != data->buffer_size.X) {
 
 		tuim_windows_backend_resize_buffer(data, width, height);
@@ -207,8 +207,8 @@ void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record
 	if (record->EventType == KEY_EVENT) {
 		const KEY_EVENT_RECORD* key = &record->Event.KeyEvent;
 
-		size_t key_code = key->wVirtualKeyCode;
-		size_t to_tuim = tuim_windows_backend_win32_to_virtual_key(key_code);
+		uint8_t key_code = (uint8_t)key->wVirtualKeyCode;
+		size_t to_tuim = (size_t)tuim_windows_backend_win32_to_virtual_key(key_code);
 
 		if (to_tuim != TUIM_KEY_UNKNOWN && key_code < TUIM_KEY_COUNT) {
 			input_state->current[to_tuim] = key->bKeyDown;
