@@ -6,7 +6,8 @@ TuimTextbox tuim_textbox(char* str) {
 	TuimTextbox textbox = tuim_default_textbox();
 
 	// for testing
-	size_t count = strlen(str) * 4;
+#define TEXT_DEBUG_SIZE 512
+	size_t count = TEXT_DEBUG_SIZE; // strlen(str) * 4;
 	textbox.text = calloc(count + 1, sizeof(char));
 
 	if (!textbox.text) {
@@ -43,7 +44,12 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 
 	char c = tuim_get_char(ctx);
 
-	if (c != NULL) {
+	// backspace
+	if (c == 0x08) {
+		textbox->text[textbox->cursor_pos] = '\0';
+		textbox->cursor_pos = max(textbox->cursor_pos-1, 0);
+	}
+	else if (c != 0) {
 		textbox->text[textbox->cursor_pos] = c;
 		textbox->cursor_pos++;
 		textbox->text[textbox->cursor_pos] = '\0';
@@ -55,6 +61,11 @@ void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
 	tuim_frame_buffer_print (&ctx->frame_buffer, 
 		textbox->style.fg, textbox->style.bg, textbox->text,
 		textbox->area.x, textbox->area.y
+	);
+
+	tuim_frame_buffer_set_background (
+		&ctx->frame_buffer, textbox->style.cursor_color, 
+		textbox->area.x + textbox->cursor_pos, textbox->area.y
 	);
 }
 

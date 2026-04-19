@@ -118,6 +118,19 @@ void tuim_frame_buffer_draw_equation_line(const TuimColor color, TuimFrameBuffer
 	}
 }
 
+void tuim_frame_buffer_set_background (
+	TuimFrameBuffer* fb, const TuimColor color, 
+	const int x, const int y) {
+
+	MEB_ASSERT(fb);
+
+	if (x < 0 || y < 0 || x >= (int)fb->width || y >= (int)fb->height) {
+		return;
+	}
+
+	TUIM_FRAME_BUFFER_AT(fb, x, y).background_color = color;
+}
+
 void tuim_frame_buffer_draw_rect(
 	TuimFrameBuffer* fb, const TuimColor color, 
 	const int x, const int y, const int width, const int height) {

@@ -231,7 +231,7 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 	MEB_ASSERT(backend_data && input_state);
 
 	TuimWindowsBackendData* data = backend_data;
-	data->char_pressed = NULL;
+	data->char_pressed = 0;
 
 	HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
 
