@@ -9,6 +9,7 @@
 
 #include <meb.h>
 #include <string.h>
+#include <stdio.h>
 
 typedef struct {
 	TuimColor fg;
@@ -24,6 +25,9 @@ typedef struct {
 	TuimTextboxStyle style;
 	TuimRect area;
 	char* text;
+
+	// index position in text
+	int cursor_pos;
 } TuimTextbox;
 
 TuimTextbox tuim_textbox(char* str);

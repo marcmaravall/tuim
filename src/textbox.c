@@ -3,10 +3,17 @@
 // TODO: implement textbox
 
 TuimTextbox tuim_textbox(char* str) {
-	TuimTextbox textbox;
+	TuimTextbox textbox = tuim_default_textbox();
 
-	textbox = tuim_default_textbox();
-	textbox.text = str;
+	// for testing
+	size_t count = strlen(str) * 4;
+	textbox.text = calloc(count + 1, sizeof(char));
+
+	if (!textbox.text) {
+		return textbox; 
+	}
+
+	memcpy(textbox.text, str, count + 1); 
 
 	return textbox;
 }
@@ -26,6 +33,7 @@ TuimTextbox tuim_default_textbox() {
 	textbox.area.y = 0;
 	textbox.area.width = (int)strlen(textbox.text);
 	textbox.area.height = 1;
+	textbox.cursor_pos = 0;
 
 	return textbox;
 }
@@ -33,8 +41,13 @@ TuimTextbox tuim_default_textbox() {
 void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 	MEB_ASSERT(ctx && textbox);
 
-	// TODO: implement: 
-	bool is_mayus = false;
+	char c = tuim_get_char(ctx);
+
+	if (c != NULL) {
+		textbox->text[textbox->cursor_pos] = c;
+		textbox->cursor_pos++;
+		textbox->text[textbox->cursor_pos] = '\0';
+	}
 }
 
 void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {

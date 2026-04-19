@@ -231,7 +231,8 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 	MEB_ASSERT(backend_data && input_state);
 
 	TuimWindowsBackendData* data = backend_data;
-	
+	data->char_pressed = NULL;
+
 	HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
 
 	DWORD events = 0;
@@ -284,6 +285,13 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 				
 				data->resized = true;
 			}
+		}
+
+		// TODO: combine with record to input state:
+		// and implement unicode...
+		else if (record.EventType == KEY_EVENT) {
+			if (record.Event.KeyEvent.bKeyDown)
+				data->char_pressed = record.Event.KeyEvent.uChar.AsciiChar;
 		}
 
 		tuim_windows_backend_input_record_to_input_state(
@@ -361,6 +369,7 @@ TuimBackend tuim_windows_backend() {
 
 	backend.set_attrib = tuim_windows_backend_set_attrib;
 	backend.attrib_supported = tuim_windows_backend_attrib_supported;
+	backend.get_char = tuim_windows_backend_get_char;
 
 	return backend;
 }
@@ -395,4 +404,10 @@ bool tuim_windows_backend_attrib_supported(TuimWindowsBackendData* data, const t
 	MEB_ASSERT(data && attrib);
 
 	return attrib < 2;	// currently only one attribute
+}
+
+char tuim_windows_backend_get_char(TuimWindowsBackendData* data) {
+	MEB_ASSERT(data);
+
+	return data->char_pressed;
 }

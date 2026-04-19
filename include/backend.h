@@ -32,6 +32,8 @@ typedef struct {
 	void (*set_attrib)(void* data, tuim_backend_attrib_t attrib, const char* value);
 	bool (*attrib_supported) (void* data, const tuim_backend_attrib_t attrib);
 
+	char (*get_char)(void* data);
+
 	void* data;
 } TuimBackend;
 

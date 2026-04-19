@@ -30,3 +30,14 @@ bool tuim_is_shift(const TuimContext* ctx, const tuim_key_code_t key_code) {
 	MEB_ASSERT(ctx);
 	return tuim_is_key(ctx, TUIM_KEY_SHIFT) && tuim_is_key_down(ctx, key_code);
 }
+
+char tuim_get_char(const TuimContext* ctx) {
+	MEB_ASSERT(ctx);
+
+	char res = 0x00;
+	if (ctx->backend.get_char != NULL) {
+		res = ctx->backend.get_char(ctx->backend.data);
+	}
+
+	return res;
+}

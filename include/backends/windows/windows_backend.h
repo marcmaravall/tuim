@@ -26,6 +26,8 @@ typedef struct {
     CHAR_INFO* shadow_buffer;
 	COORD buffer_size;
 
+    char char_pressed;
+
     bool resized;
 	bool window_active;
 } TuimWindowsBackendData;
@@ -93,5 +95,6 @@ TuimBackend tuim_windows_backend();
 
 void tuim_windows_backend_set_attrib(TuimWindowsBackendData* data, const tuim_backend_attrib_t attrib, const char* val);
 bool tuim_windows_backend_attrib_supported(TuimWindowsBackendData* data, const tuim_backend_attrib_t attrib);
+char tuim_windows_backend_get_char(TuimWindowsBackendData* data);
 
 #endif //_WIN32

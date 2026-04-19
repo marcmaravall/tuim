@@ -67,7 +67,7 @@ int main(void) {
         bool pressed = tuim_is_mouse_button(&ctx, TUIM_MOUSE_BUTTON_LEFT);
 
         if (tuim_is_key_down(&ctx, TUIM_KEY_A)) {
-            break;
+        //     break;
         }
 
         else if (tuim_is_ctrl(&ctx, TUIM_KEY_Z)) {
@@ -76,6 +76,11 @@ int main(void) {
 
         else if (tuim_is_alt(&ctx, TUIM_KEY_Z)) {
             MEB_LOG("ALT");
+        }
+
+        char c = tuim_get_char(&ctx);
+        if (c) {
+            MEB_LOGF("%c", c);
         }
 
         else if (tuim_is_shift(&ctx, TUIM_KEY_Z)) {

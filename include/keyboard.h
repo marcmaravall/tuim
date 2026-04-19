@@ -125,4 +125,8 @@ bool tuim_is_ctrl       (const TuimContext* ctx, const tuim_key_code_t key_code)
 bool tuim_is_alt        (const TuimContext* ctx, const tuim_key_code_t key_code);
 bool tuim_is_shift      (const TuimContext* ctx, const tuim_key_code_t key_code);
 
+// returns the char who is being pressed
+// or 0 if none key
+char tuim_get_char(const TuimContext* ctx);
+
 #endif // TUIM_KEYBOARD_H
