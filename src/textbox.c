@@ -47,14 +47,21 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 
 	if (tuim_is_mouse_button_down(ctx, TUIM_MOUSE_BUTTON_LEFT)) {
 		textbox->is_selected = tuim_is_mouse_inside(ctx, textbox->area);
-		if (textbox->is_selected) {
-			// TODO: update cursor position:
-
+		if (textbox->is_selected) { 
+			textbox->cursor_pos = ctx->input_state.mouse_state.mouse_x - textbox->area.x;
 		}
 	}
 
 	if (!textbox->is_selected)
 		return;
+
+	if (tuim_is_key_down(ctx, TUIM_KEY_LEFT)) {
+		if (textbox->cursor_pos != 0)
+			textbox->cursor_pos--;
+	}
+	else if (tuim_is_key_down(ctx, TUIM_KEY_RIGHT)) {
+		textbox->cursor_pos++;
+	}
 
 	// backspace
 	if (c == 0x08) {
