@@ -1,24 +1,20 @@
 #include "rect.h"
 #include "context.h"
 
-bool tuim_rect_contains(const TuimRect* rect, int px, int py) {
-	MEB_ASSERT(rect != NULL);
-	if (px <= rect->x || px >= rect->x + rect->width)
+bool tuim_rect_contains(const TuimRect rect, int px, int py) {
+	if (px <= rect.x || px >= rect.x + rect.width)
 		return false;
-	if (py <= rect->y || py >= rect->y + rect->height)
+	if (py <= rect.y || py >= rect.y + rect.height)
 		return false;
 	return true;
 }
 
-bool tuim_rect_overlaps(const TuimRect* r1, const TuimRect* r2) {
-	MEB_ASSERT(r1 != NULL);
-	MEB_ASSERT(r2 != NULL);
+bool tuim_rect_overlaps(const TuimRect r1, const TuimRect r2) {
+	if (r1.x + r1.width <= r2.x) return false;
+	if (r2.x + r2.width <= r1.x) return false;
 
-	if (r1->x + r1->width <= r2->x) return false;
-	if (r2->x + r2->width <= r1->x) return false;
-
-	if (r1->y + r1->height <= r2->y) return false;
-	if (r2->y + r2->height <= r1->y) return false;
+	if (r1.y + r1.height <= r2.y) return false;
+	if (r2.y + r2.height <= r1.y) return false;
 
 	return true;
 }

@@ -33,8 +33,9 @@ TuimTextbox tuim_default_textbox() {
 	textbox.area.x = 0;
 	textbox.area.y = 0;
 	textbox.area.width = (int)strlen(textbox.text);
-	textbox.area.height = 1;
+	textbox.area.height = 2;
 	textbox.cursor_pos = 0;
+	textbox.is_selected = false;
 
 	return textbox;
 }
@@ -43,6 +44,17 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 	MEB_ASSERT(ctx && textbox);
 
 	char c = tuim_get_char(ctx);
+
+	if (tuim_is_mouse_button_down(ctx, TUIM_MOUSE_BUTTON_LEFT)) {
+		textbox->is_selected = tuim_is_mouse_inside(ctx, textbox->area);
+		if (textbox->is_selected) {
+			// TODO: update cursor position:
+
+		}
+	}
+
+	if (!textbox->is_selected)
+		return;
 
 	// backspace
 	if (c == 0x08) {
@@ -58,15 +70,20 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 
 void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
 	MEB_ASSERT(ctx && textbox);
+
+	TuimColor bg = textbox->is_selected ? textbox->style.bg : textbox->style.selected_bg;
+	TuimColor fg = textbox->is_selected ? textbox->style.fg : textbox->style.selected_fg;
+
 	tuim_frame_buffer_print (&ctx->frame_buffer, 
-		textbox->style.fg, textbox->style.bg, textbox->text,
+		fg, bg, textbox->text,
 		textbox->area.x, textbox->area.y
 	);
 
-	tuim_frame_buffer_set_background (
-		&ctx->frame_buffer, textbox->style.cursor_color, 
-		textbox->area.x + textbox->cursor_pos, textbox->area.y
-	);
+	if (textbox->is_selected)
+		tuim_frame_buffer_set_background (
+			&ctx->frame_buffer, textbox->style.cursor_color, 
+			textbox->area.x + textbox->cursor_pos, textbox->area.y
+		);
 }
 
 void tuim_destroy_textbox(TuimTextbox* textbox) {

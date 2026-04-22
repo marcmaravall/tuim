@@ -26,6 +26,8 @@ typedef struct {
 	TuimRect area;
 	char* text;
 
+	bool is_selected;
+
 	// index position in text
 	int cursor_pos;
 } TuimTextbox;
