@@ -41,3 +41,13 @@ char tuim_get_char(const TuimContext* ctx) {
 
 	return res;
 }
+
+// TODO: explain better
+// for text applications:
+bool tuim_is_key_rep(const TuimContext* ctx, const tuim_key_code_t key_code) {
+	MEB_ASSERT(ctx);
+
+	if (!ctx->backend.inp_rep)
+		return false;
+	return ctx->backend.inp_rep(ctx->backend.data, key_code);
+}

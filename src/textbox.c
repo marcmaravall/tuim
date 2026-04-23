@@ -55,11 +55,11 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 	if (!textbox->is_selected)
 		return;
 
-	if (tuim_is_key_down(ctx, TUIM_KEY_LEFT)) {
+	if (tuim_is_key_rep(ctx, TUIM_KEY_LEFT)) {
 		if (textbox->cursor_pos != 0)
 			textbox->cursor_pos--;
 	}
-	else if (tuim_is_key_down(ctx, TUIM_KEY_RIGHT)) {
+	else if (tuim_is_key_rep(ctx, TUIM_KEY_RIGHT)) {
 		textbox->cursor_pos++;
 	}
 

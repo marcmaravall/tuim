@@ -232,6 +232,7 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 
 	TuimWindowsBackendData* data = backend_data;
 	data->char_pressed = 0;
+	data->vk_pressed = 0;
 
 	HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
 
@@ -290,8 +291,10 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 		// TODO: combine with record to input state:
 		// and implement unicode...
 		else if (record.EventType == KEY_EVENT) {
-			if (record.Event.KeyEvent.bKeyDown)
+			if (record.Event.KeyEvent.bKeyDown) {
 				data->char_pressed = record.Event.KeyEvent.uChar.AsciiChar;
+				data->vk_pressed = record.Event.KeyEvent.wVirtualKeyCode;
+			}
 		}
 
 		tuim_windows_backend_input_record_to_input_state(
@@ -370,6 +373,7 @@ TuimBackend tuim_windows_backend() {
 	backend.set_attrib = tuim_windows_backend_set_attrib;
 	backend.attrib_supported = tuim_windows_backend_attrib_supported;
 	backend.get_char = tuim_windows_backend_get_char;
+	backend.inp_rep = tuim_windows_backend_inp_rep;
 
 	return backend;
 }
@@ -410,4 +414,12 @@ char tuim_windows_backend_get_char(TuimWindowsBackendData* data) {
 	MEB_ASSERT(data);
 
 	return data->char_pressed;
+}
+
+bool tuim_windows_backend_inp_rep(TuimWindowsBackendData* data, const tuim_key_code_t key) {
+	MEB_ASSERT(data);
+
+	if (data->vk_pressed != 0)
+		return data->vk_pressed == tuim_to_win32_vk[key];
+	return false;
 }
