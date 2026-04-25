@@ -68,6 +68,9 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 		textbox->text[textbox->cursor_pos] = '\0';
 		textbox->cursor_pos = max(textbox->cursor_pos-1, 0);
 	}
+	else if (!tuim_is_printable_utf8(c)) {
+		
+	}
 	else if (c != 0) {
 		textbox->text[textbox->cursor_pos] = c;
 		textbox->cursor_pos++;

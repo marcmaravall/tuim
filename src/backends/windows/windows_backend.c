@@ -232,6 +232,7 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 
 	TuimWindowsBackendData* data = backend_data;
 	data->char_pressed = 0;
+	data->unicode_pressed = 0;
 	data->vk_pressed = 0;
 
 	HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
@@ -293,6 +294,7 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 		else if (record.EventType == KEY_EVENT) {
 			if (record.Event.KeyEvent.bKeyDown) {
 				data->char_pressed = record.Event.KeyEvent.uChar.AsciiChar;
+				data->unicode_pressed = record.Event.KeyEvent.uChar.UnicodeChar;
 				data->vk_pressed = record.Event.KeyEvent.wVirtualKeyCode;
 			}
 		}
@@ -422,4 +424,28 @@ bool tuim_windows_backend_inp_rep(TuimWindowsBackendData* data, const tuim_key_c
 	if (data->vk_pressed != 0)
 		return data->vk_pressed == tuim_to_win32_vk[key];
 	return false;
+}
+
+// TODO: set error messages:
+tuim_utf16_t tuim_windows_backend_get_clipboard(TuimWindowsBackendData* data) {
+	MEB_ASSERT(data);
+
+	if (!OpenClipboard(NULL)) {
+		return NULL;
+	}
+
+	HANDLE h_data = GetClipboardData(CF_UNICODETEXT);
+	if (!h_data) {
+		CloseClipboard();
+		return 1;
+	}
+
+	wchar_t* p_text = (wchar_t*)GlobalLock(h_data);
+	if (!p_text) {
+		CloseClipboard();
+		return 1;
+	}
+
+	GlobalUnlock(h_data);
+	CloseClipboard();
 }

@@ -46,7 +46,7 @@ int main(void) {
     tuim_layout_add(&w.layout, cEl);
 
     tuim_resize_context(&ctx, 120, 30);
-    tuim_set_backend_attrib(&ctx, TUIM_BACKEND_ATTRIB_SIZE_FIXED, "true");
+    // tuim_set_backend_attrib(&ctx, TUIM_BACKEND_ATTRIB_SIZE_FIXED, "true");
 
     TuimTextList list = tuim_text_list(10);
     tuim_text_list_add(&list, "- hola ");

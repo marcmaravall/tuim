@@ -16,6 +16,7 @@
 
 #include "backend.h"
 #include "input.h"
+#include "unicode.h"
 
 typedef struct {
 	HWND   window;
@@ -27,6 +28,8 @@ typedef struct {
 	COORD buffer_size;
 
     char char_pressed;
+    WCHAR unicode_pressed;
+
     char vk_pressed;
 
     bool resized;
@@ -138,5 +141,7 @@ char tuim_windows_backend_get_char(TuimWindowsBackendData* data);
 
 // input processed by win32, for example, for typing applications
 bool tuim_windows_backend_inp_rep(TuimWindowsBackendData* data, const tuim_key_code_t key);
+
+tuim_utf16_t tuim_windows_backend_get_clipboard (TuimWindowsBackendData* data);
 
 #endif //_WIN32

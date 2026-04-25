@@ -4,6 +4,7 @@
 #include "frame_buffer.h"
 #include "style.h"
 #include "input.h"
+#include "unicode.h"
 
 #include <stdbool.h>
 
@@ -34,6 +35,8 @@ typedef struct {
 
 	char (*get_char)(void* data);
 	bool (*inp_rep)(void* data, const tuim_key_code_t key_code);
+
+
 
 	void* data;
 } TuimBackend;

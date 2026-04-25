@@ -6,6 +6,7 @@
 #include "context.h"
 #include "frame_buffer.h"
 #include "color.h"
+#include "ascii.h"
 
 #include <meb.h>
 #include <string.h>
