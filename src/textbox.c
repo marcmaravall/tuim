@@ -63,8 +63,12 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 		textbox->cursor_pos++;
 	}
 
+	if (tuim_is_ctrl(ctx, TUIM_KEY_V)) {
+		MEB_LOGF("%s", tuim_get_clipboard(ctx));
+	}
+
 	// backspace
-	if (c == 0x08) {
+	else if (c == 0x08) {
 		textbox->text[textbox->cursor_pos] = '\0';
 		textbox->cursor_pos = max(textbox->cursor_pos-1, 0);
 	}

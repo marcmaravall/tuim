@@ -376,6 +376,7 @@ TuimBackend tuim_windows_backend() {
 	backend.attrib_supported = tuim_windows_backend_attrib_supported;
 	backend.get_char = tuim_windows_backend_get_char;
 	backend.inp_rep = tuim_windows_backend_inp_rep;
+	backend.get_clipboard = tuim_windows_backend_get_clipboard;
 
 	return backend;
 }
@@ -426,26 +427,35 @@ bool tuim_windows_backend_inp_rep(TuimWindowsBackendData* data, const tuim_key_c
 	return false;
 }
 
-// TODO: set error messages:
-tuim_utf16_t tuim_windows_backend_get_clipboard(TuimWindowsBackendData* data) {
+// TODO: support unicode and solve errors:
+char* tuim_windows_backend_get_clipboard(TuimWindowsBackendData* data) {
 	MEB_ASSERT(data);
 
 	if (!OpenClipboard(NULL)) {
+		MEB_LOG_ERROR("Cannot open clipboard on win32 backend!");
 		return NULL;
 	}
 
-	HANDLE h_data = GetClipboardData(CF_UNICODETEXT);
+	HANDLE h_data = GetClipboardData(CF_TEXT);
 	if (!h_data) {
 		CloseClipboard();
-		return 1;
+		MEB_LOG_ERROR("Error getting clipboard data!");
+		return NULL;
 	}
 
-	wchar_t* p_text = (wchar_t*)GlobalLock(h_data);
+	char* p_text = (char*)GlobalLock(h_data);
 	if (!p_text) {
+		MEB_LOG_ERROR("p_text is null!");
 		CloseClipboard();
-		return 1;
+		return NULL;
 	}
+
+	char* result = _strdup(p_text);
 
 	GlobalUnlock(h_data);
 	CloseClipboard();
+
+	MEB_LOG_INFO (result);
+
+	return result;
 }

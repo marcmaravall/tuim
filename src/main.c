@@ -1,5 +1,11 @@
 // this is only a test, not a part of the library 
 // it's only used to test the library internally and its not supposed to work very well
+
+#define MEB_LOG_TO_FILE
+#define MEB_IMPLEMENTATION
+#include <meb.h>
+#undef MEB_IMPLEMENTATION
+
 #include <tuim.h>
 #ifdef __linux__
 #include <backends/linux/linux_backend.h>
@@ -10,9 +16,6 @@
 #include <backends/windows/windows_backend.h>
 #endif
 
-#define MEB_LOG_TO_FILE
-#define MEB_IMPLEMENTATION
-#include <meb.h>
 #include <time.h>
 #include <stdio.h>
 

@@ -35,8 +35,7 @@ typedef struct {
 
 	char (*get_char)(void* data);
 	bool (*inp_rep)(void* data, const tuim_key_code_t key_code);
-
-
+	char* (*get_clipboard)(void* data);
 
 	void* data;
 } TuimBackend;

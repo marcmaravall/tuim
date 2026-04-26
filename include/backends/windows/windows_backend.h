@@ -142,6 +142,6 @@ char tuim_windows_backend_get_char(TuimWindowsBackendData* data);
 // input processed by win32, for example, for typing applications
 bool tuim_windows_backend_inp_rep(TuimWindowsBackendData* data, const tuim_key_code_t key);
 
-tuim_utf16_t tuim_windows_backend_get_clipboard (TuimWindowsBackendData* data);
+char* tuim_windows_backend_get_clipboard (TuimWindowsBackendData* data);
 
 #endif //_WIN32

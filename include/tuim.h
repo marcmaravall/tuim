@@ -20,5 +20,7 @@
 #include "checkbox.h"
 #include "canvas.h"
 #include "color.h"
+#include "ascii.h"
+#include "unicode.h"
 
 #endif //TUIM_H

@@ -51,3 +51,11 @@ void tuim_set_backend_attrib(TuimContext* ctx, const tuim_backend_attrib_t attri
 	if (ctx->backend.set_attrib)
 		ctx->backend.set_attrib(ctx->backend.data, attrib, value);
 }
+
+char* tuim_get_clipboard(TuimContext* ctx) {
+	MEB_ASSERT(ctx);
+
+	if (!ctx->backend.get_clipboard)
+		return NULL;
+	return ctx->backend.get_clipboard(ctx->backend.data);
+}
