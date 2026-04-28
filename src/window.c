@@ -108,7 +108,9 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 	int mouse_x, mouse_y;
 	tuim_get_mouse_position(ctx, &mouse_x, &mouse_y);
 
-	bool mouse_inside = tuim_is_mouse_inside(ctx, window->rect);
+	TuimRect rect = window->rect;
+	rect.height = 1;	// title bar only
+	bool mouse_inside = tuim_is_mouse_inside(ctx, rect);
 
 	bool left_down = tuim_is_mouse_button_down(ctx, TUIM_MOUSE_BUTTON_LEFT);
 	bool left_pressed = tuim_is_mouse_button(ctx, TUIM_MOUSE_BUTTON_LEFT);
