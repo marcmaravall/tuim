@@ -265,12 +265,16 @@ void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
         );
 
         if (textbox->is_selected && line_row == cursor_row) {
-            tuim_frame_buffer_set_background(
-                &ctx->frame_buffer,
-                textbox->style.cursor_color,
-                textbox->area.x + cursor_col,
-                textbox->area.y + line_row
-            );
+            // TODO: improve blinking
+
+            if ((int)(tuim_get_time(ctx)*4) % 2 == 0) {
+                tuim_frame_buffer_set_background(
+                    &ctx->frame_buffer,
+                    textbox->style.cursor_color,
+                    textbox->area.x + cursor_col,
+                    textbox->area.y + line_row
+                );
+            }
         }
 
         int next_newline = line_start + line_len;

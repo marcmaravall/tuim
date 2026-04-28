@@ -34,6 +34,9 @@ typedef struct TuimContext {
 	TuimBackend backend;
 
 	TuimInputState input_state;
+
+	// time elapsed since init context
+	double time;
 } TuimContext;
 
 void tuim_begin_frame	(TuimContext* context);
@@ -48,5 +51,7 @@ void tuim_set_backend_attrib (TuimContext* ctx, const tuim_backend_attrib_t attr
 // this should not be on context.h
 char* tuim_get_clipboard(TuimContext* ctx);
 double tuim_get_delta_time(TuimContext* ctx);
+double tuim_get_fps(TuimContext* ctx);
+double tuim_get_time(TuimContext* ctx);
 
 #endif //TUIM_CONTEXT_H
