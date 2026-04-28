@@ -47,5 +47,6 @@ void tuim_resize_context(TuimContext* ctx, const size_t width, const size_t heig
 void tuim_set_backend_attrib (TuimContext* ctx, const tuim_backend_attrib_t attrib, const char* value);
 // this should not be on context.h
 char* tuim_get_clipboard(TuimContext* ctx);
+double tuim_get_delta_time(TuimContext* ctx);
 
 #endif //TUIM_CONTEXT_H

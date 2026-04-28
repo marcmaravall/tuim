@@ -18,26 +18,46 @@ typedef uint64_t tuim_backend_attrib_t;
 // this can be extended
 // ------
 
+typedef void (*TuimBackendInitFn)(void* data);
+typedef void (*TuimBackendDestroyFn)(void* data);
+typedef void (*TuimBackendRenderFn)(void* data);
+
+typedef void (*TuimBackendGetSizeFn)(void* data, size_t* width, size_t* height);
+typedef void (*TuimBackendSetSizeFn)(void* data, size_t width, size_t height);
+
+typedef void (*TuimBackendPassFrameBufferFn)(void* data, const TuimFrameBuffer* frame_buffer);
+
+typedef void (*TuimBackendUpdateInputFn)(void* data, TuimInputState* input_state);
+
+typedef void (*TuimBackendSetAttribFn)(void* data, tuim_backend_attrib_t attrib, const char* value);
+typedef bool (*TuimBackendAttribSupportedFn)(void* data, tuim_backend_attrib_t attrib);
+
+typedef char (*TuimBackendGetCharFn)(void* data);
+typedef bool (*TuimBackendInputRepeatFn)(void* data, tuim_key_code_t key_code);
+typedef char* (*TuimBackendGetClipboardFn)(void* data);
+typedef double (*TuimBackendGetDeltaTimeFn)(void* data);
+
 typedef struct {
-	void (*init)	(void* data);
-	void (*destroy)	(void* data);
-	void (*render)	(void* data);
+    TuimBackendInitFn init;
+    TuimBackendDestroyFn destroy;
+    TuimBackendRenderFn render;
 
-	void (*get_size)(void* data, size_t* width, size_t* height);
-	void (*set_size)(void* data, const size_t width, const size_t height);
+    TuimBackendGetSizeFn get_size;
+    TuimBackendSetSizeFn set_size;
 
-	void (*pass_frame_buffer)(void* data, const TuimFrameBuffer* frame_buffer);
+    TuimBackendPassFrameBufferFn pass_frame_buffer;
 
-	void (*update_input)(void* data, TuimInputState* input_state);
+    TuimBackendUpdateInputFn update_input;
 
-	void (*set_attrib)(void* data, tuim_backend_attrib_t attrib, const char* value);
-	bool (*attrib_supported) (void* data, const tuim_backend_attrib_t attrib);
+    TuimBackendSetAttribFn set_attrib;
+    TuimBackendAttribSupportedFn attrib_supported;
 
-	char (*get_char)(void* data);
-	bool (*inp_rep)(void* data, const tuim_key_code_t key_code);
-	char* (*get_clipboard)(void* data);
+    TuimBackendGetCharFn get_char;
+    TuimBackendInputRepeatFn inp_rep;
+    TuimBackendGetClipboardFn get_clipboard;
+	TuimBackendGetDeltaTimeFn get_delta_time;
 
-	void* data;
+    void* data;
 } TuimBackend;
 
 #endif //TUIM_BACKEND_H

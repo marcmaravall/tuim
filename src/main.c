@@ -61,12 +61,17 @@ int main(void) {
     TuimTextbox a = tuim_textbox("hola");
     tuim_window_add_element(&w, tuim_textbox_to_element(&a));
 
+    TuimText deltaTime = tuim_text("delta time: ");
+    tuim_window_add_element(&w, tuim_text_to_element(&deltaTime));
+
     while (1) {
         // MEB_PROF_START();
 
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
         
+		tuim_text_format(&deltaTime, "delta time: %f", tuim_get_delta_time(&ctx));
+
         bool pressed = tuim_is_mouse_button(&ctx, TUIM_MOUSE_BUTTON_LEFT);
 
         if (tuim_is_key_down(&ctx, TUIM_KEY_A)) {

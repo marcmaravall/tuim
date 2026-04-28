@@ -144,4 +144,6 @@ bool tuim_windows_backend_inp_rep(TuimWindowsBackendData* data, const tuim_key_c
 
 char* tuim_windows_backend_get_clipboard (TuimWindowsBackendData* data);
 
+double tuim_windows_backend_get_delta_time(TuimWindowsBackendData* data);
+
 #endif //_WIN32

@@ -377,6 +377,7 @@ TuimBackend tuim_windows_backend() {
 	backend.get_char = tuim_windows_backend_get_char;
 	backend.inp_rep = tuim_windows_backend_inp_rep;
 	backend.get_clipboard = tuim_windows_backend_get_clipboard;
+	backend.get_delta_time = tuim_windows_backend_get_delta_time;
 
 	return backend;
 }
@@ -458,4 +459,27 @@ char* tuim_windows_backend_get_clipboard(TuimWindowsBackendData* data) {
 	MEB_LOG_INFO (result);
 
 	return result;
+}
+
+static LARGE_INTEGER frequency;
+static LARGE_INTEGER last_time;
+static bool initialized = false;
+
+double tuim_windows_backend_get_delta_time(TuimWindowsBackendData* data) {
+	if (!initialized) {
+		QueryPerformanceFrequency(&frequency);
+		QueryPerformanceCounter(&last_time);
+		initialized = true;
+
+		return 0.0f;
+	}
+
+	LARGE_INTEGER currentTime;
+	QueryPerformanceCounter(&currentTime);
+
+	double elapsedTicks = (double)(currentTime.QuadPart - last_time.QuadPart);
+	float deltaTime = (float)(elapsedTicks / (double)frequency.QuadPart);
+	last_time = currentTime;
+
+	return deltaTime;
 }

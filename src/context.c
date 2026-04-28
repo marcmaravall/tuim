@@ -59,3 +59,10 @@ char* tuim_get_clipboard(TuimContext* ctx) {
 		return NULL;
 	return ctx->backend.get_clipboard(ctx->backend.data);
 }
+
+double tuim_get_delta_time(TuimContext* ctx) {
+	MEB_ASSERT(ctx);
+	if (ctx->backend.get_delta_time)
+		return ctx->backend.get_delta_time(ctx->backend.data);
+	return 0.0;
+}
