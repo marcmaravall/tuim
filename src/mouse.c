@@ -5,9 +5,9 @@ bool tuim_is_mouse_inside(const TuimContext* ctx, const TuimRect area) {
 	MEB_ASSERT(ctx);
     return 
         ctx->input_state.mouse_state.mouse_x >= area.x &&
-        ctx->input_state.mouse_state.mouse_x < area.x + area.width-1 &&
+        ctx->input_state.mouse_state.mouse_x < area.x + area.width &&
         ctx->input_state.mouse_state.mouse_y >= area.y &&
-        ctx->input_state.mouse_state.mouse_y < area.y + area.height-1;
+        ctx->input_state.mouse_state.mouse_y < area.y + area.height;
 }
 
 void tuim_get_mouse_position(const TuimContext* state, int* x, int* y) {
