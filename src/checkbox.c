@@ -7,7 +7,7 @@ TuimCheckbox tuim_default_checkbox() {
 	checkbox.area.x = 0;
 	checkbox.area.y = 0;
 	checkbox.area.width = 10;
-	checkbox.area.height = 2;
+	checkbox.area.height = 1;
 	checkbox.toggled = false;
 	checkbox.hovered = false;
 	checkbox.clicked = false;

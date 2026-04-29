@@ -128,5 +128,6 @@ bool tuim_is_shift      (const TuimContext* ctx, const tuim_key_code_t key_code)
 // returns the char who is being pressed
 // or 0 if none key
 char tuim_get_char(const TuimContext* ctx);
+bool tuim_is_key_rep(const TuimContext* ctx, const tuim_key_code_t key_code);
 
 #endif // TUIM_KEYBOARD_H

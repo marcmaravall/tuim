@@ -159,7 +159,7 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
     if (!textbox->text)
         return;
 
-    if (tuim_is_mouse_button_down(ctx, TUIM_MOUSE_BUTTON_LEFT)) {
+    if (tuim_is_mouse_button_down (ctx, TUIM_MOUSE_BUTTON_LEFT)) {
         textbox->is_selected = tuim_is_mouse_inside(ctx, textbox->area);
 
         if (textbox->is_selected) {
@@ -183,15 +183,15 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
     if (!textbox->is_selected)
         return;
 
-    if (tuim_is_key_down(ctx, TUIM_KEY_LEFT)) {
+    if (tuim_is_key_rep(ctx, TUIM_KEY_LEFT)) {
         if (textbox->cursor_pos > 0)
             textbox->cursor_pos--;
     }
-    else if (tuim_is_key_down(ctx, TUIM_KEY_RIGHT)) {
+    else if (tuim_is_key_rep(ctx, TUIM_KEY_RIGHT)) {
         if (textbox->cursor_pos < (int)textbox->length)
             textbox->cursor_pos++;
     }
-    else if (tuim_is_key_down(ctx, TUIM_KEY_UP)) {
+    else if (tuim_is_key_rep(ctx, TUIM_KEY_UP)) {
         int row, col;
         tuim_textbox_get_row_col(textbox, textbox->cursor_pos, &row, &col);
 
@@ -202,7 +202,7 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
             textbox->cursor_pos = prev_start + target_col;
         }
     }
-    else if (tuim_is_key_down(ctx, TUIM_KEY_DOWN)) {
+    else if (tuim_is_key_rep(ctx, TUIM_KEY_DOWN)) {
         int row, col;
         tuim_textbox_get_row_col(textbox, textbox->cursor_pos, &row, &col);
 

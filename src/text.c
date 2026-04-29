@@ -91,6 +91,8 @@ void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
 
 	// TODO: draw in area:
 
+	if (text->area.width <= 0 || text->area.height <= 0)
+		return;
 
 	tuim_frame_buffer_print(
 		&ctx->frame_buffer, text->foreground, text->background, text->text, text->area.x, text->area.y

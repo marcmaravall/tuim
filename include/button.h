@@ -11,6 +11,10 @@
 #include <meb.h>
 #include <stdint.h>
 
+typedef void (*TuimOnClickFn)(void* user_data);
+typedef void (*TuimOnHoverFn)(void* user_data);
+typedef void (*TuimOnReleaseFn)(void* user_data);
+
 typedef struct {
     TuimRect area;
     const char* label;
@@ -30,14 +34,22 @@ typedef struct {
     bool was_down;
     bool pressed_inside;
 
-    void (*on_click)(void* user_data);
-    void (*on_hover)(void* user_data);
-    void (*on_release)(void* user_data);
+    TuimOnClickFn on_click;
+    TuimOnHoverFn on_hover;
+    TuimOnReleaseFn on_release;
     void* user_data;
 } TuimButton;
 
 TuimButton tuim_default_button();
 TuimButton tuim_button(const char* label);
+
+TuimButton tuim_button_callbacks (
+    const char*     label,
+	TuimOnClickFn   on_click,
+	TuimOnHoverFn   on_hover,
+	TuimOnReleaseFn on_release,
+    void*           user_data
+);
 
 void tuim_button_draw	(TuimContext* ctx, const TuimButton* button);
 void tuim_button_update (const TuimContext* ctx, TuimButton* button);
