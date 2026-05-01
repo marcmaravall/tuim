@@ -165,31 +165,10 @@ void tuim_windows_backend_render(void* backend_data) {
 	);*/
 }
 
-// TODO: do with table:
 static WORD tuim_color_to_win32(const TuimColor color) {
 	WORD win_color = 0;
 	if (color.type == TUIM_COLOR_TYPE_INDEXED) {
-		switch (color.color.indexed_color) {
-			case TUIM_BLACK: win_color = 0; break;
-			case TUIM_RED: win_color = 4; break;
-			case TUIM_GREEN: win_color = 2; break;
-			case TUIM_YELLOW: win_color = 6; break;
-			case TUIM_BLUE: win_color = 1; break;
-			case TUIM_MAGENTA: win_color = 5; break;
-			case TUIM_CYAN: win_color = 3; break;
-			case TUIM_WHITE: win_color = 7; break;
-			case TUIM_BRIGHT_BLACK: win_color = 8; break;
-			case TUIM_BRIGHT_RED: win_color = 12; break;
-			case TUIM_BRIGHT_GREEN: win_color = 10; break;
-			case TUIM_BRIGHT_YELLOW: win_color = 14; break;
-			case TUIM_BRIGHT_BLUE: win_color = 9; break;
-			case TUIM_BRIGHT_MAGENTA: win_color = 13; break;
-			case TUIM_BRIGHT_CYAN: win_color = 11; break;
-			case TUIM_BRIGHT_WHITE: win_color = 15; break;
-			default:
-				win_color = color.color.indexed_color % 16;
-				break;
-		}
+		win_color = tuim_color_to_win32_table[color.color.indexed_color];
 	} else if (color.type == TUIM_COLOR_TYPE_RGB) {
 		win_color |= (color.color.rgb_color.red > 128) ? FOREGROUND_RED : 0;
 		win_color |= (color.color.rgb_color.green > 128) ? FOREGROUND_GREEN : 0;
@@ -306,18 +285,18 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 	}
 }
 
-void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, SHORT width, SHORT height) {
+void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, size_t width, size_t height) {
 	COORD currentSize;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
 	GetConsoleScreenBufferInfo(data->handle, &csbi);
 	currentSize = csbi.dwSize;
 
-	SMALL_RECT rect = { 0, 0, width - 1, height - 1 };
-	COORD newSize = { width, height };
+	SMALL_RECT rect = { 0, 0, (WORD)width - 1, (WORD)height - 1 };
+	COORD newSize = {(WORD)width, (WORD)height };
 	
 	// solved by chatgpt:
-	if (width < currentSize.X || height < currentSize.Y) {
+	if ((WORD)width < currentSize.X || (WORD)height < currentSize.Y) {
 		SetConsoleWindowInfo(data->handle, TRUE, &rect);
 		(data->handle, newSize);
 	}

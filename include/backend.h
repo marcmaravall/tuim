@@ -25,7 +25,7 @@ typedef void (*TuimBackendRenderFn)(void* data);
 typedef void (*TuimBackendGetSizeFn)(void* data, size_t* width, size_t* height);
 typedef void (*TuimBackendSetSizeFn)(void* data, size_t width, size_t height);
 
-typedef void (*TuimBackendPassFrameBufferFn)(void* data, const TuimFrameBuffer* frame_buffer);
+typedef void (*TuimBackendPassFrameBufferFn)(void* data, TuimFrameBuffer* frame_buffer);
 
 typedef void (*TuimBackendUpdateInputFn)(void* data, TuimInputState* input_state);
 

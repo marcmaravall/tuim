@@ -21,6 +21,7 @@
 #include "canvas.h"
 #include "color.h"
 #include "ascii.h"
+#include "event.h"
 #include "unicode.h"
 
 #endif //TUIM_H

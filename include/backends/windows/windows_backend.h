@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "color.h"
 #include "backend.h"
 #include "input.h"
 #include "unicode.h"
@@ -30,7 +31,7 @@ typedef struct {
     char char_pressed;
     WCHAR unicode_pressed;
 
-    char vk_pressed;
+    WCHAR vk_pressed;
 
     bool resized;
 	bool window_active;
@@ -46,7 +47,27 @@ void tuim_windows_backend_update_input(void* data, TuimInputState* input_state);
 void tuim_windows_backend_input_record_to_input_state(const INPUT_RECORD* record, TuimKeyboardState* input_state);
 
 static WORD tuim_color_to_win32(const TuimColor color);
-void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, const SHORT width, const SHORT height);
+
+static const WORD tuim_color_to_win32_table[256] = {
+    [TUIM_BLACK] = 0,
+    [TUIM_RED] = 4,
+    [TUIM_GREEN] = 2,
+    [TUIM_YELLOW] = 6,
+    [TUIM_BLUE] = 1,
+    [TUIM_MAGENTA] = 5,
+    [TUIM_CYAN] = 3,
+    [TUIM_WHITE] = 7,
+    [TUIM_BRIGHT_BLACK] = 8,
+    [TUIM_BRIGHT_RED] = 12,
+    [TUIM_BRIGHT_GREEN] = 10,
+    [TUIM_BRIGHT_YELLOW] = 14,
+    [TUIM_BRIGHT_BLUE] = 9,
+    [TUIM_BRIGHT_MAGENTA] = 13,
+    [TUIM_BRIGHT_CYAN] = 11,
+    [TUIM_BRIGHT_WHITE] = 15,
+};
+
+void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, const size_t width, const size_t height);
 
 void tuim_windows_backend_resize_buffer(TuimWindowsBackendData* data, const SHORT width, const SHORT height);
 

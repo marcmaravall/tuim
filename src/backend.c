@@ -1,6 +1,6 @@
 #include "backend.h"
 
-TuimBackend tuim_default_backend() {
+TuimBackend tuim_null_backend() {
 	TuimBackend backend;
 	
 	backend.attrib_supported = NULL;
