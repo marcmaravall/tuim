@@ -33,7 +33,7 @@ bool tuim_is_mouse_button_down(const TuimContext* state, const size_t button) {
         !(state->input_state.mouse_state.previous & button);
 }
 
-bool tuim_is_mouse_button(const TuimContext* state, const size_t button) {
+bool tuim_is_mouse_button (const TuimContext* state, const size_t button) {
     MEB_ASSERT(state);
     return (state->input_state.mouse_state.current & button);
 }

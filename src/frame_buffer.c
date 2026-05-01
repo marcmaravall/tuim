@@ -59,6 +59,46 @@ void tuim_frame_buffer_print(TuimFrameBuffer* fb, const TuimColor fg, const Tuim
 	}
 }
 
+// this is used for not rendering all the text
+void tuim_frame_buffer_print_with_size (
+	TuimFrameBuffer* fb, 
+	const TuimColor fg, const TuimColor bg, 
+	const char* msg, const int x, const int y, 
+	const size_t len) {
+
+	MEB_ASSERT(fb != NULL);
+	MEB_ASSERT(msg != NULL);
+
+	if (y < 0 || y >= (int)fb->height) {
+		return;
+	}
+
+	int start_x = x;
+	size_t msg_index = 0;
+
+	if (start_x < 0) {
+		msg_index = (size_t)(-start_x);
+		start_x = 0;
+
+		if (msg_index >= len) {
+			return;
+		}
+	}
+
+	for (; msg_index < len; msg_index++, start_x++) {
+		if (start_x >= (int)fb->width) {
+			break;
+		}
+
+		TuimFrameBufferCell* cell = &TUIM_FRAME_BUFFER_AT(fb, start_x, y);
+
+		cell->ascii_char = msg[msg_index];
+		cell->foreground_color = fg;
+		cell->background_color = bg;
+	}
+}
+
+
 void tuim_frame_buffer_draw_line
 	(TuimFrameBuffer* fb, const TuimColor color, int x0, int y0, const int x1, const int y1) {
 

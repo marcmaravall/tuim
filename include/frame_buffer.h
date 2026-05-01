@@ -36,6 +36,8 @@ void tuim_frame_buffer_init		(TuimFrameBuffer* fb, const size_t width, const siz
 void tuim_frame_buffer_clear	(TuimFrameBuffer* fb, const TuimColor color);
 
 void tuim_frame_buffer_print	 (TuimFrameBuffer* fb, const TuimColor fg, const TuimColor bg, const char* msg, const int x, const int y);
+void tuim_frame_buffer_print_with_size(TuimFrameBuffer* fb, const TuimColor fg, const TuimColor bg, const char* msg, const int x, const int y, const size_t text_width);
+
 
 void tuim_frame_buffer_draw_line 
 	(TuimFrameBuffer* fb, const TuimColor color, 

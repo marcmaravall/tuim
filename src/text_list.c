@@ -65,9 +65,15 @@ void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
 
 	for (size_t i = start_y; i < end_y; i++) {
 		TuimTextListElement el = list->data[i-start_y];
-		tuim_frame_buffer_print (
+		
+		size_t len = strlen(el.label);
+		if (len > list->area.width) {
+			len = list->area.width;
+		}
+		
+		tuim_frame_buffer_print_with_size (
 			&ctx->frame_buffer, list->style.foreground, 
-			list->style.background, el.label, (int)x, (int)i
+			list->style.background, el.label, (int)x, (int)i, len
 		);
 	}
 }

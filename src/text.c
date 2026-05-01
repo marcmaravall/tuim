@@ -94,8 +94,14 @@ void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
 	if (text->area.width <= 0 || text->area.height <= 0)
 		return;
 
-	tuim_frame_buffer_print(
-		&ctx->frame_buffer, text->foreground, text->background, text->text, text->area.x, text->area.y
+	size_t len = strlen(text->text);
+	if (len > text->area.width) {
+		len = text->area.width;
+	}
+
+	tuim_frame_buffer_print_with_size (
+		&ctx->frame_buffer, text->foreground, 
+		text->background, text->text, text->area.x, text->area.y, len
 	);
 }
 

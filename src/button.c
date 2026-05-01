@@ -60,7 +60,7 @@ void tuim_button_update(const TuimContext* ctx, TuimButton* button) {
 	int mouse_x, mouse_y;
 	tuim_get_mouse_position(ctx, &mouse_x, &mouse_y);
 
-	bool is_down = tuim_is_mouse_button(ctx, TUIM_MOUSE_BUTTON_LEFT);
+	bool is_down = tuim_is_mouse_button_down (ctx, TUIM_MOUSE_BUTTON_LEFT);
 	bool is_inside = tuim_is_mouse_inside(ctx, button->area);
 
 	button->pressing = is_inside && is_down;
