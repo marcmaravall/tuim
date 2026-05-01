@@ -60,4 +60,6 @@ typedef struct {
     void* data;
 } TuimBackend;
 
+TuimBackend tuim_null_backend();
+
 #endif //TUIM_BACKEND_H

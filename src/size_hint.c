@@ -3,8 +3,8 @@
 TuimSizeHint tuim_size_hint_dynamic (const TuimRect rect) {
 	TuimSizeHint sh;
 
-	sh.min_width  = 1;
-	sh.min_height = 1;
+	sh.min_width  = 0;
+	sh.min_height = 0;
 
 	sh.preferred_width  = rect.width;
 	sh.preferred_height = rect.height;
