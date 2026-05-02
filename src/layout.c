@@ -1,9 +1,13 @@
+// TODO: refactor this mess...
+
 #include "layout.h"
 
 void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout) {
+	MEB_ASSERT(ctx && layout && "tuim_layout_draw: invalid arguments!");
 	for (size_t i = 0; i < layout->size; ++i) {
 		TuimLayoutElement* element = &layout->elements[i];
-		element->data.draw(ctx, element->data.data);
+		if (element->data.draw)
+			element->data.draw(ctx, element->data.data);
 	}
 }
 
@@ -88,7 +92,8 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 			rect.height = main_size;
 		}
 
-		el.layout(el.data, rect);
+		if (el.layout)
+			el.layout(el.data, rect);
 
 		cursor += main_size;
 		cursor += current->margin_end;
@@ -97,7 +102,8 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 			cursor += layout->spacing;
 		}
 
-		el.update(ctx, el.data);
+		if (el.update)
+			el.update(ctx, el.data);
 	}
 
 	free(computed_sizes);
@@ -112,28 +118,32 @@ TuimElement tuim_layout_get(TuimLayout* layout, const size_t index) {
 
 void tuim_layout_init(TuimLayout* layout, size_t capacity) {
 	MEB_ASSERT(layout);
-	layout->elements = malloc(sizeof(TuimLayoutElement) * capacity);
-	
-	if (capacity < 1) {
-		layout->capacity = 0;
-	}
 
-	layout->capacity = capacity;
+	layout->elements = malloc(sizeof(TuimLayoutElement) * capacity);
+	MEB_ASSERT(layout->elements && "tuim_layout_init: Failed to allocate memory for layout elements!");
+
+	if (capacity <= 0) {
+		MEB_LOG_WARNING("tuim_layout_init: tried to initialize capacity with 0.");
+		layout->capacity = 1;
+	}
+	else 
+		layout->capacity = capacity;
+
 	layout->size = 0;
 	
-	// TODO: change to tuim_layout_default_ajsdkajlkd macros
-	layout->bounds.x = 0;
-	layout->bounds.y = 0;
-	layout->bounds.width = INT_MAX;
-	layout->bounds.height = INT_MAX;
+	layout->bounds.x = TUIM_LAYOUT_DEFAULT_BOUNDS_X;
+	layout->bounds.y = TUIM_LAYOUT_DEFAULT_BOUNDS_Y;
+	layout->bounds.width = TUIM_LAYOUT_DEFAULT_BOUNDS_WIDTH;
+	layout->bounds.height = TUIM_LAYOUT_DEFAULT_BOUNDS_HEIGHT;
 
-	layout->direction = TUIM_COLUMN;
-	layout->spacing = 0;
+	layout->direction = TUIM_LAYOUT_DEFAULT_DIRECTION;
+	layout->spacing = TUIM_LAYOUT_DEFAULT_SPACING;
 }
 
 // i dont know if works, i havent tested it
 void tuim_layout_destroy(TuimLayout* layout) {
 	MEB_ASSERT(layout);
+
 	for (size_t i = 0; i < layout->size; i++) {
 		TuimElement el = layout->elements[i].data;
 		el.destroy(el.data);
@@ -141,13 +151,15 @@ void tuim_layout_destroy(TuimLayout* layout) {
 	free(layout->elements);
 }
 
-void tuim_layout_add(TuimLayout* layout, TuimElement element) {
-	MEB_ASSERT(layout);
+void tuim_layout_add (TuimLayout* layout, TuimElement element) {
+	MEB_ASSERT(layout && layout->elements);
 
 	if (layout->size >= layout->capacity) {
 		size_t new_capacity = layout->capacity ? layout->capacity * 2 : 1;
+		
 		TuimLayoutElement* new_elements =
 			realloc(layout->elements, sizeof(TuimLayoutElement) * new_capacity);
+
 		MEB_ASSERT(new_elements);
 		layout->elements = new_elements;
 		layout->capacity = new_capacity;
@@ -182,11 +194,14 @@ TuimElement tuim_layout_to_element(TuimLayout* layout) {
 
 	TuimElement el;
 	el.data = layout;
-	el.destroy = tuim_layout_destroy;
-	el.draw = tuim_layout_draw;
-	el.update = tuim_layout_update;
-	el.measure = tuim_layout_measure;
-	el.layout = tuim_layout_layout;
+	el.destroy	= (TuimElementDestroyFn)tuim_layout_destroy;
+	el.draw		= (TuimElementDrawFn)tuim_layout_draw;
+	el.update	= (TuimElementUpdateFn)tuim_layout_update;
+	el.measure	= (TuimElementMeasureFn)tuim_layout_measure;
+	el.layout	= (TuimElementLayoutFn)tuim_layout_layout;
+
+	el.on_focus_gained	= NULL;
+	el.on_focus_lost	= NULL;
 
 	return el;
 }
@@ -215,13 +230,18 @@ void tuim_layout_layout(TuimLayout* layout, const TuimRect area) {
 // ---------------
 
 TuimElement tuim_layout_add_text(TuimLayout* layout, char* str, TuimText* text) {
+	MEB_ASSERT(layout && str && text && "tuim_layout_add_text: invalid arguments!");
+	
 	*text = tuim_text(str);
 	TuimElement el = tuim_text_to_element(text);
 	tuim_layout_add(layout, el);
+
 	return el;
 }
 
 TuimElement tuim_layout_add_button(TuimLayout* layout, const char* str, TuimButton* button) {
+	MEB_ASSERT(layout && str && button && "tuim_layout_add_button: invalid arguments!");
+
 	*button = tuim_button(str);
 	TuimElement el = tuim_button_to_element(button);
 	tuim_layout_add(layout, el);
@@ -229,6 +249,8 @@ TuimElement tuim_layout_add_button(TuimLayout* layout, const char* str, TuimButt
 }
 
 TuimElement tuim_layout_add_checkbox(TuimLayout* layout, const char* str, TuimCheckbox* checkbox) {
+	MEB_ASSERT(layout && str && checkbox && "tuim_layout_add_checkbox: invalid arguments!");
+	
 	*checkbox = tuim_checkbox(str);
 	TuimElement el = tuim_checkbox_to_element(checkbox);
 	tuim_layout_add(layout, el);

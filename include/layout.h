@@ -65,7 +65,15 @@ typedef struct {
 void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout);
 void tuim_layout_update(TuimContext* ctx, TuimLayout* layout);
 
+#define TUIM_LAYOUT_DEFAULT_BOUNDS_X 0
+#define TUIM_LAYOUT_DEFAULT_BOUNDS_Y 0
+#define TUIM_LAYOUT_DEFAULT_BOUNDS_WIDTH INT_MAX
+#define TUIM_LAYOUT_DEFAULT_BOUNDS_HEIGHT INT_MAX
+#define TUIM_LAYOUT_DEFAULT_DIRECTION TUIM_COLUMN
+#define TUIM_LAYOUT_DEFAULT_SPACING 0
+
 void tuim_layout_init(TuimLayout* layout, size_t capacity);
+
 void tuim_layout_destroy(TuimLayout* layout);
 void tuim_layout_add(TuimLayout* layout, TuimElement element);
 TuimElement tuim_layout_get(TuimLayout* layout, const size_t index);
