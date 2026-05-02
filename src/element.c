@@ -6,7 +6,9 @@ TuimElement tuim_element(
 	TuimElementLayoutFn layout,
 	TuimElementUpdateFn update,
 	TuimElementDrawFn draw,
-	TuimElementDestroyFn destroy
+	TuimElementDestroyFn destroy,
+	TuimElementOnFocusGainedFn on_focus_gained,
+	TuimElementOnFocusLostFn on_focus_lost
 ) {
 	TuimElement el;
 	
@@ -16,6 +18,9 @@ TuimElement tuim_element(
 	el.update = update;
 	el.draw = draw;
 	el.destroy = destroy;
+
+	el.on_focus_gained	= on_focus_gained;
+	el.on_focus_lost	= on_focus_lost;
 	
 	return el;
 }
@@ -29,6 +34,8 @@ TuimElement tuim_element_null() {
 	el.update = NULL;
 	el.draw = NULL;
 	el.destroy = NULL;
+	el.on_focus_gained	= NULL;
+	el.on_focus_lost	= NULL;
 	
 	return el;
 }
@@ -49,5 +56,7 @@ bool tuim_element_is_null(const TuimElement* el) {
 			el->draw == NULL && 
 			el->layout == NULL && 
 			el->measure == NULL && 
-			el->update == NULL;
+			el->update == NULL &&
+			el->on_focus_gained == NULL &&
+			el->on_focus_lost	== NULL;
 }

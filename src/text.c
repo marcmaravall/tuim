@@ -70,12 +70,14 @@ TuimElement tuim_text_to_element(const TuimText* text) {
 	
 	TuimElement element;
 	
-	element.data = (void*)text;
-	element.measure = tuim_text_measure;
-	element.layout = tuim_text_layout;
-	element.draw = tuim_draw_text;
-	element.update = tuim_text_update;
-	element.destroy = tuim_text_destroy;
+	element.data			= (void*)text;
+	element.measure			= (TuimElementMeasureFn)tuim_text_measure;
+	element.layout			= (TuimElementLayoutFn)	tuim_text_layout;
+	element.draw			= (TuimElementDrawFn)	tuim_draw_text;
+	element.update			= (TuimElementUpdateFn)	tuim_text_update;
+	element.destroy			= (TuimElementDestroyFn)	tuim_text_destroy;
+	element.on_focus_gained = (TuimElementOnFocusGainedFn)	tuim_text_on_focus_gained;
+	element.on_focus_lost	= (TuimElementOnFocusLostFn)	tuim_text_on_focus_lost;
 	
 	return element;
 }
@@ -128,6 +130,15 @@ void tuim_text_format(TuimText* text, const char* format, ...) {
 	va_end(args);
 
 	text->length = (size_t)needed;
+}
+
+// TODO: add some animation to check if it works
+void tuim_text_on_focus_gained(TuimText* data) {
+	MEB_ASSERT(data);
+}
+
+void tuim_text_on_focus_lost(TuimText* data) {
+	MEB_ASSERT(data);
 }
 
 void tuim_text_destroy(TuimText* text) {

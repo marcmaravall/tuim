@@ -110,6 +110,9 @@ TuimElement tuim_text_list_to_element(TuimTextList* list) {
 	el.layout = tuim_text_list_layout;
 	el.measure = tuim_text_list_measure;
 
+	el.on_focus_gained	= NULL;
+	el.on_focus_lost	= NULL;
+
 	return el;
 }
 

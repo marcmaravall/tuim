@@ -46,6 +46,7 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 		title_to_render = malloc(window->rect.width + 1);
 		MEB_ASSERT(title_to_render);
 
+		// TODO: quit unsafe warning
 		strncpy(title_to_render, window->title, window->rect.width);
 
 		size_t from = window->rect.width - 3;
@@ -96,7 +97,9 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 
 void tuim_window_destroy(TuimWindow* window) {
 	MEB_ASSERT(window);
-	// window->title = NULL;
+	
+	tuim_layout_destroy(&window->layout);
+	window->title = NULL;
 }
 
 // returns 1 if the window was updated, 0 otherwise

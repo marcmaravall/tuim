@@ -12,6 +12,9 @@ typedef void (*TuimElementUpdateFn) (TuimContext* ctx, void* data);
 typedef void (*TuimElementDrawFn)   (TuimContext* ctx, void* data);
 typedef void (*TuimElementDestroyFn)(void* data);
 
+typedef void (*TuimElementOnFocusGainedFn)	(void* data);
+typedef void (*TuimElementOnFocusLostFn)	(void* data);
+
 typedef struct {
 	void* data;
 	TuimElementMeasureFn measure;
@@ -20,6 +23,9 @@ typedef struct {
 	TuimElementUpdateFn update;
 	TuimElementDrawFn draw;
 	TuimElementDestroyFn destroy;
+
+	TuimElementOnFocusGainedFn on_focus_gained;
+	TuimElementOnFocusLostFn on_focus_lost;
 
 } TuimElement;
 
@@ -31,7 +37,9 @@ TuimElement tuim_element (
 	TuimElementLayoutFn layout, 
 	TuimElementUpdateFn update, 
 	TuimElementDrawFn draw, 
-	TuimElementDestroyFn destroy
+	TuimElementDestroyFn destroy,
+	TuimElementOnFocusGainedFn on_focus_gained,
+	TuimElementOnFocusLostFn on_focus_lost
 );
 
 TuimElement tuim_element_null();
