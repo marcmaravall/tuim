@@ -33,7 +33,7 @@ char* tuim_text_list_get(TuimTextList* list, const size_t index) {
 	if (index >= list->size)
 		MEB_ASSERT(0 && "ERROR: invalid index on text list");
 	
-	char* res = list->data[index].label;
+	char* res = mds_get(list->data[index].str);
 	MEB_ASSERT(res);
 	return res;
 }
@@ -66,14 +66,14 @@ void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
 	for (size_t i = start_y; i < end_y; i++) {
 		TuimTextListElement el = list->data[i-start_y];
 		
-		size_t len = strlen(el.label);
+		size_t len = el.str.size;
 		if (len > list->area.width) {
 			len = list->area.width;
 		}
 		
 		tuim_frame_buffer_print_with_size (
 			&ctx->frame_buffer, list->style.foreground, 
-			list->style.background, el.label, (int)x, (int)i, len
+			list->style.background, mds_get(el.str), (int)x, (int)i, len
 		);
 	}
 }
@@ -82,8 +82,7 @@ void tuim_text_list_destroy(TuimTextList* list) {
 	MEB_ASSERT(list);
 
 	for (size_t i = 0; i < list->size; i++) {
-		if (list->data[i].free_on_delete)
-			free(list->data[i].label);
+		mds_free(&list->data[i].str);
 	}
 
 	free(list->data);
@@ -137,8 +136,7 @@ void tuim_text_list_add(TuimTextList* list, char* text) {
 	if (list->max_size < len)
 		list->max_size = len;
 
-	list->data[list->size - 1].label = text;
-	list->data[list->size - 1].free_on_delete = false;
+	list->data[list->size - 1].str = mds_new(text);
 }
 
 void tuim_text_list_clear(TuimTextList* list) {

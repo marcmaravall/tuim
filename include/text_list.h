@@ -12,13 +12,13 @@
 #include "rect.h"
 
 #include <meb.h>
+#include <mds.h>
+
 #include <stdint.h>
 
 typedef struct {
-	char* label;
-	bool free_on_delete;
+	mdString str;
 } TuimTextListElement;
-
 
 // style flags:
 
