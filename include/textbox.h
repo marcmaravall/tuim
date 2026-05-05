@@ -8,6 +8,8 @@
 #include "color.h"
 
 #include <meb.h>
+#include <mds.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -27,6 +29,7 @@ typedef struct {
     TuimTextboxStyle style;
     TuimRect         area;
 
+    // TODO: change to mdString
     char* text;
     size_t length;
     size_t capacity;

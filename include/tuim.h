@@ -11,6 +11,7 @@
 #include "table.h"
 #include "window.h"
 #include "window_manager.h"
+#include "scroll_view.h"
 #include "layout.h"
 #include "element.h"
 #include "size_hint.h"
