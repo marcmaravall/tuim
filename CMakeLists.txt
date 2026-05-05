@@ -40,3 +40,4 @@ endif()
 
 target_include_directories (tuim PRIVATE include)
 target_include_directories (tuim PRIVATE "thirdparty/meb")
+target_include_directories (tuim PRIVATE "thirdparty/mds")

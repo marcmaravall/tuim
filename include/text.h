@@ -9,6 +9,7 @@
 #include "element.h"
 
 #include <meb.h>
+#include <mds.h>
 
 #include <string.h>
 #include <stdarg.h>
@@ -18,11 +19,7 @@ typedef struct {
 	TuimColor background;
 
 	TuimRect area;
-
-	char* text;
-
-	size_t length;
-	size_t capacity;
+	mdString text;
 } TuimText;
 
 TuimText tuim_default_text();

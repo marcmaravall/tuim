@@ -21,6 +21,10 @@
 #include <meb.h>
 #undef MEB_IMPLEMENTATION
 
+#define MDS_IMPLEMENTATION
+#include <mds.h>
+#undef MDS_IMPLEMENTATION
+
 #include <tuim.h>
 #ifdef __linux__
 #include <backends/linux/linux_backend.h>
@@ -78,15 +82,12 @@ static void build_main_window(
     w->max_width = INT_MAX;
     w->rect.width = 80;
     w->rect.height = 30;
-
-    // -- Canvas (color fill test) --
-    tuim_canvas_init(canvas, 20, 3);
-    tuim_canvas_fill(canvas, TUIM_RED_STRUCT_INDEXED);
-    tuim_window_add_element(w, tuim_canvas_to_element(canvas));
+	w->min_width = 80;
+	w->min_height = 15;
 
     // -- Text list (static labels) --
     *log_list = tuim_text_list(8);
-    tuim_text_list_add(log_list, "  [TUIM TEST SUITE]");
+    tuim_text_list_add(log_list, "TUIM TEST SUITE");
     tuim_text_list_add(log_list, "  Press ESC to quit");
     tuim_text_list_add(log_list, "  Press A/B/C to test keys");
     tuim_text_list_add(log_list, "  Ctrl+Z / Alt+Z / Shift+Z for modifiers");
@@ -196,6 +197,7 @@ int main(void) {
     while (!should_quit) {
         tuim_begin_frame(&ctx);
         tuim_update_input(&ctx);
+
 
         // ---- Delta time ----
         double dt = tuim_get_delta_time(&ctx);
