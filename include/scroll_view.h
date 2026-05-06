@@ -5,11 +5,12 @@
 
 #include "element.h"
 #include "size_hint.h"
+#include "layout.h"
 
 #include <meb.h>
 
 typedef struct {
-	int scroll;
+	TuimLayout layout;
 } TuimScrollView;
 
 void tuim_scroll_view_destroy(TuimScrollView* sw);

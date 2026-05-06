@@ -43,6 +43,7 @@ void tuim_begin_frame	(TuimContext* context);
 void tuim_end_frame		(TuimContext* context);
 
 void tuim_init_context	(TuimContext* ctx);
+void tuim_init_with_backend(TuimContext* ctx, TuimBackend backend);
 void tuim_destroy_context(TuimContext* ctx);
 
 // backend calls:

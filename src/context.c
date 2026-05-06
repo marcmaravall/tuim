@@ -17,6 +17,11 @@ void tuim_init_context(TuimContext* ctx) {
 	ctx->time = 0.0;
 }
 
+void tuim_init_with_backend(TuimContext* ctx, TuimBackend backend) {
+	ctx->backend = backend;
+	tuim_init_context(ctx);
+}
+
 void tuim_end_frame(TuimContext* ctx) {
 	ctx->backend.pass_frame_buffer(ctx->backend.data, &ctx->frame_buffer);
 	ctx->backend.render(ctx->backend.data);

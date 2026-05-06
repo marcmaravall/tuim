@@ -3,6 +3,7 @@
 - Write documentation for the library.
 - Implement textbox element for user input.
 - Change dynamic text to mds.h.
+- Add viewport.
 - Quit repeated code on tuim_button and tuim_checkbox (make abstraction).
 - Add slider element.
 - Add dropdown element.

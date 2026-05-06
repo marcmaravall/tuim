@@ -18,6 +18,8 @@ int main() {
 
 	TuimWindow w = tuim_default_window();
 
+	TuimViewport vp;
+
 	while (1) {
 		tuim_begin_frame(&ctx);
 		tuim_update_input(&ctx);

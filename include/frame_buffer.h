@@ -55,6 +55,11 @@ void tuim_frame_buffer_draw_rect_char
 	(TuimFrameBuffer* fb, const TuimColor color, 
 	const char c, const int x, const int y, const int width, const int height);
 
+// draws a framebuffer inside another framebuffer in (x, y) position
+void tuim_frame_buffer_draw_frame_buffer (
+	TuimFrameBuffer* dest, TuimFrameBuffer* src, const int x, const int y
+);
+
 void tuim_frame_buffer_draw_equation_line (const TuimColor color, TuimFrameBuffer* fb, const double m, const double n);
 
 void tuim_frame_buffer_set_background (TuimFrameBuffer* fb, const TuimColor color, const int x, const int y);

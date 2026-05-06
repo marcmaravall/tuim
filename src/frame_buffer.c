@@ -195,6 +195,22 @@ void tuim_frame_buffer_draw_rect_char(TuimFrameBuffer* fb, const TuimColor color
 	}
 }
 
+void tuim_frame_buffer_draw_frame_buffer(
+	TuimFrameBuffer* dest, TuimFrameBuffer* src, const int x, const int y
+) {
+	MEB_ASSERT(dest && src);
+
+	for (int j = 0; j < src->width; j++) {
+		for (int i = 0; i < src->height; i++) {
+			if (x + j >= dest->width || y + i >= dest->height) {
+				continue;
+			}
+			TUIM_FRAME_BUFFER_AT(dest, x + j, y + i) = TUIM_FRAME_BUFFER_AT(src, j, i);
+		}
+	}
+
+}
+
 void tuim_frame_buffer_destroy(TuimFrameBuffer* fb) {
 	free(fb);
 }

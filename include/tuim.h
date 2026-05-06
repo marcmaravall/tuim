@@ -18,6 +18,7 @@
 #include "textbox.h"
 #include "text_list.h"
 #include "frame_buffer.h"
+#include "viewport.h"
 #include "checkbox.h"
 #include "canvas.h"
 #include "color.h"
