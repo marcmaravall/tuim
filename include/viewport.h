@@ -3,6 +3,7 @@
 
 #include <meb.h>
 
+#include "context.h"
 #include "element.h"
 #include "frame_buffer.h"
 #include "rect.h"
@@ -19,5 +20,7 @@ void tuim_viewport_draw(TuimContext* ctx, const TuimViewport* vp);
 void tuim_viewport_destroy(TuimViewport* vp);
 
 TuimElement tuim_viewport_to_element(const TuimViewport* vp);
+
+void tuim_viewport_clear(TuimViewport* vp, TuimColor color);
 
 #endif // TUIM_VIEWPORT_H

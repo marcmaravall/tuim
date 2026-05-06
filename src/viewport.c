@@ -21,6 +21,11 @@ void tuim_viewport_destroy(TuimViewport* vp) {
 	tuim_frame_buffer_destroy(&vp->frame_buffer);
 }
 
+void tuim_viewport_clear(TuimViewport* vp, TuimColor color) {
+	MEB_ASSERT(vp);
+	tuim_frame_buffer_clear(&vp->frame_buffer, color);
+}
+
 TuimElement tuim_viewport_to_element(const TuimViewport* vp) {
 	MEB_ASSERT(vp);
 
