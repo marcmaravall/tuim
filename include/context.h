@@ -7,35 +7,20 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "viewport.h"
 #include "ascii.h"
 #include "unicode.h"
 #include "backend.h"
-#include "frame_buffer.h"
-
-// TODO: implement
-typedef struct {
-	int frame_index;
-
-	int cursor_x;
-	int cursor_y;
-	
-	bool is_mouse_down;
-
-} TuimFrameContext;
 
 typedef struct TuimContext {
-	TuimFrameBuffer frame_buffer;
-	TuimFrameContext frame_context;
-
-	int available_width;
+	// viewport of all the screen, this can be changed for custom viewports, for example, 
+	// getting mouse input only in a specific area of the screen, or rendering only in a specific area of the screen.
+	TuimViewport viewport;
 
 	TuimStyle style;
-
 	TuimBackend backend;
-
 	TuimInputState input_state;
 
-	// time elapsed since init context
 	double time;
 } TuimContext;
 

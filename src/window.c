@@ -68,29 +68,29 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 	const int y1 = window->rect.y + window->rect.height-1;
 
 	tuim_frame_buffer_draw_rect (
-		&ctx->frame_buffer, window->style.background, x0, y0, 
+		&ctx->viewport.frame_buffer, window->style.background, x0, y0, 
 		window->rect.width, window->rect.height
 	);
 
 	tuim_layout_draw(ctx, &window->layout);
 	
 	tuim_frame_buffer_draw_line (
-		&ctx->frame_buffer, window->style.border_color,
+		&ctx->viewport.frame_buffer, window->style.border_color,
 		x1, y0, x1, y1
 	);
 
 	tuim_frame_buffer_draw_line (
-		&ctx->frame_buffer, window->style.border_color,
+		&ctx->viewport.frame_buffer, window->style.border_color,
 		x0, y1, x1, y1
 	);
 
 	tuim_frame_buffer_draw_line (
-		&ctx->frame_buffer, window->style.title_bar_color,
+		&ctx->viewport.frame_buffer, window->style.title_bar_color,
 		x0, y0, x1, y0
 	);
 
 	tuim_frame_buffer_print (
-		&ctx->frame_buffer, window->style.title_color, window->style.title_bar_color,
+		&ctx->viewport.frame_buffer, window->style.title_color, window->style.title_bar_color,
 		title_to_render, window->rect.x, window->rect.y
 	);
 }

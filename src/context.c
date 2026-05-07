@@ -1,7 +1,7 @@
 #include "context.h"
 
 void tuim_begin_frame(TuimContext* ctx) {
-	tuim_frame_buffer_clear(&ctx->frame_buffer, ctx->style.clear_color);
+	tuim_frame_buffer_clear(&ctx->viewport.frame_buffer, ctx->style.clear_color);
 }
 
 void tuim_init_context(TuimContext* ctx) {
@@ -11,7 +11,7 @@ void tuim_init_context(TuimContext* ctx) {
 	ctx->backend.get_size(ctx->backend.data, &width, &height);
 
 	tuim_clear_input(&ctx->input_state);
-	tuim_frame_buffer_init(&ctx->frame_buffer, width, height);
+	ctx->viewport = tuim_viewport((TuimRect){0, 0, width, height});
 
 	ctx->style = tuim_style_default();
 	ctx->time = 0.0;
@@ -23,7 +23,7 @@ void tuim_init_with_backend(TuimContext* ctx, TuimBackend backend) {
 }
 
 void tuim_end_frame(TuimContext* ctx) {
-	ctx->backend.pass_frame_buffer(ctx->backend.data, &ctx->frame_buffer);
+	ctx->backend.pass_frame_buffer(ctx->backend.data, &ctx->viewport.frame_buffer);
 	ctx->backend.render(ctx->backend.data);
 	ctx->time += tuim_get_delta_time(ctx);
 }
@@ -31,7 +31,7 @@ void tuim_end_frame(TuimContext* ctx) {
 void tuim_destroy_context(TuimContext* ctx) {
 	MEB_ASSERT(ctx);
 	ctx->backend.destroy(ctx->backend.data);
-	free(ctx->frame_buffer.cells);
+	free(ctx->viewport.frame_buffer.cells);
 	free(ctx->backend.data);
 }
 

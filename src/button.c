@@ -45,7 +45,7 @@ void tuim_button_draw(TuimContext* ctx, const TuimButton* button) {
 	}
 
 	tuim_frame_buffer_print(
-		&ctx->frame_buffer, fg, bg,
+		&ctx->viewport.frame_buffer, fg, bg,
 		label,
 		button->area.x,
 		button->area.y

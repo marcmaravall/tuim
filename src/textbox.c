@@ -258,7 +258,7 @@ void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
         line_buf[line_len] = '\0';
 
         tuim_frame_buffer_print(
-            &ctx->frame_buffer,
+            &ctx->viewport.frame_buffer,
             fg, bg, line_buf,
             textbox->area.x,
             textbox->area.y + line_row
@@ -269,7 +269,7 @@ void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
 
             if ((int)(tuim_get_time(ctx)*4) % 2 == 0) {
                 tuim_frame_buffer_set_background(
-                    &ctx->frame_buffer,
+                    &ctx->viewport.frame_buffer,
                     textbox->style.cursor_color,
                     textbox->area.x + cursor_col,
                     textbox->area.y + line_row

@@ -21,7 +21,7 @@ int main() {
 
 	TuimWindow w = tuim_default_window();
 
-	TuimFrameBuffer fb = ctx.frame_buffer;
+	TuimViewport global_vp = ctx.viewport;
 
 	while (1) {
 		tuim_begin_frame(&ctx);
@@ -29,12 +29,15 @@ int main() {
 
 		tuim_window_update(&ctx, &w);
 
-		ctx.frame_buffer = fb;
+		ctx.viewport = global_vp;
+		tuim_viewport_clear(&ctx.viewport, TUIM_BRIGHT_BLACK_STRUCT_INDEXED);
+
+		ctx.viewport = vp;
 		tuim_viewport_clear(&vp, TUIM_BLACK_STRUCT_INDEXED);
 
-		ctx.frame_buffer = vp.frame_buffer;
 		tuim_window_draw(&ctx, &w);
-		ctx.frame_buffer = fb;
+
+		ctx.viewport = global_vp;
 		tuim_viewport_draw(&ctx, &vp);
 
 		tuim_end_frame(&ctx);

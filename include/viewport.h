@@ -3,10 +3,11 @@
 
 #include <meb.h>
 
-#include "context.h"
 #include "element.h"
 #include "frame_buffer.h"
 #include "rect.h"
+
+typedef struct TuimContext TuimContext;
 
 typedef struct TuimViewport {
 	TuimFrameBuffer frame_buffer;

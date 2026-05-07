@@ -89,7 +89,7 @@ void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
 	}
 
 	tuim_frame_buffer_print_with_size (
-		&ctx->frame_buffer, text->foreground, 
+		&ctx->viewport.frame_buffer, text->foreground,
 		text->background, mds_get(text->text), text->area.x, text->area.y, len
 	);
 }

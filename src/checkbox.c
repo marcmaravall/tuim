@@ -51,14 +51,14 @@ void tuim_checkbox_draw(TuimContext* ctx, const TuimCheckbox* checkbox) {
 	}
 
 	tuim_frame_buffer_print (
-		&ctx->frame_buffer, fg, bg,
+		&ctx->viewport.frame_buffer, fg, bg,
 		status,
 		checkbox->area.x,
 		checkbox->area.y
 	);
 
 	tuim_frame_buffer_print(
-		&ctx->frame_buffer, fg, bg,
+		&ctx->viewport.frame_buffer, fg, bg,
 		label,
 		checkbox->area.x + (int)len,
 		checkbox->area.y

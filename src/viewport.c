@@ -1,4 +1,5 @@
 #include "viewport.h"
+#include "context.h"
 
 TuimViewport tuim_viewport(const TuimRect rect) {
 	TuimViewport vp;
@@ -12,7 +13,7 @@ TuimViewport tuim_viewport(const TuimRect rect) {
 
 void tuim_viewport_draw(TuimContext* ctx, const TuimViewport* vp) {
 	MEB_ASSERT(ctx && vp);
-	tuim_frame_buffer_draw_frame_buffer(&ctx->frame_buffer, (TuimFrameBuffer*)&vp->frame_buffer, vp->x, vp->y);
+	tuim_frame_buffer_draw_frame_buffer(&ctx->viewport.frame_buffer, (TuimFrameBuffer*)&vp->frame_buffer, vp->x, vp->y);
 }
 
 void tuim_viewport_destroy(TuimViewport* vp) {

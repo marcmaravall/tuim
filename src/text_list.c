@@ -72,7 +72,7 @@ void tuim_text_list_draw(TuimContext* ctx, const TuimTextList* list) {
 		}
 		
 		tuim_frame_buffer_print_with_size (
-			&ctx->frame_buffer, list->style.foreground, 
+			&ctx->viewport.frame_buffer, list->style.foreground,
 			list->style.background, mds_get(el.str), (int)x, (int)i, len
 		);
 	}

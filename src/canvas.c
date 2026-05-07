@@ -23,17 +23,17 @@ void tuim_canvas_draw(TuimContext* ctx, const TuimCanvas* canvas) {
 		for (int x = x_from; x < x_to; ++x) {
 
 			if (x < 0 || y < 0 ||
-				x >= ctx->frame_buffer.width ||
-				y >= ctx->frame_buffer.height) {
+				x >= ctx->viewport.frame_buffer.width ||
+				y >= ctx->viewport.frame_buffer.height) {
 				continue;
 			}
 
-			int fb_index = y * (int)ctx->frame_buffer.width + x;
+			int fb_index = y * (int)ctx->viewport.frame_buffer.width + x;
 			int canvas_index =
 				(y - y_from) * canvas->rect.width + (x - x_from);
 
-			ctx->frame_buffer.cells[fb_index].ascii_char = ' ';
-			ctx->frame_buffer.cells[fb_index].background_color =
+			ctx->viewport.frame_buffer.cells[fb_index].ascii_char = ' ';
+			ctx->viewport.frame_buffer.cells[fb_index].background_color =
 				canvas->pixels[canvas_index];
 		}
 	}
