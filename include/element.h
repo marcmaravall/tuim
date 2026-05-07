@@ -6,6 +6,9 @@
 #include "rect.h"
 #include "size_hint.h"
 
+#define TUIM_ELEMENTS(...) (TuimElement[]) {__VA_ARGS__}
+#define TUIM_ELEMENT_NULL (TuimElement) { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+
 typedef TuimSizeHint(*TuimElementMeasureFn)(void* data);
 typedef void (*TuimElementLayoutFn) (void* data, const TuimRect area);
 typedef void (*TuimElementUpdateFn) (TuimContext* ctx, void* data);

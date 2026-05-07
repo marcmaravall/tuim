@@ -10,12 +10,12 @@ endif()
 project ("tuim")
 
 if (WIN32)
-	file(GLOB tuim_src "src/*.c" "src/backends/windows/windows_backend.c")
+	file(GLOB tuim_src "src/*.c" "src/backends/windows/windows_backend.c" "src/backends/abstract/abstract.c")
   add_executable(tuim ${tuim_src})
 
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
-  file(GLOB tuim_src "src/*.c" "src/backends/linux/linux_backend.c")
+  file(GLOB tuim_src "src/*.c" "src/backends/linux/linux_backend.c" "src/backends/abstract/abstract.c")
 
   add_executable(tuim ${tuim_src})
 

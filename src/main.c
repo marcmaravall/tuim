@@ -3,9 +3,7 @@
 // implementing...
 
 #include <tuim.h>
-#ifdef _WIN32
-#include <backends/windows/windows_backend.h>
-#endif
+#include <backends/abstract/abstract.h>
 
 #define MEB_LOG_TO_FILE
 #define MEB_IMPLEMENTATION
@@ -17,7 +15,7 @@
 
 int main() {
 	TuimContext ctx;
-	tuim_init_with_backend(&ctx, tuim_windows_backend());
+	tuim_init_with_backend(&ctx, tuim_abstract_backend());
 	tuim_set_style(&ctx, tuim_style_default_dark());
 
 	TuimWindow window = tuim_window("Mouse test suite: ", (TuimRect){0, 0, 30, 10});
@@ -37,13 +35,13 @@ int main() {
 		&window, 
 		5,
 		
-		(TuimElement[]) {
+		TUIM_ELEMENTS (
 			tuim_text_element("This is a test of the mouse input system. You can drag this window around and resize it."),
 			tuim_text_element("Hi"),
 			tuim_button_element("Click me!"),
 			tuim_checkbox_element("Check me!"),
 			tuim_textbox_element ("Type here!")
-		}
+		)
 	);
 
 	while (1) {
