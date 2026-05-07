@@ -274,7 +274,7 @@ TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* 
 TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button) {
 	MEB_ASSERT(window && str && button);
 	
-	*button = tuim_button(str);
+	button = tuim_button(str);
 	TuimElement el = tuim_button_to_element(button);
 	tuim_layout_add(&window->layout, el);
 	return el;
@@ -283,7 +283,7 @@ TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButt
 TuimElement tuim_window_add_checkbox(TuimWindow* window, const char* str, TuimCheckbox* check) {
 	MEB_ASSERT(window && str && check);
 	
-	*check = tuim_checkbox(str);
+	check = tuim_checkbox(str);
 	TuimElement el = tuim_checkbox_to_element(check);
 	tuim_layout_add(&window->layout, el);
 	return el;
