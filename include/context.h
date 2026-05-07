@@ -31,6 +31,8 @@ void tuim_init_context	(TuimContext* ctx);
 void tuim_init_with_backend(TuimContext* ctx, TuimBackend backend);
 void tuim_destroy_context(TuimContext* ctx);
 
+void tuim_set_style(TuimContext* ctx, TuimStyle style);
+
 // backend calls:
 void tuim_resize_context(TuimContext* ctx, const size_t width, const size_t height);
 void tuim_set_backend_attrib (TuimContext* ctx, const tuim_backend_attrib_t attrib, const char* value);

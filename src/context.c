@@ -36,6 +36,11 @@ void tuim_destroy_context(TuimContext* ctx) {
 	free(ctx->backend.data);
 }
 
+void tuim_set_style(TuimContext* ctx, TuimStyle style) {
+	MEB_ASSERT(ctx);
+	ctx->style = style;
+}
+
 // backend calls:
 
 void tuim_resize_context(TuimContext* ctx, const size_t width, const size_t height) {

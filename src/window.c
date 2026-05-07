@@ -34,6 +34,16 @@ TuimWindow tuim_default_window() {
 	return w;
 }
 
+TuimWindow tuim_window(const char* title, const TuimRect rect) {
+	MEB_ASSERT(title);
+
+	TuimWindow window = tuim_default_window();
+	window.title = title;
+	window.rect = rect;
+
+	return window;
+}
+
 // TODO: use less malloc 
 void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 	MEB_ASSERT(ctx && window);
@@ -106,6 +116,8 @@ void tuim_window_destroy(TuimWindow* window) {
 int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 	MEB_ASSERT(ctx && window);
 
+	window->layout.bounds.width = window->rect.width;
+	window->layout.bounds.height = window->rect.height;
 	tuim_layout_update(ctx, &window->layout);
 
 	int mouse_x, mouse_y;
@@ -243,10 +255,17 @@ void tuim_window_add_element(TuimWindow* window, const TuimElement el) {
 	tuim_layout_add(&window->layout, el);
 }
 
+void tuim_window_add_elements(TuimWindow* window, const size_t count, TuimElement els[]) {
+	MEB_ASSERT(window && els);
+	for (size_t i = 0; i < count; ++i) {
+		tuim_layout_add(&window->layout, els[i]);
+	}
+}
+
 TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text) {
 	MEB_ASSERT(window && str && text);
 	
-	*text = tuim_text(str);
+	text = tuim_text(str);
 	TuimElement el = tuim_text_to_element(text);
 	tuim_layout_add(&window->layout, el);
 	return el;
@@ -278,4 +297,17 @@ TuimElement tuim_window_add_text_list(TuimWindow* window, const size_t capacity,
 	tuim_layout_add(&window->layout, el);
 	
 	return el;
+}
+
+void tuim_window_set_bounds(TuimWindow* window, const TuimSizeHint sh) {
+	MEB_ASSERT(window);
+
+	window->rect.width = sh.preferred_width;
+	window->rect.height = sh.preferred_height;
+	window->max_height = sh.max_height;
+	window->min_height = sh.min_height;
+	window->max_width = sh.max_width;
+	window->min_width = sh.min_width;
+
+	tuim_window_resize(window, window->rect);
 }

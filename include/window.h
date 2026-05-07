@@ -88,6 +88,7 @@ typedef struct {
 } TuimWindow;
 
 TuimWindow tuim_default_window();
+TuimWindow tuim_window(const char* title, const TuimRect rect);
 
 TuimSizeHint tuim_window_measure(const TuimWindow* data);
 void tuim_window_draw  (TuimContext* ctx, TuimWindow* window);
@@ -108,11 +109,14 @@ TuimElement tuim_window_to_element(TuimWindow* window);
 
 bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window);
 
-void tuim_window_add_element(TuimWindow* window, const TuimElement el);
+void tuim_window_add_element  (TuimWindow* window, const TuimElement el);
+void tuim_window_add_elements (TuimWindow* window, const size_t count, TuimElement els[]);
 
 TuimElement tuim_window_add_text(TuimWindow* window, const char* str, TuimText* text);
 TuimElement tuim_window_add_button(TuimWindow* window, const char* str, TuimButton* button);
 TuimElement tuim_window_add_checkbox(TuimWindow* window, const char* str, TuimCheckbox* checkbox);
 TuimElement tuim_window_add_text_list(TuimWindow* window, const size_t capacity, TuimTextList* list);
+
+void tuim_window_set_bounds(TuimWindow* window, const TuimSizeHint sh);
 
 #endif // TUIM_WINDOW_H

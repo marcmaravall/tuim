@@ -1,25 +1,25 @@
 #include "text.h"
 
-TuimText tuim_default_text() {
-	TuimText text;
+TuimText* tuim_default_text() {
+	TuimText* text = malloc(sizeof(TuimText));
 
-	text.text = mds_new("[TUIM_DEFAULT_TEXT");
+	text->text = mds_new("[TUIM_DEFAULT_TEXT");
 
-	text.background = TUIM_BLACK_STRUCT_INDEXED;
-	text.foreground = TUIM_WHITE_STRUCT_INDEXED;
-	text.area.x = 0;
-	text.area.y = 0;
-	text.area.width = text.text.size;
-	text.area.height = 1;
+	text->background = TUIM_BLACK_STRUCT_INDEXED;
+	text->foreground = TUIM_WHITE_STRUCT_INDEXED;
+	text->area.x = 0;
+	text->area.y = 0;
+	text->area.width = text->text.size;
+	text->area.height = 1;
 
 	return text;
 }
 
-TuimText tuim_text(const char* str) {
-	TuimText text = tuim_default_text();
+TuimText* tuim_text(const char* str) {
+	TuimText* text = tuim_default_text();
 
-	mds_free(&text.text);
-	text.text = mds_new(str);
+	mds_free(&text->text);
+	text->text = mds_new(str);
 
 	return text;
 }
@@ -72,8 +72,6 @@ TuimElement tuim_text_to_element(const TuimText* text) {
 
 void tuim_text_update(TuimContext* ctx, TuimText* text) {
 	MEB_ASSERT(ctx && text);
-	text->area.width = (int)mds_size(text->text);
-	text->area.height = 1;
 }
 
 void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
@@ -85,9 +83,9 @@ void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
 	if (text->area.width <= 0 || text->area.height <= 0)
 		return;
 
-	size_t len = mds_size(text->text);
-	if (len > text->area.width) {
-		len = text->area.width;
+	size_t len = text->area.width;
+	if (len > text->text.size) {
+		len = text->text.size;
 	}
 
 	tuim_frame_buffer_print_with_size (

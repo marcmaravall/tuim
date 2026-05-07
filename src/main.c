@@ -1,3 +1,6 @@
+// mouse test:
+// implementing...
+
 #include <tuim.h>
 #ifdef _WIN32
 #include <backends/windows/windows_backend.h>
@@ -12,59 +15,49 @@
 #include <stdio.h>
 
 int main() {
-    TuimContext ctx;
-    tuim_init_with_backend(&ctx, tuim_windows_backend());
-    ctx.style = tuim_style_default_dark();
+	TuimContext ctx;
+	tuim_init_with_backend(&ctx, tuim_windows_backend());
+	tuim_set_style(&ctx, tuim_style_default_dark());
 
-    TuimViewport vp = tuim_viewport((TuimRect) { 50, 7, 30, 15 });
-    tuim_frame_buffer_clear(&vp.frame_buffer, TUIM_BLACK_STRUCT_INDEXED);
+	TuimWindow window = tuim_window("Mouse test suite: ", (TuimRect){0, 0, 30, 10});
+	
+	tuim_window_set_bounds(&window, (TuimSizeHint) {
+		.preferred_width = 30, 
+		.preferred_height = 10, 
+		.min_width = 20, 
+		.min_height = 5, 
+		.max_width = 100, 
+		.max_height = 30
+	});
 
-    TuimWindow w = tuim_default_window();
+	tuim_set_backend_attrib(&ctx, TUIM_BACKEND_ATTRIB_SIZE_FIXED, "false");
 
-	TuimText debug = tuim_default_text();
+	tuim_window_add_elements (
+		&window, 
+		2,
+		
+		(TuimElement[]) {
+			tuim_text_to_element(
+				tuim_text("This is a test of the mouse input system. You can drag this window around and resize it.")
+			),
 
-    while (1) {
-        TuimViewport global_vp = ctx.viewport;
-        tuim_begin_frame(&ctx);
-        tuim_update_input(&ctx);
+			tuim_text_to_element(
+				tuim_text("Hi")
+			)
+		}
+	);
 
-		if (tuim_is_key(&ctx, TUIM_KEY_A)) {
-            return 0;
-        }
+	while (1) {
+		tuim_begin_frame(&ctx);
+		tuim_update_input(&ctx);
 
-        //
-        ctx.viewport = vp;
-        tuim_viewport_clear(&ctx.viewport, TUIM_BRIGHT_BLACK_STRUCT_INDEXED);
+		tuim_window_update(&ctx, &window);
+		tuim_window_draw(&ctx, &window);
 
-        int abs_mouse_x = ctx.input_state.mouse_state.mouse_x;
-        int abs_mouse_y = ctx.input_state.mouse_state.mouse_y;
+		tuim_end_frame(&ctx);
+	}
 
-        ctx.input_state.mouse_state.mouse_x -= vp.x;
-        ctx.input_state.mouse_state.mouse_y -= vp.y;
+	tuim_window_destroy(&window);
 
-        tuim_window_update(&ctx, &w);
-        tuim_viewport_clear(&vp, TUIM_BLACK_STRUCT_INDEXED);
-        tuim_window_draw(&ctx, &w);
-
-        ctx.input_state.mouse_state.mouse_x = abs_mouse_x;
-        ctx.input_state.mouse_state.mouse_y = abs_mouse_y;
-
-        ctx.viewport = global_vp;
-
-		tuim_text_format(&debug, "ABS= (x=%d, y=%d) REL = (x=%d, y=%d)", 
-            ctx.input_state.mouse_state.mouse_x, 
-            ctx.input_state.mouse_state.mouse_y,
-            ctx.input_state.mouse_state.mouse_x - vp.x,
-            ctx.input_state.mouse_state.mouse_y - vp.y
-        );
-
-		tuim_text_update(&ctx, &debug);
-		tuim_draw_text(&ctx, &debug);
-
-		tuim_viewport_draw(&ctx, &vp);
-        tuim_end_frame(&ctx);
-        Sleep(16);
-    }
-
-    return 0;
+	return 0;
 }
