@@ -94,52 +94,52 @@ static void tuim_textbox_get_row_col(const TuimTextbox* tb, int pos,
     }
 }
 
-TuimTextbox tuim_default_textbox(void) {
-    TuimTextbox tb;
+TuimTextbox* tuim_default_textbox(void) {
+    TuimTextbox* tb = malloc(sizeof(TuimTextbox));
 
-    tb.style.fg = TUIM_WHITE_STRUCT_INDEXED;
-    tb.style.bg = TUIM_BLACK_STRUCT_INDEXED;
-    tb.style.selected_fg = TUIM_BLACK_STRUCT_INDEXED;
-    tb.style.selected_bg = TUIM_WHITE_STRUCT_INDEXED;
-    tb.style.cursor_color = TUIM_YELLOW_STRUCT_INDEXED;
+    tb->style.fg = TUIM_WHITE_STRUCT_INDEXED;
+    tb->style.bg = TUIM_BLACK_STRUCT_INDEXED;
+    tb->style.selected_fg = TUIM_BLACK_STRUCT_INDEXED;
+    tb->style.selected_bg = TUIM_WHITE_STRUCT_INDEXED;
+    tb->style.cursor_color = TUIM_YELLOW_STRUCT_INDEXED;
 
-    tb.area.x = 0;
-    tb.area.y = 0;
-    tb.area.width = 0;
-    tb.area.height = 1;
+    tb->area.x = 0;
+    tb->area.y = 0;
+    tb->area.width = 0;
+    tb->area.height = 1;
 
-    tb.capacity = TUIM_TEXTBOX_INITIAL_CAPACITY;
-    tb.length = 0;
-    tb.text = calloc(tb.capacity + 1, sizeof(char));
+    tb->capacity = TUIM_TEXTBOX_INITIAL_CAPACITY;
+    tb->length = 0;
+    tb->text = calloc(tb->capacity + 1, sizeof(char));
 
-    tb.cursor_pos = 0;
-    tb.is_selected = false;
+    tb->cursor_pos = 0;
+    tb->is_selected = false;
 
     return tb;
 }
 
-TuimTextbox tuim_textbox(const char* str) {
+TuimTextbox* tuim_textbox(const char* str) {
     MEB_ASSERT(str);
 
-    TuimTextbox tb = tuim_default_textbox();
-    if (!tb.text)
+    TuimTextbox* tb = tuim_default_textbox();
+    if (!tb->text)
         return tb;
 
     size_t len = strlen(str);
 
-    if (len > tb.capacity) {
-        free(tb.text);
-        tb.capacity = len + TUIM_TEXTBOX_INITIAL_CAPACITY;
-        tb.text = calloc(tb.capacity + 1, sizeof(char));
-        if (!tb.text) {
-            tb.capacity = 0;
-            tb.length = 0;
+    if (len > tb->capacity) {
+        free(tb->text);
+        tb->capacity = len + TUIM_TEXTBOX_INITIAL_CAPACITY;
+        tb->text = calloc(tb->capacity + 1, sizeof(char));
+        if (!tb->text) {
+            tb->capacity = 0;
+            tb->length = 0;
             return tb;
         }
     }
 
-    memcpy(tb.text, str, len + 1);
-    tb.length = len;
+    memcpy(tb->text, str, len + 1);
+    tb->length = len;
 
     return tb;
 }

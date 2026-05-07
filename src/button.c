@@ -1,28 +1,28 @@
 #include "button.h"
 
-TuimButton tuim_default_button() {
-	TuimButton button;
+TuimButton* tuim_default_button() {
+	TuimButton* button = malloc(sizeof(TuimButton));
 
-	button.label = "Button";
-	button.area.x = 0;
-	button.area.y = 0;
-	button.area.width = 10;
-	button.area.height = 1;
-	button.hovered = false;
-	button.clicked = false;
-	button.pressed_inside = false;
-	button.pressing = false;
-	button.was_down = false;
+	button->label = "Button";
+	button->area.x = 0;
+	button->area.y = 0;
+	button->area.width = 10;
+	button->area.height = 1;
+	button->hovered = false;
+	button->clicked = false;
+	button->pressed_inside = false;
+	button->pressing = false;
+	button->was_down = false;
 
-	button.style.background = TUIM_BLACK_STRUCT_INDEXED;
-	button.style.foreground = TUIM_WHITE_STRUCT_INDEXED;
-	button.style.hover_background = TUIM_GREEN_STRUCT_INDEXED;
-	button.style.hover_foreground = TUIM_WHITE_STRUCT_INDEXED;
+	button->style.background = TUIM_BLACK_STRUCT_INDEXED;
+	button->style.foreground = TUIM_WHITE_STRUCT_INDEXED;
+	button->style.hover_background = TUIM_GREEN_STRUCT_INDEXED;
+	button->style.hover_foreground = TUIM_WHITE_STRUCT_INDEXED;
 
-	button.user_data = NULL;
-	button.on_click = NULL;
-	button.on_hover = NULL;
-	button.on_release = NULL;
+	button->user_data = NULL;
+	button->on_click = NULL;
+	button->on_hover = NULL;
+	button->on_release = NULL;
 
 	return button;
 }
@@ -145,15 +145,16 @@ TuimRect tuim_button_calculate_area(const TuimButton* button) {
 	return area;
 }
 
-TuimButton tuim_button(const char* label) {
+TuimButton* tuim_button(const char* label) {
 	MEB_ASSERT(label);
 
-	TuimButton button = tuim_default_button();
-	button.label = label;
+	TuimButton* button = tuim_default_button();
+	button->label = label;
+	
 	return button;
 }
 
-TuimButton tuim_button_callbacks(
+TuimButton* tuim_button_callbacks(
 	const char* label,
 	TuimOnClickFn   on_click,
 	TuimOnHoverFn   on_hover,
@@ -161,11 +162,11 @@ TuimButton tuim_button_callbacks(
 	void* user_data
 ) {
 	MEB_ASSERT(label);
-	TuimButton button = tuim_default_button();
-	button.label = label;
-	button.on_click = on_click;
-	button.on_hover = on_hover;
-	button.on_release = on_release;
-	button.user_data = user_data;
+	TuimButton* button = tuim_default_button();
+	button->label = label;
+	button->on_click = on_click;
+	button->on_hover = on_hover;
+	button->on_release = on_release;
+	button->user_data = user_data;
 	return button;
 }

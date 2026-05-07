@@ -1,27 +1,27 @@
 #include "checkbox.h"
 
-TuimCheckbox tuim_default_checkbox() {
-	TuimCheckbox checkbox;
+TuimCheckbox* tuim_default_checkbox() {
+	TuimCheckbox* checkbox = malloc(sizeof(TuimCheckbox));
 
-	checkbox.label = "checkbox";
-	checkbox.area.x = 0;
-	checkbox.area.y = 0;
-	checkbox.area.width = 10;
-	checkbox.area.height = 1;
-	checkbox.toggled = false;
-	checkbox.hovered = false;
-	checkbox.clicked = false;
-	checkbox.pressed_inside = false;
-	checkbox.pressing = false;
-	checkbox.was_down = false;
-	checkbox.flags = 0;
+	checkbox->label = "checkbox";
+	checkbox->area.x = 0;
+	checkbox->area.y = 0;
+	checkbox->area.width = 10;
+	checkbox->area.height = 1;
+	checkbox->toggled = false;
+	checkbox->hovered = false;
+	checkbox->clicked = false;
+	checkbox->pressed_inside = false;
+	checkbox->pressing = false;
+	checkbox->was_down = false;
+	checkbox->flags = 0;
 
-	checkbox.style.background = TUIM_BLACK_STRUCT_INDEXED;
-	checkbox.style.foreground = TUIM_WHITE_STRUCT_INDEXED;
-	checkbox.style.hover_background = TUIM_GREEN_STRUCT_INDEXED;
-	checkbox.style.hover_foreground = TUIM_WHITE_STRUCT_INDEXED;
-	checkbox.style.active_background = TUIM_BLUE_STRUCT_INDEXED;
-	checkbox.style.active_foreground = TUIM_WHITE_STRUCT_INDEXED;
+	checkbox->style.background = TUIM_BLACK_STRUCT_INDEXED;
+	checkbox->style.foreground = TUIM_WHITE_STRUCT_INDEXED;
+	checkbox->style.hover_background = TUIM_GREEN_STRUCT_INDEXED;
+	checkbox->style.hover_foreground = TUIM_WHITE_STRUCT_INDEXED;
+	checkbox->style.active_background = TUIM_BLUE_STRUCT_INDEXED;
+	checkbox->style.active_foreground = TUIM_WHITE_STRUCT_INDEXED;
 
 	return checkbox;
 }
@@ -149,8 +149,8 @@ TuimRect tuim_checkbox_calculate_area(const TuimCheckbox* checkbox) {
 	return area;
 }
 
-TuimCheckbox tuim_checkbox(const char* label) {
-	TuimCheckbox checkbox = tuim_default_checkbox();
-	checkbox.label = label;
+TuimCheckbox* tuim_checkbox(const char* label) {
+	TuimCheckbox* checkbox = tuim_default_checkbox();
+	checkbox->label = label;
 	return checkbox;
 }

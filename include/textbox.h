@@ -40,8 +40,8 @@ typedef struct {
 
 #define TUIM_TEXTBOX_INITIAL_CAPACITY 63
 
-TuimTextbox tuim_textbox(const char* str);
-TuimTextbox tuim_default_textbox(void);
+TuimTextbox* tuim_textbox(const char* str);
+TuimTextbox* tuim_default_textbox(void);
 
 void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox);
 void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox);

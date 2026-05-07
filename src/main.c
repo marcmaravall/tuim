@@ -1,4 +1,5 @@
 // mouse test:
+// in reality is not a mouse test...
 // implementing...
 
 #include <tuim.h>
@@ -34,7 +35,7 @@ int main() {
 
 	tuim_window_add_elements (
 		&window, 
-		2,
+		5,
 		
 		(TuimElement[]) {
 			tuim_text_to_element(
@@ -43,6 +44,18 @@ int main() {
 
 			tuim_text_to_element(
 				tuim_text("Hi")
+			),
+
+			tuim_button_to_element(
+				tuim_button("Click me!")
+			),
+			
+			tuim_checkbox_to_element(
+				tuim_checkbox("Check me!")
+			),
+
+			tuim_textbox_to_element	(
+				tuim_textbox("Type here!")
 			)
 		}
 	);

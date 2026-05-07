@@ -40,10 +40,10 @@ typedef struct {
     void* user_data;
 } TuimButton;
 
-TuimButton tuim_default_button();
-TuimButton tuim_button(const char* label);
+TuimButton* tuim_default_button();
+TuimButton* tuim_button(const char* label);
 
-TuimButton tuim_button_callbacks (
+TuimButton* tuim_button_callbacks (
     const char*     label,
 	TuimOnClickFn   on_click,
 	TuimOnHoverFn   on_hover,

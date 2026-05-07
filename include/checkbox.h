@@ -38,8 +38,8 @@ typedef struct {
     uint8_t flags;
 } TuimCheckbox;
 
-TuimCheckbox tuim_default_checkbox();
-TuimCheckbox tuim_checkbox(const char* label);
+TuimCheckbox* tuim_default_checkbox();
+TuimCheckbox* tuim_checkbox(const char* label);
 
 void tuim_checkbox_draw(TuimContext* ctx, const TuimCheckbox* checkbox);
 void tuim_checkbox_update(const TuimContext* ctx, TuimCheckbox* checkbox);
