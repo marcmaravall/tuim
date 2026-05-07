@@ -3,7 +3,7 @@
 TuimText tuim_default_text() {
 	TuimText text;
 
-	text.text = mds_new("[TUIM_DEFAULT_TEXT]");
+	text.text = mds_new("[TUIM_DEFAULT_TEXT");
 
 	text.background = TUIM_BLACK_STRUCT_INDEXED;
 	text.foreground = TUIM_WHITE_STRUCT_INDEXED;
@@ -72,6 +72,8 @@ TuimElement tuim_text_to_element(const TuimText* text) {
 
 void tuim_text_update(TuimContext* ctx, TuimText* text) {
 	MEB_ASSERT(ctx && text);
+	text->area.width = (int)mds_size(text->text);
+	text->area.height = 1;
 }
 
 void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
@@ -102,15 +104,13 @@ void tuim_text_format(TuimText* text, const char* format, ...) {
 	int needed = vsnprintf(NULL, 0, format, args);
 	va_end(args);
 
-	if (needed < 0) 
-		return;
+	if (needed < 0) return;
 
 	size_t required = (size_t)needed;
-
-	mds_resize(&text->text, required);
+	mds_resize(&text->text, required + 1);
 
 	va_start(args, format);
-	vsnprintf(mds_get(text->text), mds_capacity(text->text) + 1, format, args);
+	vsnprintf(mds_get(text->text), required + 1, format, args);
 	va_end(args);
 
 	text->text.size = required;
