@@ -21,27 +21,33 @@ int main() {
 
 	TuimWindow w = tuim_default_window();
 
-	TuimViewport global_vp = ctx.viewport;
+    while (1) {
+	    TuimViewport global_vp = ctx.viewport;
+        tuim_begin_frame(&ctx);
+        tuim_update_input(&ctx);
 
-	while (1) {
-		tuim_begin_frame(&ctx);
-		tuim_update_input(&ctx);
+        tuim_viewport_clear(&ctx.viewport, TUIM_BRIGHT_BLACK_STRUCT_INDEXED);
 
-		tuim_window_update(&ctx, &w);
+        int abs_mouse_x = ctx.input_state.mouse_state.mouse_x;
+        int abs_mouse_y = ctx.input_state.mouse_state.mouse_y;
 
-		ctx.viewport = global_vp;
-		tuim_viewport_clear(&ctx.viewport, TUIM_BRIGHT_BLACK_STRUCT_INDEXED);
+        ctx.input_state.mouse_state.mouse_x -= vp.x;
+        ctx.input_state.mouse_state.mouse_y -= vp.y;
 
-		ctx.viewport = vp;
-		tuim_viewport_clear(&vp, TUIM_BLACK_STRUCT_INDEXED);
+        ctx.viewport = vp;
+        tuim_window_update(&ctx, &w);
+        tuim_viewport_clear(&vp, TUIM_BLACK_STRUCT_INDEXED);
+        tuim_window_draw(&ctx, &w);
 
-		tuim_window_draw(&ctx, &w);
+        ctx.input_state.mouse_state.mouse_x = abs_mouse_x;
+        ctx.input_state.mouse_state.mouse_y = abs_mouse_y;
 
-		ctx.viewport = global_vp;
-		tuim_viewport_draw(&ctx, &vp);
+        ctx.viewport = global_vp;
 
-		tuim_end_frame(&ctx);
-	}
+        tuim_end_frame(&ctx);
+
+        Sleep(16);
+    }
 
 	return 0;
 }

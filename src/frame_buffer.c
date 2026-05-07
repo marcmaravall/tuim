@@ -202,7 +202,7 @@ void tuim_frame_buffer_draw_frame_buffer(
 
 	for (int j = 0; j < src->width; j++) {
 		for (int i = 0; i < src->height; i++) {
-			if (x + j >= dest->width || y + i >= dest->height) {
+			if (x + j >= dest->width || y + i >= dest->height || x + j < 0 || y+i < 0) {
 				continue;
 			}
 			TUIM_FRAME_BUFFER_AT(dest, x + j, y + i) = TUIM_FRAME_BUFFER_AT(src, j, i);
@@ -212,7 +212,9 @@ void tuim_frame_buffer_draw_frame_buffer(
 }
 
 void tuim_frame_buffer_destroy(TuimFrameBuffer* fb) {
-	free(fb);
+	MEB_ASSERT(fb);
+	free(fb->cells);
+	fb->cells = NULL;
 }
 
 void tuim_frame_buffer_resize(TuimFrameBuffer* fb, const size_t width, const size_t height) {
@@ -225,7 +227,8 @@ void tuim_frame_buffer_resize(TuimFrameBuffer* fb, const size_t width, const siz
 		MEB_ASSERT(0 && "ERROR: frame_buffer size is 0");
 	}
 
-	TuimFrameBufferCell* new_ = realloc(fb->cells, sizeof(TuimFrameBufferCell) * width * height);
+	size_t size = sizeof(TuimFrameBufferCell) * width * height;
+	TuimFrameBufferCell* new_ = realloc(fb->cells, size);
 	MEB_ASSERT(new_);
 
 	fb->cells = new_;

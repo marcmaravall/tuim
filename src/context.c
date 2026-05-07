@@ -23,6 +23,7 @@ void tuim_init_with_backend(TuimContext* ctx, TuimBackend backend) {
 }
 
 void tuim_end_frame(TuimContext* ctx) {
+	tuim_viewport_draw(&ctx->viewport, &ctx->viewport);
 	ctx->backend.pass_frame_buffer(ctx->backend.data, &ctx->viewport.frame_buffer);
 	ctx->backend.render(ctx->backend.data);
 	ctx->time += tuim_get_delta_time(ctx);
