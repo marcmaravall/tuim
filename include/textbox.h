@@ -45,6 +45,7 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox);
 void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox);
 void tuim_destroy_textbox(TuimTextbox* textbox);
 
+TuimElement  tuim_textbox_element   (const char* str);
 TuimElement  tuim_textbox_to_element(TuimTextbox* textbox);
 void         tuim_textbox_layout(TuimTextbox* textbox, const TuimRect area);
 TuimSizeHint tuim_textbox_measure(TuimTextbox* textbox);

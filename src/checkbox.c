@@ -99,6 +99,12 @@ void tuim_checkbox_destroy(TuimCheckbox* checkbox) {
 	// idk
 }
 
+TuimElement tuim_checkbox_element(const char* label) {
+	MEB_ASSERT(label);
+	TuimCheckbox* checkbox = tuim_checkbox(label);
+	return tuim_checkbox_to_element(checkbox);
+}
+
 TuimElement tuim_checkbox_to_element(TuimCheckbox* checkbox) {
 	MEB_ASSERT(checkbox);
 

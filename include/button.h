@@ -55,7 +55,9 @@ void tuim_button_draw	(TuimContext* ctx, const TuimButton* button);
 void tuim_button_update (const TuimContext* ctx, TuimButton* button);
 void tuim_button_destroy(TuimButton* button);
 
+TuimElement tuim_button_element(const char* label);
 TuimElement tuim_button_to_element(TuimButton* button);
+
 TuimSizeHint tuim_button_measure(const TuimButton* button);
 void tuim_button_layout(TuimButton* button, const TuimRect rect);
 

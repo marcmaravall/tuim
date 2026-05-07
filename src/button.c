@@ -101,6 +101,13 @@ void tuim_button_destroy(TuimButton* button) {
 	// idk
 }
 
+TuimElement tuim_button_element(const char* label) {
+	MEB_ASSERT(label);
+
+	TuimButton* button = tuim_button(label);
+	return tuim_button_to_element(button);
+}
+
 TuimElement tuim_button_to_element(TuimButton* button) {
 	MEB_ASSERT(button);
 

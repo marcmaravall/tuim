@@ -174,6 +174,12 @@ void tuim_layout_add (TuimLayout* layout, TuimElement element) {
 	layout->size++;
 }
 
+void tuim_layout_add_elements(TuimLayout* layout, size_t count, TuimElement elements[]) {
+	MEB_ASSERT(layout && elements && "tuim_layout_add_elements: invalid arguments!");
+	for (size_t i = 0; i < count; ++i) {
+		tuim_layout_add(layout, elements[i]);
+	}
+}
 
 void tuim_layout_clear(TuimLayout* layout) {
 	MEB_ASSERT(layout);

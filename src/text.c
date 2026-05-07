@@ -70,6 +70,13 @@ TuimElement tuim_text_to_element(const TuimText* text) {
 	return element;
 }
 
+TuimElement tuim_text_element(const char* str) {
+	MEB_ASSERT(str);
+
+	TuimElement* el = tuim_text(str);
+	return tuim_text_to_element(el);
+}
+
 void tuim_text_update(TuimContext* ctx, TuimText* text) {
 	MEB_ASSERT(ctx && text);
 }

@@ -34,6 +34,9 @@ void tuim_text_format(TuimText* text, const char* format, ...);
 void tuim_text_on_focus_gained	(TuimText* data);
 void tuim_text_on_focus_lost	(TuimText* data);
 
+// allocates a new TuimText and returns its element
+TuimElement tuim_text_element (const char* str);
+
 TuimElement tuim_text_to_element(const TuimText* text);
 
 #endif //TUIM_TEXT_H

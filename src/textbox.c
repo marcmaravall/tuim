@@ -310,6 +310,12 @@ TuimSizeHint tuim_textbox_measure(TuimTextbox* textbox) {
     return tuim_size_hint_static(natural);
 }
 
+TuimElement tuim_textbox_element(const char* str) {
+	MEB_ASSERT(str);
+    TuimTextbox* textbox = tuim_textbox(str);
+    return tuim_textbox_to_element(textbox);
+}
+
 TuimElement tuim_textbox_to_element(TuimTextbox* textbox) {
     MEB_ASSERT(textbox);
 

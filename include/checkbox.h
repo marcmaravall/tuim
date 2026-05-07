@@ -45,7 +45,9 @@ void tuim_checkbox_draw(TuimContext* ctx, const TuimCheckbox* checkbox);
 void tuim_checkbox_update(const TuimContext* ctx, TuimCheckbox* checkbox);
 void tuim_checkbox_destroy(TuimCheckbox* checkbox);
 
+TuimElement tuim_checkbox_element   (const char* label);
 TuimElement tuim_checkbox_to_element(TuimCheckbox* checkbox);
+
 TuimSizeHint tuim_checkbox_measure(const TuimCheckbox* checkbox);
 void tuim_checkbox_layout(TuimCheckbox* checkbox, const TuimRect rect);
 

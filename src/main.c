@@ -38,25 +38,11 @@ int main() {
 		5,
 		
 		(TuimElement[]) {
-			tuim_text_to_element(
-				tuim_text("This is a test of the mouse input system. You can drag this window around and resize it.")
-			),
-
-			tuim_text_to_element(
-				tuim_text("Hi")
-			),
-
-			tuim_button_to_element(
-				tuim_button("Click me!")
-			),
-			
-			tuim_checkbox_to_element(
-				tuim_checkbox("Check me!")
-			),
-
-			tuim_textbox_to_element	(
-				tuim_textbox("Type here!")
-			)
+			tuim_text_element("This is a test of the mouse input system. You can drag this window around and resize it."),
+			tuim_text_element("Hi"),
+			tuim_button_element("Click me!"),
+			tuim_checkbox_element("Check me!"),
+			tuim_textbox_element ("Type here!")
 		}
 	);
 
