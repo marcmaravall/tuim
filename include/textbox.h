@@ -29,10 +29,8 @@ typedef struct {
     TuimTextboxStyle style;
     TuimRect         area;
 
-    // TODO: change to mdString
-    char* text;
-    size_t length;
-    size_t capacity;
+    // it combines mdString with old implementation (it works so im not going to modify it)
+    mdString text;
 
     bool is_selected;
     int  cursor_pos;

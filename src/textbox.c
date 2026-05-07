@@ -3,16 +3,16 @@
 // TODO: improve this implementation
 
 static bool tuim_textbox_grow(TuimTextbox* tb) {
-    if (tb->length < tb->capacity)
+    if (tb->text.size < tb->text.capacity)
         return true;
 
-    size_t new_cap = tb->capacity * 2 + 64;
-    char* new_buf = realloc(tb->text, new_cap + 1);
+    size_t new_cap = tb->text.capacity * 2 + 64;
+    char* new_buf = realloc(tb->text.data, new_cap + 1);
     if (!new_buf)
         return false;
 
-    tb->text = new_buf;
-    tb->capacity = new_cap;
+    tb->text.data = new_buf;
+    tb->text.capacity = new_cap;
     return true;
 }
 
@@ -20,29 +20,30 @@ static bool tuim_textbox_insert_char(TuimTextbox* tb, char c) {
     if (!tuim_textbox_grow(tb))
         return false;
 
+    char* text = mds_get(tb->text);
     memmove (
-        &tb->text[tb->cursor_pos + 1],
-        &tb->text[tb->cursor_pos],
-        tb->length - (size_t)tb->cursor_pos + 1
+        &text[tb->cursor_pos + 1],
+        &text[tb->cursor_pos],
+        mds_size(tb->text) - (size_t)tb->cursor_pos + 1
     );
 
-    tb->text[tb->cursor_pos] = c;
-    tb->length++;
+    text[tb->cursor_pos] = c;
+	tb->text.size++;
     tb->cursor_pos++;
     return true;
 }
 
 static void tuim_textbox_backspace(TuimTextbox* tb) {
-    if (tb->cursor_pos == 0 || tb->length == 0)
+    if (tb->cursor_pos == 0 || mds_size(tb->text) == 0)
         return;
 
     tb->cursor_pos--;
     memmove(
-        &tb->text[tb->cursor_pos],
-        &tb->text[tb->cursor_pos + 1],
-        tb->length - (size_t)tb->cursor_pos
+        &mds_get(tb->text)[tb->cursor_pos],
+        &mds_get(tb->text)[tb->cursor_pos + 1],
+        mds_size(tb->text) - (size_t)tb->cursor_pos
     );
-    tb->length--;
+    tb->text.size--;
 }
 
 static int tuim_textbox_line_start(const TuimTextbox* tb, int row) {
@@ -50,8 +51,9 @@ static int tuim_textbox_line_start(const TuimTextbox* tb, int row) {
         return 0;
 
     int current_row = 0;
-    for (int i = 0; tb->text[i] != '\0'; i++) {
-        if (tb->text[i] == '\n') {
+	char* text = mds_get(tb->text);
+    for (int i = 0; text[i] != '\0'; i++) {
+        if (text[i] == '\n') {
             current_row++;
             if (current_row == row)
                 return i + 1;
@@ -62,18 +64,20 @@ static int tuim_textbox_line_start(const TuimTextbox* tb, int row) {
 
 static int tuim_textbox_line_length(const TuimTextbox* tb, int line_start) {
     int len = 0;
-    for (int i = line_start; tb->text[i] != '\0' && tb->text[i] != '\n'; i++)
+	char* text = mds_get(tb->text);
+    for (int i = line_start; text[i] != '\0' && text[i] != '\n'; i++)
         len++;
     return len;
 }
 
 static int tuim_textbox_line_count(const TuimTextbox* tb) {
-    if (!tb->text)
+    if (!mds_get(tb->text))
         return 1;
 
     int count = 1;
-    for (int i = 0; tb->text[i] != '\0'; i++) {
-        if (tb->text[i] == '\n')
+	char* text = mds_get(tb->text);
+    for (int i = 0; text[i] != '\0'; i++) {
+        if (text[i] == '\n')
             count++;
     }
     return count;
@@ -83,8 +87,9 @@ static void tuim_textbox_get_row_col(const TuimTextbox* tb, int pos,
     int* out_row, int* out_col) {
     *out_row = 0;
     *out_col = 0;
-    for (int i = 0; i < pos && tb->text[i] != '\0'; i++) {
-        if (tb->text[i] == '\n') {
+	char* text = mds_get(tb->text);
+    for (int i = 0; i < pos && text[i] != '\0'; i++) {
+        if (text[i] == '\n') {
             (*out_row)++;
             *out_col = 0;
         }
@@ -108,9 +113,7 @@ TuimTextbox* tuim_default_textbox(void) {
     tb->area.width = 0;
     tb->area.height = 1;
 
-    tb->capacity = TUIM_TEXTBOX_INITIAL_CAPACITY;
-    tb->length = 0;
-    tb->text = calloc(tb->capacity + 1, sizeof(char));
+	tb->text = mds_new("");
 
     tb->cursor_pos = 0;
     tb->is_selected = false;
@@ -122,24 +125,7 @@ TuimTextbox* tuim_textbox(const char* str) {
     MEB_ASSERT(str);
 
     TuimTextbox* tb = tuim_default_textbox();
-    if (!tb->text)
-        return tb;
-
-    size_t len = strlen(str);
-
-    if (len > tb->capacity) {
-        free(tb->text);
-        tb->capacity = len + TUIM_TEXTBOX_INITIAL_CAPACITY;
-        tb->text = calloc(tb->capacity + 1, sizeof(char));
-        if (!tb->text) {
-            tb->capacity = 0;
-            tb->length = 0;
-            return tb;
-        }
-    }
-
-    memcpy(tb->text, str, len + 1);
-    tb->length = len;
+	tb->text = mds_new(str);
 
     return tb;
 }
@@ -147,16 +133,13 @@ TuimTextbox* tuim_textbox(const char* str) {
 void tuim_destroy_textbox(TuimTextbox* textbox) {
     MEB_ASSERT(textbox);
 
-    free(textbox->text);
-    textbox->text = NULL;
-    textbox->length = 0;
-    textbox->capacity = 0;
+	mds_free(&textbox->text);
 }
 
 void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
     MEB_ASSERT(ctx && textbox);
 
-    if (!textbox->text)
+    if (!mds_get(textbox->text))
         return;
 
     if (tuim_is_mouse_button_down (ctx, TUIM_MOUSE_BUTTON_LEFT)) {
@@ -188,7 +171,7 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
             textbox->cursor_pos--;
     }
     else if (tuim_is_key_rep(ctx, TUIM_KEY_RIGHT)) {
-        if (textbox->cursor_pos < (int)textbox->length)
+        if (textbox->cursor_pos < (int)mds_size(textbox->text))
             textbox->cursor_pos++;
     }
     else if (tuim_is_key_rep(ctx, TUIM_KEY_UP)) {
@@ -230,7 +213,7 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
     MEB_ASSERT(ctx && textbox);
 
-    if (!textbox->text)
+    if (!mds_get(textbox->text))
         return;
 
     TuimColor bg = textbox->is_selected ? textbox->style.selected_bg : textbox->style.bg;
@@ -240,7 +223,7 @@ void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
     if (textbox->is_selected)
         tuim_textbox_get_row_col(textbox, textbox->cursor_pos, &cursor_row, &cursor_col);
 
-    char* line_buf = malloc(textbox->capacity + 1);
+    char* line_buf = malloc(mds_size(textbox->text) + 1);
     if (!line_buf)
         return;
 
@@ -250,10 +233,10 @@ void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
     while (true) {
         int line_len = 0;
         for (int i = line_start;
-            textbox->text[i] != '\0' && textbox->text[i] != '\n';
+            mds_get(textbox->text)[i] != '\0' && mds_get(textbox->text)[i] != '\n';
             i++)
         {
-            line_buf[line_len++] = textbox->text[i];
+            line_buf[line_len++] = mds_get(textbox->text)[i];
         }
         line_buf[line_len] = '\0';
 
@@ -278,7 +261,7 @@ void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
         }
 
         int next_newline = line_start + line_len;
-        if (textbox->text[next_newline] == '\0')
+        if (mds_get(textbox->text)[next_newline] == '\0')
             break;
 
         line_start = next_newline + 1;
@@ -300,9 +283,10 @@ TuimSizeHint tuim_textbox_measure(TuimTextbox* textbox) {
     int line_width = 0;
     int line_height = 1;
 
-    if (textbox->text) {
-        for (int i = 0; textbox->text[i] != '\0'; i++) {
-            if (textbox->text[i] == '\n') {
+    mdString str = textbox->text;
+    if (mds_get(str)) {
+        for (int i = 0; mds_get(str)[i] != '\0'; i++) {
+            if (mds_get(str)[i] == '\n') {
                 if (line_width > max_width)
                     max_width = line_width;
                 line_width = 0;

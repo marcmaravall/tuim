@@ -232,7 +232,7 @@ void tuim_layout_layout(TuimLayout* layout, const TuimRect area) {
 TuimElement tuim_layout_add_text(TuimLayout* layout, char* str, TuimText* text) {
 	MEB_ASSERT(layout && str && text && "tuim_layout_add_text: invalid arguments!");
 	
-	*text = tuim_text(str);
+	text = tuim_text(str);
 	TuimElement el = tuim_text_to_element(text);
 	tuim_layout_add(layout, el);
 
@@ -242,7 +242,7 @@ TuimElement tuim_layout_add_text(TuimLayout* layout, char* str, TuimText* text) 
 TuimElement tuim_layout_add_button(TuimLayout* layout, const char* str, TuimButton* button) {
 	MEB_ASSERT(layout && str && button && "tuim_layout_add_button: invalid arguments!");
 
-	*button = tuim_button(str);
+	button = tuim_button(str);
 	TuimElement el = tuim_button_to_element(button);
 	tuim_layout_add(layout, el);
 	return el;
@@ -251,7 +251,7 @@ TuimElement tuim_layout_add_button(TuimLayout* layout, const char* str, TuimButt
 TuimElement tuim_layout_add_checkbox(TuimLayout* layout, const char* str, TuimCheckbox* checkbox) {
 	MEB_ASSERT(layout && str && checkbox && "tuim_layout_add_checkbox: invalid arguments!");
 	
-	*checkbox = tuim_checkbox(str);
+	checkbox = tuim_checkbox(str);
 	TuimElement el = tuim_checkbox_to_element(checkbox);
 	tuim_layout_add(layout, el);
 	return el;
