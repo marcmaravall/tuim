@@ -149,7 +149,7 @@ TuimRect tuim_checkbox_calculate_area(const TuimCheckbox* checkbox) {
 	MEB_ASSERT(checkbox->label);
 
 	TuimRect area = checkbox->area;
-	size_t label_len = strlen(checkbox->label);
+	size_t label_len = strlen(checkbox->label) + 4;
 	area.width = (int)label_len;
 
 	return area;

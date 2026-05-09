@@ -24,8 +24,8 @@ typedef struct {
 	HANDLE handle;
 	WORD   current_attributes;
 
-	CHAR_INFO* buffer;
-    CHAR_INFO* shadow_buffer;
+    TuimFrameBufferCell* shadow_buffer;
+	TuimFrameBuffer* buffer;
 	COORD buffer_size;
 
     char char_pressed;

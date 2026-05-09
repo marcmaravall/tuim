@@ -9,6 +9,9 @@ void tuim_windows_backend_init(void* backend_data) {
 	data->current_attributes = 0x07;
 	data->resized = false;
 
+	SetConsoleOutputCP(CP_UTF8);
+	SetConsoleCP(CP_UTF8);
+
 	HWND input_handle = GetStdHandle(STD_INPUT_HANDLE);
 	DWORD mode = 0;
 	if (input_handle == INVALID_HANDLE_VALUE)
@@ -63,8 +66,8 @@ void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y) {
 
 void tuim_windows_backend_destroy(void* backend_data) {
 	TuimWindowsBackendData* data = backend_data;
-	free(data->buffer);
 	free(data->shadow_buffer);
+	data->shadow_buffer = NULL;
 }
 
 #ifndef TUIM_MAX_FRAME_BUFFER_SIZE
@@ -73,96 +76,115 @@ void tuim_windows_backend_destroy(void* backend_data) {
 
 void tuim_windows_backend_pass_frame_buffer(void* backend_data, TuimFrameBuffer* frame_buffer) {
 	MEB_ASSERT(backend_data && frame_buffer);
-
 	TuimWindowsBackendData* data = backend_data;
+
+	data->buffer = frame_buffer;
 
 	if (data->resized) {
 		size_t width = data->buffer_size.X;
 		size_t height = data->buffer_size.Y;
+		if (width * height == 0) return;
 
-		if (width * height == 0)
-			return;
-
-		CHAR_INFO* new_buffer = realloc(data->buffer, width * height * sizeof(CHAR_INFO));
-		data->buffer = new_buffer;
-
-		new_buffer = realloc(data->shadow_buffer, width * height * sizeof(CHAR_INFO));
-		data->shadow_buffer = new_buffer;
-
-		tuim_windows_backend_resize_console (
-			data,
-			(SHORT)width,
-			(SHORT)height
-		);
-
-		tuim_frame_buffer_resize(
-			frame_buffer,
-			width,
-			height
-		);
+		tuim_windows_backend_resize_buffer(data, (SHORT)width, (SHORT)height);
+		tuim_windows_backend_resize_console(data, width, height);
+		tuim_frame_buffer_resize(frame_buffer, width, height);
 
 		data->resized = false;
+		return;
 	}
 
 	SHORT width = (SHORT)frame_buffer->width;
 	SHORT height = (SHORT)frame_buffer->height;
+
 	if (height != data->buffer_size.Y || width != data->buffer_size.X) {
-
 		tuim_windows_backend_resize_buffer(data, width, height);
-	}
-	else {
-		MEB_ASSERT(data->buffer);
-	}
-
-	size_t total = width * height;
-
-	for (size_t i = 0; i < total; i++) {
-		TuimFrameBufferCell cell = frame_buffer->cells[i];
-		data->buffer[i].Char.AsciiChar = cell.ascii_char;
-
-		data->buffer[i].Attributes = tuim_color_to_win32(cell.foreground_color)
-			| (tuim_color_to_win32(cell.background_color) << 4);
 	}
 }
 
+// unicode helpers: 
+
+static int utf8_to_utf16(const uint8_t* src, int byte_len, WCHAR out[2]) {
+	int n = MultiByteToWideChar(
+		CP_UTF8, 0,
+		(LPCCH)src, byte_len,
+		out, 2
+	);
+	return n;
+}
+
+// -----------------
+
+// TODO: add support for complex unicode characters
 void tuim_windows_backend_render(void* backend_data) {
 	TuimWindowsBackendData* data = backend_data;
-
-	COORD bufferCoord = { 0,0 };
-	SMALL_RECT region = { 0,0, data->buffer_size.X - 1, data->buffer_size.Y- 1 };
+	TuimFrameBuffer* fb = data->buffer;
+	if (!fb) return;
 
 	const SHORT height = data->buffer_size.Y;
-	const SHORT width  = data->buffer_size.X;
+	const SHORT width = data->buffer_size.X;
 
 	for (SHORT y = 0; y < height; y++) {
+
 		SHORT first = -1, last = -1;
 
 		for (SHORT x = 0; x < width; x++) {
-			size_t i = y * width + x;
-
-			if (memcmp(&data->buffer[i], &data->shadow_buffer[i], sizeof(CHAR_INFO)) != 0) {
-				if (first == -1) first = x;
+			size_t i = (size_t)y * width + x;
+			if (!tuim_frame_buffer_cell_equal (
+				TUIM_FRAME_BUFFER_AT(fb, x, y),
+				data->shadow_buffer[i])) {
+				if (first == -1) 
+					first = x;
 				last = x;
 			}
 		}
 
-		if (first == -1) continue;
+		if (first == -1) 
+			continue;
 
-		SMALL_RECT region = { first, y, last, y };
-		COORD bufferCoord = { first, y };
+		WCHAR wline[4096];
+		WORD  attrs[2048];
+		int   wline_len = 0;
+		int   attr_len = 0;
 
-		WriteConsoleOutput(data->handle, data->buffer, data->buffer_size, bufferCoord, &region);
+		for (SHORT x = first; x <= last; x++) {
+			TuimFrameBufferCell* cell = &TUIM_FRAME_BUFFER_AT(fb, x, y);
+
+			if (cell->display_width == 0 && cell->grapheme_length == 0) {
+				attrs[attr_len++] = attrs[attr_len > 0 ? attr_len - 1 : 0];
+				continue;
+			}
+
+			WORD attr = tuim_color_to_win32(cell->foreground_color)
+				| (tuim_color_to_win32(cell->background_color) << 4);
+			attrs[attr_len++] = attr;
+			if (cell->display_width == 2) {
+				attrs[attr_len++] = attr;
+			}
+
+			if (cell->grapheme_length == 0) {
+				wline[wline_len++] = L' ';
+			}
+			else {
+				WCHAR wch[2];
+				int n = MultiByteToWideChar(
+					CP_UTF8, 0,
+					(LPCCH)cell->grapheme, cell->grapheme_length,
+					wch, 2
+				);
+
+				for (int k = 0; k < n; k++)
+					wline[wline_len++] = wch[k];
+			}
+		}
+
+		COORD attr_coord = { first, y };
+		DWORD written;
+		WriteConsoleOutputAttribute(data->handle, attrs, (DWORD)attr_len, attr_coord, &written);
+		WriteConsoleOutputCharacterW(data->handle, wline, (DWORD)wline_len, attr_coord, &written);
 	}
 
-	memcpy(data->shadow_buffer, data->buffer, width * height * sizeof(CHAR_INFO));
-
-	/*WriteConsoleOutput(
-		data->handle,
-		data->buffer,
-		data->buffer_size,
-		bufferCoord,
-		&region
-	);*/
+	const size_t total = (size_t)width * height;
+	memcpy(data->shadow_buffer, fb->cells, total * sizeof(TuimFrameBufferCell));
 }
 
 static WORD tuim_color_to_win32(const TuimColor color) {
@@ -310,20 +332,18 @@ void tuim_windows_backend_resize_console(TuimWindowsBackendData* data, size_t wi
 void tuim_windows_backend_resize_buffer(TuimWindowsBackendData* data, const SHORT width, const SHORT height) {
 	MEB_ASSERT(data);
 
-	data->buffer_size.X = (SHORT)width;
-	data->buffer_size.Y = (SHORT)height;
-	
-	const size_t size = width * height * sizeof(CHAR_INFO);
-	if (size == 0)
+	data->buffer_size.X = width;
+	data->buffer_size.Y = height;
+
+	const size_t count = (size_t)width * height;
+	if (count == 0) 
 		return;
 
-	CHAR_INFO* new_buffer = realloc(data->buffer, size);
-	MEB_ASSERT(new_buffer);
-	data->buffer = new_buffer;
-
-	CHAR_INFO* new_shadow = realloc(data->shadow_buffer, size);
+	TuimFrameBufferCell* new_shadow = realloc(data->shadow_buffer, count * sizeof(TuimFrameBufferCell));
 	MEB_ASSERT(new_shadow);
 	data->shadow_buffer = new_shadow;
+
+	memset(data->shadow_buffer, 0xFF, count * sizeof(TuimFrameBufferCell));
 }
 
 TuimBackend tuim_windows_backend() {

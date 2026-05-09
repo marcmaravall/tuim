@@ -11,12 +11,19 @@
 #include <stdbool.h>
 #include <math.h>
 
+#include "unicode.h"
 #include "color.h"
+
+#define TUIM_MAX_GRAPHEME_BYTES 16
 
 typedef struct {
 	TuimColor foreground_color;
 	TuimColor background_color;
 	char ascii_char;
+
+	uint8_t grapheme[TUIM_MAX_GRAPHEME_BYTES];
+	uint8_t grapheme_length;
+	uint8_t display_width;
 } TuimFrameBufferCell;
 
 bool tuim_frame_buffer_cell_equal(const TuimFrameBufferCell a, const TuimFrameBufferCell b);

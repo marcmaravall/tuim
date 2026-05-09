@@ -18,7 +18,7 @@ int main() {
 	tuim_init_with_backend(&ctx, tuim_abstract_backend());
 	tuim_set_style(&ctx, tuim_style_default_dark());
 
-	TuimWindow window = tuim_window("Mouse test suite: ", (TuimRect){0, 0, 30, 10});
+	TuimWindow window = tuim_window("UNICODE: ñà", (TuimRect){0, 0, 30, 10});
 	
 	tuim_window_set_bounds(&window, (TuimSizeHint) {
 		.preferred_width = 30, 
@@ -47,6 +47,7 @@ int main() {
 	while (1) {
 		tuim_begin_frame(&ctx);
 		tuim_update_input(&ctx);
+
 
 		tuim_window_update(&ctx, &window);
 		tuim_window_draw(&ctx, &window);
