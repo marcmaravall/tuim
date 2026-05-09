@@ -90,14 +90,17 @@ void tuim_draw_text(TuimContext* ctx, const TuimText* text) {
 	if (text->area.width <= 0 || text->area.height <= 0)
 		return;
 
-	size_t len = text->area.width;
+	int len = text->area.width;
 	if (len > text->text.size) {
 		len = text->text.size;
 	}
 
+	if (text->area.x < 0)
+		len += text->area.x;
+
 	tuim_frame_buffer_print_with_size (
 		&ctx->viewport.frame_buffer, text->foreground,
-		text->background, mds_get(text->text), text->area.x, text->area.y, len
+		text->background, mds_get(text->text), text->area.x, text->area.y, (size_t)len
 	);
 }
 

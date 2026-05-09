@@ -59,20 +59,20 @@ void tuim_frame_buffer_clear(TuimFrameBuffer* fb, const TuimColor color) {
 	}
 }
 
-void tuim_frame_buffer_print(
+void tuim_frame_buffer_print (
 	TuimFrameBuffer* fb,
 	const TuimColor fg, const TuimColor bg,
 	const char* msg, const int x, const int y)
 {
-	MEB_ASSERT(fb != NULL);
-	MEB_ASSERT(msg != NULL);
+	MEB_ASSERT(fb);
+	MEB_ASSERT(msg);
 
-	if (y < 0 || y >= (int)fb->height) return;
+	if (y < 0 || y >= (int)fb->height)
+		return;
 
 	const uint8_t* src = (const uint8_t*)msg;
 	int            start_x = x;
 
-	// Si x es negativo, saltamos graphemes hasta llegar a columna 0
 	while (start_x < 0 && *src) {
 		int byte_len = tuim_utf8_codepoint_len(src);
 		int width = tuim_utf8_display_width(src);
@@ -81,14 +81,14 @@ void tuim_frame_buffer_print(
 	}
 
 	while (*src) {
-		if (start_x >= (int)fb->width) break;
+		if (start_x >= (int)fb->width)
+			break;
 
 		TuimFrameBufferCell* cell = &TUIM_FRAME_BUFFER_AT(fb, start_x, y);
 		int bytes_consumed = cell_set_grapheme(cell, src);
 		cell->foreground_color = fg;
 		cell->background_color = bg;
 
-		// Si es wide y cabe la celda de continuación, marcarla
 		if (cell->display_width == 2 && start_x + 1 < (int)fb->width) {
 			TuimFrameBufferCell* cont = &TUIM_FRAME_BUFFER_AT(fb, start_x + 1, y);
 			cell_set_continuation(cont);
@@ -101,17 +101,17 @@ void tuim_frame_buffer_print(
 	}
 }
 
-// `len` es ahora en COLUMNAS DE DISPLAY, no en bytes.
 void tuim_frame_buffer_print_with_size (
 	TuimFrameBuffer* fb,
 	const TuimColor fg, const TuimColor bg,
 	const char* msg, const int x, const int y,
 	const size_t col_len)
 {
-	MEB_ASSERT(fb != NULL);
-	MEB_ASSERT(msg != NULL);
+	MEB_ASSERT(fb);
+	MEB_ASSERT(msg);
 
-	if (y < 0 || y >= (int)fb->height) return;
+	if (y < 0 || y >= (int)fb->height) 
+		return;
 
 	const uint8_t* src = (const uint8_t*)msg;
 	int            start_x = x;
