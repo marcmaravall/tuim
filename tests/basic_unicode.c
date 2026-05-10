@@ -16,27 +16,25 @@ int main() {
 	tuim_init_with_backend(&ctx, tuim_abstract_backend());
 	tuim_set_style(&ctx, tuim_style_default_dark());
 
-	TuimWindow window = tuim_window("Tuim Unicode Test", (TuimRect) { 0, 0, 30, 10 });
-
-	tuim_window_set_bounds(&window, (TuimSizeHint) {
-		.preferred_width = 30,
-			.preferred_height = 10,
-			.min_width = 20,
-			.min_height = 7,
-			.max_width = 100,
-			.max_height = 30
+	TuimWindow window = tuim_window("Tuim Unicode Test", (TuimRect){0, 0, 30, 10});
+	
+	tuim_window_set_bounds (&window, (TuimSizeHint) {
+		.preferred_width = 30, 
+		.preferred_height = 10, 
+		.min_width = 20, 
+		.min_height = 7, 
+		.max_width = 100, 
+		.max_height = 30
 	});
-
-	tuim_set_backend_attrib(&ctx, TUIM_BACKEND_ATTRIB_SIZE_FIXED, "false");
 
 	tuim_window_add_elements(
 		&window,
 		3,
-		TUIM_ELEMENTS(
-			tuim_text_element("║ This is a test for Unicode characters."),
-			tuim_text_element("║ ─ │ ┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼ ═ ║ ╔ ╗ ╚ ╝ ╠ ╣ ╦ ╩ ╬─ │ ┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼"),
-			tuim_text_element("║ → ← ↑ ↓ ▲ ▼ - ◦ ● ○ ñá@#~€¬"),
-			)
+		TUIM_ELEMENTS (
+			tuim_text_element	 ("║ This is a test for Unicode characters."),
+			tuim_text_element	 ("║ ─ │ ┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼ ═ ║ ╔ ╗ ╚ ╝ ╠ ╣ ╦ ╩ ╬─ │ ┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼"),
+			tuim_text_element	 ("║ → ← ↑ ↓ ▲ ▼ - ◦ ● ○ ñá@#~€¬"),
+		)
 	);
 
 	while (1) {

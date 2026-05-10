@@ -32,16 +32,16 @@
 #define TUIM_WINDOW_DEFAULT_HEIGHT 5 
 
 #ifndef TUIM_WINDOW_DEFAULT_MIN_WIDTH
-#	define TUIM_WINDOW_DEFAULT_MIN_WIDTH 8
+#	define TUIM_WINDOW_DEFAULT_MIN_WIDTH 1
 #endif
 #ifndef TUIM_WINDOW_DEFAULT_MIN_HEIGHT
-#	define TUIM_WINDOW_DEFAULT_MIN_HEIGHT 3
+#	define TUIM_WINDOW_DEFAULT_MIN_HEIGHT 1
 #endif
 #ifndef TUIM_WINDOW_DEFAULT_MAX_WIDTH
-#	define TUIM_WINDOW_DEFAULT_MAX_WIDTH 50
+#	define TUIM_WINDOW_DEFAULT_MAX_WIDTH INT_MAX
 #endif
 #ifndef TUIM_WINDOW_DEFAULT_MAX_HEIGHT
-#	define TUIM_WINDOW_DEFAULT_MAX_HEIGHT 20
+#	define TUIM_WINDOW_DEFAULT_MAX_HEIGHT INT_MIN
 #endif
 
 #ifndef max
@@ -87,8 +87,8 @@ typedef struct {
 	// ---------
 } TuimWindow;
 
-TuimWindow tuim_default_window();
-TuimWindow tuim_window(const char* title, const TuimRect rect);
+TuimWindow* tuim_default_window();
+TuimWindow* tuim_window(const char* title, const TuimRect rect);
 
 TuimSizeHint tuim_window_measure(const TuimWindow* data);
 void tuim_window_draw  (TuimContext* ctx, TuimWindow* window);
@@ -105,6 +105,7 @@ void tuim_window_resize(TuimWindow* window, const TuimRect rect);
 #define TUIM_WINDOW_UPDATE_RELEASED 3
 int tuim_window_update(TuimContext* ctx, TuimWindow* window);
 
+TuimElement tuim_window_element(const char* title, const TuimRect);
 TuimElement tuim_window_to_element(TuimWindow* window);
 
 bool tuim_window_is_hovered(const TuimContext* ctx, const TuimWindow* window);

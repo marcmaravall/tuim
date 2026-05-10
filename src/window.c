@@ -1,45 +1,45 @@
 #include "window.h"
 
-TuimWindow tuim_default_window() {
-	TuimWindow w;
-	tuim_layout_init(&w.layout, TUIM_WINDOW_LAYOUT_DEFAULT_CAPACITY);
+TuimWindow* tuim_default_window() {
+	TuimWindow* w = malloc(sizeof(TuimWindow));
+	tuim_layout_init(& w->layout, TUIM_WINDOW_LAYOUT_DEFAULT_CAPACITY);
 	
-	w.title = "hello, world!";
+	w->title = "hello, world!";
 	
-	w.min_height = TUIM_WINDOW_DEFAULT_MIN_HEIGHT;
-	w.min_width  = TUIM_WINDOW_DEFAULT_MIN_WIDTH;
-	w.max_height = TUIM_WINDOW_DEFAULT_MAX_HEIGHT;
-	w.max_width = TUIM_WINDOW_DEFAULT_MAX_WIDTH;
+	w->min_height = TUIM_WINDOW_DEFAULT_MIN_HEIGHT;
+	w->min_width  = TUIM_WINDOW_DEFAULT_MIN_WIDTH;
+	w->max_height = TUIM_WINDOW_DEFAULT_MAX_HEIGHT;
+	w->max_width = TUIM_WINDOW_DEFAULT_MAX_WIDTH;
 
-	w.drag_offset_x = -1;
-	w.drag_offset_y = -1;
-	w.is_dragging = false;
-	w.is_resizing = false;
+	w->drag_offset_x = -1;
+	w->drag_offset_y = -1;
+	w->is_dragging = false;
+	w->is_resizing = false;
 
-	w.rect.x = 0;
-	w.rect.y = 0;
-	w.rect.width  = TUIM_WINDOW_DEFAULT_WIDTH;
-	w.rect.height = TUIM_WINDOW_DEFAULT_HEIGHT;
+	w->rect.x = 0;
+	w->rect.y = 0;
+	w->rect.width  = TUIM_WINDOW_DEFAULT_WIDTH;
+	w->rect.height = TUIM_WINDOW_DEFAULT_HEIGHT;
 
-	tuim_window_resize(&w, w.rect);
+	tuim_window_resize(w, w->rect);
 
-	w.start_mouse_resize_x = -1;
-	w.start_mouse_resize_y = -1;
+	w->start_mouse_resize_x = -1;
+	w->start_mouse_resize_y = -1;
 
-	w.style.border_color = TUIM_BRIGHT_BLUE_STRUCT_INDEXED;
-	w.style.title_bar_color = TUIM_BLUE_STRUCT_INDEXED;
-	w.style.title_color = TUIM_WHITE_STRUCT_INDEXED;
-	w.style.background = TUIM_BLACK_STRUCT_INDEXED;
+	w->style.border_color = TUIM_BRIGHT_BLUE_STRUCT_INDEXED;
+	w->style.title_bar_color = TUIM_BLUE_STRUCT_INDEXED;
+	w->style.title_color = TUIM_WHITE_STRUCT_INDEXED;
+	w->style.background = TUIM_BLACK_STRUCT_INDEXED;
 
 	return w;
 }
 
-TuimWindow tuim_window(const char* title, const TuimRect rect) {
+TuimWindow* tuim_window(const char* title, const TuimRect rect) {
 	MEB_ASSERT(title);
 
-	TuimWindow window = tuim_default_window();
-	window.title = title;
-	window.rect = rect;
+	TuimWindow *window = tuim_default_window();
+	window->title = title;
+	window->rect = rect;
 
 	return window;
 }
@@ -310,4 +310,8 @@ void tuim_window_set_bounds(TuimWindow* window, const TuimSizeHint sh) {
 	window->min_width = sh.min_width;
 
 	tuim_window_resize(window, window->rect);
+}
+
+TuimElement tuim_window_element(const char* title, const TuimRect rect) {
+	return tuim_window_to_element(tuim_window(title, rect));
 }

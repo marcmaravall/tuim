@@ -91,3 +91,13 @@ double tuim_get_time(TuimContext* ctx) {
 	MEB_ASSERT(ctx);
 	return ctx->time;
 }
+
+int tuim_get_context_width(const TuimContext* ctx) {
+	MEB_ASSERT(ctx);
+	return ctx->viewport.frame_buffer.width;
+}
+
+int tuim_get_context_height(const TuimContext* ctx) {
+	MEB_ASSERT(ctx);
+	return ctx->viewport.frame_buffer.height;
+}

@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#define TUIM_RECT(...) (TuimRect) { __VA_ARGS__ }
+
 typedef struct {
 	union {
 		struct {
