@@ -42,8 +42,9 @@ char tuim_get_char(const TuimContext* ctx) {
 	return res;
 }
 
-// TODO: explain better
-// for text applications:
+// return true if the key is being repeated in the context of desktop applications,
+// for example, when the user holds down a key, it will be repeated after a short delay, 
+// and then it will be repeated at a certain rate until the user releases the key.
 bool tuim_is_key_rep(const TuimContext* ctx, const tuim_key_code_t key_code) {
 	MEB_ASSERT(ctx);
 

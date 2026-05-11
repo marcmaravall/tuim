@@ -37,8 +37,6 @@ typedef struct {
 #define TUIM_FRAME_BUFFER_AT(fb, x, y) ((fb)->cells[(y) * (fb)->width + (x)])
 #define TUIM_FRAME_BUFFER_SET_AT(fb, x, y, cell) (fb)->cells[(y) * (fb)->width + (x)] = (cell);
 
-// TODO: add custom ascii chars for all shapes
-
 void tuim_frame_buffer_init		(TuimFrameBuffer* fb, const size_t width, const size_t height);
 void tuim_frame_buffer_clear	(TuimFrameBuffer* fb, const TuimColor color);
 
