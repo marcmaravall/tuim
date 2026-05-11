@@ -40,6 +40,7 @@ TuimWindow* tuim_window(const char* title, const TuimRect rect) {
 	TuimWindow *window = tuim_default_window();
 	window->title = title;
 	window->rect = rect;
+	tuim_window_resize(window, window->rect);
 
 	return window;
 }

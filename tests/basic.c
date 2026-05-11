@@ -14,21 +14,22 @@
 int main() {
 	TuimContext ctx;
 	tuim_init_with_backend(&ctx, tuim_windows_backend());
-	ctx.style = tuim_style_default_dark();
+	tuim_set_style(&ctx, tuim_style_default_dark());
 
-	TuimWindow w = tuim_default_window();
-
-	TuimViewport vp;
+	TuimWindow* w = tuim_window("Tuim Basic Test:", (TuimRect) { 0, 0, 30, 10 });
 
 	while (1) {
 		tuim_begin_frame(&ctx);
 		tuim_update_input(&ctx);
 
-		tuim_window_update(&ctx, &w);
-		tuim_window_draw(&ctx, &w);
+		tuim_window_update(&ctx, w);
+		tuim_window_draw(&ctx, w);
 
 		tuim_end_frame(&ctx);
 	}
+
+	tuim_window_destroy(w);
+	tuim_destroy_context(&ctx);
 
 	return 0;
 }
