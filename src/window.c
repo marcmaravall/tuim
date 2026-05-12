@@ -38,7 +38,7 @@ TuimWindow* tuim_window(const char* title, const TuimRect rect) {
 	MEB_ASSERT(title);
 
 	TuimWindow *window = tuim_default_window();
-	window->title = title;
+	window->title = (char*)title;
 	window->rect = rect;
 	tuim_window_resize(window, window->rect);
 
@@ -303,12 +303,12 @@ TuimElement tuim_window_add_text_list(TuimWindow* window, const size_t capacity,
 void tuim_window_set_bounds(TuimWindow* window, const TuimSizeHint sh) {
 	MEB_ASSERT(window);
 
-	window->rect.width = sh.preferred_width;
-	window->rect.height = sh.preferred_height;
-	window->max_height = sh.max_height;
-	window->min_height = sh.min_height;
-	window->max_width = sh.max_width;
-	window->min_width = sh.min_width;
+	window->rect.width  = (int)sh.preferred_width;
+	window->rect.height = (int)sh.preferred_height;
+	window->max_height  = sh.max_height;
+	window->min_height  = sh.min_height;
+	window->max_width   = sh.max_width;
+	window->min_width   = sh.min_width;
 
 	tuim_window_resize(window, window->rect);
 }

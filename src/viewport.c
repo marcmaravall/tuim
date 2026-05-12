@@ -7,7 +7,6 @@ TuimViewport tuim_viewport(const TuimRect rect) {
 	vp.x = rect.x;
 	vp.y = rect.y;
 	tuim_frame_buffer_init(&vp.frame_buffer, rect.width, rect.height);
-
 	return vp;
 }
 

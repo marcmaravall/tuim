@@ -17,13 +17,21 @@ void tuim_init_context(TuimContext* ctx) {
 	ctx->time = 0.0;
 }
 
+TuimContext tuim_context(const TuimBackend backend, const TuimStyle style) {
+	TuimContext ctx;
+	ctx.backend = backend;
+	tuim_init_context(&ctx);
+	ctx.style = style;
+	return ctx;
+}
+
 void tuim_init_with_backend(TuimContext* ctx, TuimBackend backend) {
 	ctx->backend = backend;
 	tuim_init_context(ctx);
 }
 
 void tuim_end_frame(TuimContext* ctx) {
-	tuim_viewport_draw(&ctx->viewport, &ctx->viewport);
+	tuim_viewport_draw(ctx, &ctx->viewport);
 	ctx->backend.pass_frame_buffer(ctx->backend.data, &ctx->viewport.frame_buffer);
 	ctx->backend.render(ctx->backend.data);
 	ctx->time += tuim_get_delta_time(ctx);
