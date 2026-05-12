@@ -13,6 +13,9 @@
 typedef struct {
 	TuimViewport viewport;
 	TuimLayout	  layout;
+
+	int scroll_x;
+	int scroll_y;
 } TuimScrollView;
 
 TuimScrollView tuim_scroll_view(const TuimRect);

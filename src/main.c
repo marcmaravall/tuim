@@ -16,19 +16,25 @@ int main() {
 	tuim_init_with_backend(&ctx, tuim_windows_backend());
 	tuim_set_style(&ctx, tuim_style_default_dark());
 
-	TuimWindow* w = tuim_window("Tuim Basic Test:", (TuimRect) { 0, 0, 30, 10 });
+	TuimScrollView sw = tuim_scroll_view((TuimRect) { 0, 0, 60, 20 });
+	tuim_layout_add_elements(
+		&sw.layout,
+		1,
+		TUIM_ELEMENTS (
+			tuim_text_element("Example test in the viewport area .....................")
+		)
+	);
 
 	while (1) {
 		tuim_begin_frame(&ctx);
 		tuim_update_input(&ctx);
-
-		tuim_window_update(&ctx, w);
-		tuim_window_draw(&ctx, w);
+		
+		tuim_scroll_view_update(&ctx, &sw);
+		tuim_scroll_view_draw(&ctx, &sw);
 
 		tuim_end_frame(&ctx);
 	}
 
-	tuim_window_destroy(w);
 	tuim_destroy_context(&ctx);
 
 	return 0;

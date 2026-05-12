@@ -63,6 +63,7 @@ typedef struct {
 } TuimLayout;
 
 void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout);
+
 void tuim_layout_update(TuimContext* ctx, TuimLayout* layout);
 
 #define TUIM_LAYOUT_DEFAULT_BOUNDS_X 0
