@@ -26,4 +26,5 @@ void tuim_clear_input(TuimInputState* state) {
 	state->mouse_state.previous = 0;
 	state->mouse_state.mouse_x = 0;
 	state->mouse_state.mouse_y = 0;
+	state->mouse_state.scroll = 0;
 }

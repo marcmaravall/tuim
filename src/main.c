@@ -16,13 +16,16 @@ int main() {
 	tuim_init_with_backend(&ctx, tuim_windows_backend());
 	tuim_set_style(&ctx, tuim_style_default_dark());
 
-	TuimScrollView sw = tuim_scroll_view((TuimRect) { 40, 10, 30, 20 });
+	TuimText* debug = tuim_text("Scroll view");
+
+	TuimScrollView sw = tuim_scroll_view((TuimRect) { 40, 0, 30, 20 });
 	tuim_layout_add_elements(
 		&sw.layout,
-		2,
-		TUIM_ELEMENTS (
+		3,
+		TUIM_ELEMENTS(
+			tuim_text_to_element(debug),
 			tuim_text_element("Example test in the viewport"),
-			tuim_checkbox_element("Example checkbox")
+			tuim_checkbox_element("Example checkbox"),
 		)
 	);
 
@@ -30,23 +33,17 @@ int main() {
 		tuim_begin_frame(&ctx);
 		tuim_update_input(&ctx);
 		
-		if (tuim_is_key_rep(&ctx, TUIM_KEY_LEFT)) {
-			sw.scroll_x -= 1;
-		}
-		if (tuim_is_key_rep(&ctx, TUIM_KEY_RIGHT)) {
-			sw.scroll_x += 1;
-		}
-		if (tuim_is_key_rep(&ctx, TUIM_KEY_UP)) {
-			sw.scroll_y -= 1;
-		}
-		if (tuim_is_key_rep(&ctx, TUIM_KEY_DOWN)) {
-			sw.scroll_y += 1;
-		}
+		int scroll = tuim_get_mouse_scroll(&ctx);
+		sw.scroll_y += scroll/128;// *tuim_get_delta_time(&ctx);
+
+		tuim_text_format(debug, "Scroll View: %d", scroll);
 
 		tuim_scroll_view_update(&ctx, &sw);
 		tuim_scroll_view_draw(&ctx, &sw);
 
 		tuim_end_frame(&ctx);
+
+		Sleep(16);
 	}
 
 	tuim_destroy_context(&ctx);

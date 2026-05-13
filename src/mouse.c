@@ -33,6 +33,9 @@ void tuim_clear_mouse_state(TuimMouseState* state) {
 	MEB_ASSERT(state);
 	state->current = 0;
 	state->previous = 0;
+	state->mouse_x = 0;
+    state->mouse_y = 0;
+	state->scroll = 0;
 }
 
 bool tuim_is_mouse_button_down(const TuimContext* state, const size_t button) {
@@ -50,4 +53,9 @@ bool tuim_is_mouse_button_up(const TuimContext* state, const size_t button) {
     MEB_ASSERT(state);
     return !(state->input_state.mouse_state.current & button) &&
         (state->input_state.mouse_state.previous & button);
+}
+
+int tuim_get_mouse_scroll(const TuimContext* ctx) {
+    MEB_ASSERT(ctx);
+	return ctx->input_state.mouse_state.scroll;
 }

@@ -236,6 +236,8 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 	data->unicode_pressed = 0;
 	data->vk_pressed = 0;
 
+	input_state->mouse_state.scroll = 0;
+
 	HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
 
 	DWORD events = 0;
@@ -257,6 +259,12 @@ void tuim_windows_backend_update_input(void* backend_data, TuimInputState* input
 
 			input_state->mouse_state.mouse_x = pos.X;
 			input_state->mouse_state.mouse_y = pos.Y;
+
+			if (mouse.dwEventFlags & MOUSE_WHEELED) {
+				SHORT delta = HIWORD(mouse.dwButtonState);
+
+				input_state->mouse_state.scroll += delta;
+			}
 
 			if (record.Event.MouseEvent.dwEventFlags == 0) {
 				if (record.Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED) {
