@@ -3,7 +3,7 @@
 TuimText* tuim_default_text() {
 	TuimText* text = malloc(sizeof(TuimText));
 
-	text->text = mds_new("[TUIM_DEFAULT_TEXT");
+	// text->text = // mds_new("[TUIM_DEFAULT_TEXT");
 
 	text->background = TUIM_BLACK_STRUCT_INDEXED;
 	text->foreground = TUIM_WHITE_STRUCT_INDEXED;
@@ -16,10 +16,16 @@ TuimText* tuim_default_text() {
 }
 
 TuimText* tuim_text(const char* str) {
-	TuimText* text = tuim_default_text();
+	TuimText* text = malloc(sizeof(TuimText));
 
-	mds_free(&text->text);
 	text->text = mds_new(str);
+
+	text->background = TUIM_BLACK_STRUCT_INDEXED;
+	text->foreground = TUIM_WHITE_STRUCT_INDEXED;
+	text->area.x = 0;
+	text->area.y = 0;
+	text->area.width = text->text.size;
+	text->area.height = 1;
 
 	return text;
 }
