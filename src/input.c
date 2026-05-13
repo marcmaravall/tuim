@@ -9,6 +9,8 @@ void tuim_update_input(TuimContext* ctx) {
 	}
 
 	tuim_update_mouse_state(&ctx->input_state.mouse_state);
+	ctx->input_state.mouse_state.mouse_x -= ctx->viewport.x;
+	ctx->input_state.mouse_state.mouse_y -= ctx->viewport.y;
 
 	ctx->backend.update_input(ctx->backend.data, &ctx->input_state);
 }

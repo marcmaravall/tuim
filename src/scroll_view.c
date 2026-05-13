@@ -14,8 +14,11 @@ TuimScrollView tuim_scroll_view(const TuimRect rect) {
 	return sw;
 }
 
-void tuim_scroll_view_update(const TuimContext* ctx, TuimScrollView* sw) {
+void tuim_scroll_view_update(TuimContext* ctx, TuimScrollView* sw) {
 	MEB_ASSERT(ctx && sw);
+
+	TuimViewport last = ctx->viewport;
+	ctx->viewport = sw->viewport;
 
 	sw->layout.bounds.x = sw->scroll_x;
 	sw->layout.bounds.y = sw->scroll_y;
@@ -23,6 +26,8 @@ void tuim_scroll_view_update(const TuimContext* ctx, TuimScrollView* sw) {
 	sw->layout.bounds.height = sw->content_height;
 
 	tuim_layout_update(ctx, &sw->layout);
+	
+	ctx->viewport = last;
 }
 
 void tuim_scroll_view_draw(TuimContext* ctx, TuimScrollView* sw) {

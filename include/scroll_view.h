@@ -23,7 +23,7 @@ typedef struct {
 
 TuimScrollView tuim_scroll_view(const TuimRect);
 
-void tuim_scroll_view_update  (const TuimContext* ctx, TuimScrollView* sw);
+void tuim_scroll_view_update  (TuimContext* ctx, TuimScrollView* sw);
 void tuim_scroll_view_draw	  (TuimContext* ctx, TuimScrollView* sw);
 void tuim_scroll_view_destroy (TuimScrollView* sw);
 
