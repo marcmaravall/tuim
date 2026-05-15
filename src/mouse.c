@@ -5,8 +5,8 @@ bool tuim_is_mouse_inside(const TuimContext* ctx, const TuimRect area) {
 	MEB_ASSERT(ctx);
 	
 	// local mouse position relative to viewport
-    int local_x = ctx->input_state.mouse_state.mouse_x - ctx->viewport.x;
-    int local_y = ctx->input_state.mouse_state.mouse_y - ctx->viewport.y;
+    const int local_x = ctx->input_state.mouse_state.mouse_x - ctx->viewport.x;
+    const int local_y = ctx->input_state.mouse_state.mouse_y - ctx->viewport.y;
    
     return 
         local_x >= area.x &&

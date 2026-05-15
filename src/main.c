@@ -29,21 +29,26 @@ int main() {
 		)
 	);
 
+	TuimWindow* win = tuim_window("Test Window", (TuimRect) { 0, 0, 80, 25 });
+	tuim_window_add_elements(win, 1, TUIM_ELEMENTS(tuim_scroll_view_to_element(&sw)));
+
 	while (1) {
 		tuim_begin_frame(&ctx);
 		tuim_update_input(&ctx);
 		
 		int scroll = tuim_get_mouse_scroll(&ctx);
-		sw.scroll_y += scroll/128;// *tuim_get_delta_time(&ctx);
+		sw.scroll_y += scroll/60;// *tuim_get_delta_time(&ctx);
 
-		tuim_text_format(debug, "Scroll View: %d", scroll);
+		tuim_text_format(debug, "FPS: %d   DELTA TIME: %f", (int)tuim_get_fps(&ctx), tuim_get_delta_time(&ctx));
 
-		tuim_scroll_view_update(&ctx, &sw);
-		tuim_scroll_view_draw(&ctx, &sw);
+		tuim_window_update(&ctx, win);
+		tuim_window_draw(&ctx, win);
+		// tuim_scroll_view_update(&ctx, &sw);
+		// tuim_scroll_view_draw(&ctx, &sw);
 
 		tuim_end_frame(&ctx);
 
-		Sleep(16);
+		// Sleep(16);
 	}
 
 	tuim_destroy_context(&ctx);

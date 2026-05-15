@@ -24,6 +24,11 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 			int effective_size = current.base_size;
 
 			if (effective_size == 0) {
+				if (current.data.measure == NULL) {
+					effective_size = 0;
+					continue;
+				}
+
 				TuimSizeHint hint = current.data.measure(current.data.data);
 				effective_size = (layout->direction == TUIM_ROW)
 					? (int)hint.preferred_width

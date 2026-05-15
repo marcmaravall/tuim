@@ -27,6 +27,9 @@ void tuim_scroll_view_update  (TuimContext* ctx, TuimScrollView* sw);
 void tuim_scroll_view_draw	  (TuimContext* ctx, TuimScrollView* sw);
 void tuim_scroll_view_destroy (TuimScrollView* sw);
 
+TuimSizeHint tuim_scroll_view_measure(const TuimScrollView* sw);
+void tuim_scroll_view_layout(TuimScrollView* sw, const TuimRect rect);
+
 TuimElement tuim_scroll_view_to_element(TuimScrollView* sw);
 
 #endif // TUIM_SCROLL_VIEW_H
