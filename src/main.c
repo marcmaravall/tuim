@@ -15,6 +15,7 @@ int main() {
 	TuimContext ctx;
 	tuim_init_with_backend(&ctx, tuim_windows_backend());
 	tuim_set_style(&ctx, tuim_style_default_dark());
+	tuim_set_target_fps(&ctx, 30.0);
 
 	TuimText* debug = tuim_text("Scroll view");
 
@@ -37,18 +38,14 @@ int main() {
 		tuim_update_input(&ctx);
 		
 		int scroll = tuim_get_mouse_scroll(&ctx);
-		sw.scroll_y += scroll/60;// *tuim_get_delta_time(&ctx);
+		sw.scroll_y += scroll/60;
 
-		tuim_text_format(debug, "FPS: %d   DELTA TIME: %f", (int)tuim_get_fps(&ctx), tuim_get_delta_time(&ctx));
+		tuim_text_format(debug, "FPS: %f   DELTA TIME: %f", tuim_get_fps(&ctx), tuim_get_delta_time(&ctx));
 
 		tuim_window_update(&ctx, win);
 		tuim_window_draw(&ctx, win);
-		// tuim_scroll_view_update(&ctx, &sw);
-		// tuim_scroll_view_draw(&ctx, &sw);
 
 		tuim_end_frame(&ctx);
-
-		// Sleep(16);
 	}
 
 	tuim_destroy_context(&ctx);

@@ -37,6 +37,8 @@ typedef bool (*TuimBackendInputRepeatFn)(void* data, tuim_key_code_t key_code);
 typedef char* (*TuimBackendGetClipboardFn)(void* data);
 typedef double (*TuimBackendGetDeltaTimeFn)(void* data);
 
+typedef void (*TuimBackendSleepMsFn)(void* data, int milliseconds);
+
 typedef struct {
     TuimBackendInitFn init;
     TuimBackendDestroyFn destroy;
@@ -56,6 +58,8 @@ typedef struct {
     TuimBackendInputRepeatFn inp_rep;
     TuimBackendGetClipboardFn get_clipboard;
 	TuimBackendGetDeltaTimeFn get_delta_time;
+
+    TuimBackendSleepMsFn sleep_ms;
 
     void* data;
 } TuimBackend;

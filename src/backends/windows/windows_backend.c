@@ -12,7 +12,7 @@ void tuim_windows_backend_init(void* backend_data) {
 	SetConsoleOutputCP(CP_UTF8);
 	SetConsoleCP(CP_UTF8);
 
-	HWND input_handle = GetStdHandle(STD_INPUT_HANDLE);
+	HANDLE input_handle = GetStdHandle(STD_INPUT_HANDLE);
 	DWORD mode = 0;
 	if (input_handle == INVALID_HANDLE_VALUE)
 		return;
@@ -23,6 +23,7 @@ void tuim_windows_backend_init(void* backend_data) {
 	mode |= ENABLE_MOUSE_INPUT;
 	mode &= ~ENABLE_QUICK_EDIT_MODE;
 	
+
 	mode |= ENABLE_WINDOW_INPUT;
 
 	SetConsoleMode(input_handle, mode);
@@ -354,6 +355,10 @@ void tuim_windows_backend_resize_buffer(TuimWindowsBackendData* data, const SHOR
 	memset(data->shadow_buffer, 0xFF, count * sizeof(TuimFrameBufferCell));
 }
 
+static void tuim_windows_backend_sleep_ms(void* data, const int ms) {
+	Sleep((DWORD)ms);
+}
+
 TuimBackend tuim_windows_backend() {
 	TuimBackend backend;
 
@@ -385,6 +390,8 @@ TuimBackend tuim_windows_backend() {
 	backend.inp_rep = tuim_windows_backend_inp_rep;
 	backend.get_clipboard = tuim_windows_backend_get_clipboard;
 	backend.get_delta_time = tuim_windows_backend_get_delta_time;
+
+	backend.sleep_ms = tuim_windows_backend_sleep_ms;
 
 	return backend;
 }

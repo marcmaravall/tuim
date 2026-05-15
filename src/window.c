@@ -117,10 +117,6 @@ void tuim_window_destroy(TuimWindow* window) {
 int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 	MEB_ASSERT(ctx && window);
 
-	window->layout.bounds.width = window->rect.width;
-	window->layout.bounds.height = window->rect.height;
-	tuim_layout_update(ctx, &window->layout);
-
 	int mouse_x, mouse_y;
 	tuim_get_mouse_position(ctx, &mouse_x, &mouse_y);
 
@@ -190,6 +186,10 @@ int tuim_window_update(TuimContext* ctx, TuimWindow* window) {
 	if (res != TUIM_WINDOW_UPDATE_NONE)
 		// change layout settings
 		tuim_window_resize(window, window->rect);
+
+	window->layout.bounds.width = window->rect.width;
+	window->layout.bounds.height = window->rect.height;
+	tuim_layout_update(ctx, &window->layout);
 
 	return res;
 }

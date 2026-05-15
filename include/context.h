@@ -21,6 +21,10 @@ typedef struct TuimContext {
 	TuimBackend backend;
 	TuimInputState input_state;
 
+	double fps;
+	double delta_time;
+
+	double target_fps;
 	double time;
 } TuimContext;
 
@@ -44,6 +48,8 @@ char* tuim_get_clipboard(TuimContext* ctx);
 double tuim_get_delta_time(TuimContext* ctx);
 double tuim_get_fps(TuimContext* ctx);
 double tuim_get_time(TuimContext* ctx);
+
+void tuim_set_target_fps(TuimContext* ctx, const double fps);
 
 int tuim_get_context_width (const TuimContext* ctx);
 int tuim_get_context_height(const TuimContext* ctx);
