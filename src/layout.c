@@ -59,6 +59,9 @@ void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
 			computed_sizes[i] = (int)((current.flex / total_flex) * remaining);
 		}
 		else if (current.base_size == 0) {
+			if (!current.data.measure)
+				continue;
+			
 			TuimSizeHint hint = current.data.measure(current.data.data);
 			computed_sizes[i] = (layout->direction == TUIM_ROW)
 				? (int)hint.preferred_width

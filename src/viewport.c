@@ -6,7 +6,9 @@ TuimViewport tuim_viewport(const TuimRect rect) {
 
 	vp.x = rect.x;
 	vp.y = rect.y;
+
 	tuim_frame_buffer_init(&vp.frame_buffer, rect.width, rect.height);
+	
 	return vp;
 }
 
@@ -47,8 +49,11 @@ TuimSizeHint tuim_viewport_measure(const TuimViewport* vp) {
 
 void tuim_viewport_layout(TuimViewport* vp, const TuimRect rect) {
 	MEB_ASSERT(vp);
-	vp->frame_buffer.width  = rect.width;
-	vp->frame_buffer.height = rect.height;
+
+	vp->x = rect.x;
+	vp->y = rect.y;
+
+	tuim_frame_buffer_resize(&vp->frame_buffer, rect.width, rect.height);
 }
 
 TuimElement tuim_viewport_to_element(const TuimViewport* vp) {

@@ -3,7 +3,7 @@
 TuimCheckbox* tuim_default_checkbox() {
 	TuimCheckbox* checkbox = malloc(sizeof(TuimCheckbox));
 
-	checkbox->label = "checkbox";
+	checkbox->label = mds_new("checkbox");
 	checkbox->area.x = 0;
 	checkbox->area.y = 0;
 	checkbox->area.width = 10;
@@ -32,7 +32,7 @@ void tuim_checkbox_draw(TuimContext* ctx, const TuimCheckbox* checkbox) {
 	const char* status = checkbox->toggled ? "[x] " : "[ ] ";
 	size_t len = strlen(status);
 
-	const char* label = checkbox->label ? checkbox->label : "";
+	char* label = (mds_get(checkbox->label) == NULL) ? "" : mds_get(checkbox->label);
 
 	TuimColor bg;
 	TuimColor fg;
@@ -125,7 +125,7 @@ TuimSizeHint tuim_checkbox_measure(const TuimCheckbox* checkbox) {
 
 	size.min_width = 4; // for "[ ] "
 	size.min_height = 1;
-	size.preferred_width = 4 + strlen(checkbox->label);
+	size.preferred_width = 4 + mds_size(checkbox->label);
 	size.preferred_height = 1;
 	size.max_width = size.preferred_width;
 	size.max_height = size.preferred_height;
@@ -146,10 +146,9 @@ inline bool tuim_checkbox_get(const TuimCheckbox* checkbox) {
 // TODO: add cases depending on flags
 TuimRect tuim_checkbox_calculate_area(const TuimCheckbox* checkbox) {
 	MEB_ASSERT(checkbox);
-	MEB_ASSERT(checkbox->label);
 
 	TuimRect area = checkbox->area;
-	size_t label_len = strlen(checkbox->label) + 4;
+	size_t label_len = mds_size(checkbox->label) + 4;
 	area.width = (int)label_len;
 
 	return area;
@@ -157,6 +156,6 @@ TuimRect tuim_checkbox_calculate_area(const TuimCheckbox* checkbox) {
 
 TuimCheckbox* tuim_checkbox(const char* label) {
 	TuimCheckbox* checkbox = tuim_default_checkbox();
-	checkbox->label = label;
+	checkbox->label = mds_new(label);
 	return checkbox;
 }

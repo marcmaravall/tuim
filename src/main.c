@@ -20,15 +20,24 @@ int main() {
 	TuimText* debug = tuim_text("Scroll view");
 
 	TuimScrollView sw = tuim_scroll_view((TuimRect) { 40, 0, 30, 20 });
+
 	tuim_layout_add_elements(
 		&sw.layout,
-		3,
+		4,
 		TUIM_ELEMENTS(
 			tuim_text_to_element(debug),
 			tuim_text_element("Example test in the viewport"),
 			tuim_checkbox_element("Example checkbox"),
+
+			tuim_text_element(""),
 		)
 	);
+
+	for (size_t i = 0; i < 20; ++i) {
+		char buffer[32];
+		snprintf(buffer, 32, "Element %zu", i);
+		tuim_layout_add(&sw.layout, tuim_checkbox_element(buffer));
+	}
 
 	TuimWindow* win = tuim_window("Test Window", (TuimRect) { 0, 0, 80, 25 });
 	tuim_window_add_elements(win, 1, TUIM_ELEMENTS(tuim_scroll_view_to_element(&sw)));

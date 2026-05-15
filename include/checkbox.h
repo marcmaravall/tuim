@@ -8,12 +8,14 @@
 #include "context.h"
 #include "mouse.h"
 
+#include <mds.h>
 #include <meb.h>
+
 #include <stdint.h>
 
 typedef struct {
     TuimRect area;
-    const char* label;
+	mdString label;
 
     struct TuimCheckboxStyle {
         TuimColor background;
