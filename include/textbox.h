@@ -34,6 +34,10 @@ typedef struct {
 
     bool is_selected;
     int  cursor_pos;
+
+    double blink_time;
+    int    blink_delay;
+
 } TuimTextbox;
 
 #define TUIM_TEXTBOX_INITIAL_CAPACITY 63

@@ -43,7 +43,6 @@ typedef struct {
 	TuimRect area;
 
 	TuimTextListElement* data;
-	// max strlen(label) on data
 	size_t max_size;
 
 	size_t size;

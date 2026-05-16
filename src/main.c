@@ -29,7 +29,7 @@ int main() {
 			tuim_text_element("Example test in the viewport"),
 			tuim_checkbox_element("Example checkbox"),
 
-			tuim_text_element(""),
+			tuim_textbox_element("Example textbox"),
 		)
 	);
 

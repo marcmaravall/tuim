@@ -115,6 +115,9 @@ TuimTextbox* tuim_default_textbox(void) {
 
 	tb->text = mds_new("");
 
+    tb->blink_time = 0.0;
+    tb->blink_delay = 2;
+
     tb->cursor_pos = 0;
     tb->is_selected = false;
 
@@ -146,6 +149,8 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
         textbox->is_selected = tuim_is_mouse_inside(ctx, textbox->area);
 
         if (textbox->is_selected) {
+            textbox->blink_time = 0.0;
+            
             int click_col = ctx->input_state.mouse_state.mouse_x - textbox->area.x;
             int click_row = ctx->input_state.mouse_state.mouse_y - textbox->area.y;
 
@@ -165,6 +170,8 @@ void tuim_update_textbox(TuimContext* ctx, TuimTextbox* textbox) {
 
     if (!textbox->is_selected)
         return;
+    
+    textbox->blink_time += tuim_get_delta_time(ctx);
 
     if (tuim_is_key_rep(ctx, TUIM_KEY_LEFT)) {
         if (textbox->cursor_pos > 0)
@@ -224,6 +231,7 @@ void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
         tuim_textbox_get_row_col(textbox, textbox->cursor_pos, &cursor_row, &cursor_col);
 
     char* line_buf = malloc(mds_size(textbox->text) + 1);
+
     if (!line_buf)
         return;
 
@@ -248,9 +256,8 @@ void tuim_draw_textbox(TuimContext* ctx, const TuimTextbox* textbox) {
         );
 
         if (textbox->is_selected && line_row == cursor_row) {
-            // TODO: improve blinking
-
-            if ((int)(tuim_get_time(ctx)*4) % 2 == 0) {
+            // TODO: continue improving blinking system
+            if (((int)textbox->blink_time) % textbox->blink_delay == 0) {
                 tuim_frame_buffer_set_background(
                     &ctx->viewport.frame_buffer,
                     textbox->style.cursor_color,

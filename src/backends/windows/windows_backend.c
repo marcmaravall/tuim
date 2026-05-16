@@ -48,7 +48,11 @@ void tuim_windows_backend_init(void* backend_data) {
 	newSize.X = csbi.srWindow.Right - csbi.srWindow.Left + 1;
 	newSize.Y = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 
-	// TODO: remove cursor
+	// remove cursor:
+	CONSOLE_CURSOR_INFO info;
+	info.dwSize = 100;
+	info.bVisible = FALSE;
+	SetConsoleCursorInfo(data->handle, &info);
 }
 
 void tuim_windows_backend_get_size(void* backend_data, size_t* x, size_t* y) {
