@@ -15,7 +15,7 @@ int main() {
 	TuimContext ctx;
 	tuim_init_with_backend(&ctx, tuim_windows_backend());
 	tuim_set_style(&ctx, tuim_style_default_dark());
-	tuim_set_target_fps(&ctx, 30.0);
+	tuim_set_target_fps(&ctx, 120.0);
 
 	TuimText* debug = tuim_text("Scroll view");
 

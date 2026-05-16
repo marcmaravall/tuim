@@ -1,5 +1,3 @@
-// TODO: refactor this mess...
-
 #include "layout.h"
 
 void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout) {
@@ -11,110 +9,186 @@ void tuim_layout_draw(TuimContext* ctx, const TuimLayout* layout) {
 	}
 }
 
+// TODO: refactor this monstruosity
 void tuim_layout_update(TuimContext* ctx, TuimLayout* layout) {
-	MEB_ASSERT(ctx && layout);
+    MEB_ASSERT(ctx && layout);
 
-	int total_fixed = 0;
-	float total_flex = 0.0f;
+    // calculate total flex and fixed
+    int   total_fixed = 0;
+    float total_flex = 0.0f;
 
-	for (size_t i = 0; i < layout->size; i++) {
-		TuimLayoutElement current = layout->elements[i];
+    for (size_t i = 0; i < layout->size; i++) {
+        TuimLayoutElement current = layout->elements[i];
 
-		if (current.flex == 0.0f) {
-			int effective_size = current.base_size;
+        if (current.flex == 0.0f) {
+            int effective_size = current.base_size;
 
-			if (effective_size == 0) {
-				if (current.data.measure == NULL) {
-					effective_size = 0;
-					continue;
-				}
+            if (effective_size == 0) {
+                if (current.data.measure == NULL)
+                    continue;
 
-				TuimSizeHint hint = current.data.measure(current.data.data);
-				effective_size = (layout->direction == TUIM_ROW)
-					? (int)hint.preferred_width
-					: (int)hint.preferred_height;
-			}
+                TuimSizeHint hint = current.data.measure(current.data.data);
+                effective_size = (layout->direction == TUIM_ROW)
+                    ? (int)hint.preferred_width
+                    : (int)hint.preferred_height;
+            }
 
-			total_fixed += effective_size + current.margin_start + current.margin_end;
-		}
-		else {
-			total_flex += current.flex;
-		}
-	}
+            total_fixed += effective_size + current.margin_start + current.margin_end;
+        }
+        else {
+            total_flex += current.flex;
+        }
+    }
 
-	int container_size = (layout->direction == TUIM_ROW) ? layout->bounds.width : layout->bounds.height;
-	int total_spacing = ((int)layout->size - 1) * layout->spacing;
-	int remaining = container_size - total_fixed - total_spacing;
+    // space not used
 
-	if (remaining < 0)
-		remaining = 0;
+    int container_size = (layout->direction == TUIM_ROW)
+        ? layout->bounds.width : layout->bounds.height;
+    int total_spacing = ((int)layout->size - 1) * layout->spacing;
+    int remaining = container_size - total_fixed - total_spacing;
 
-	int* computed_sizes = malloc(sizeof(int) * layout->size);
-	MEB_ASSERT(computed_sizes);
+    if (remaining < 0)
+        remaining = 0;
 
-	for (size_t i = 0; i < layout->size; i++) {
-		TuimLayoutElement current = layout->elements[i];
+    // justify: 
 
-		if (current.flex > 0.0f && total_flex > 0.0f) {
-			computed_sizes[i] = (int)((current.flex / total_flex) * remaining);
-		}
-		else if (current.base_size == 0) {
-			if (!current.data.measure)
-				continue;
-			
-			TuimSizeHint hint = current.data.measure(current.data.data);
-			computed_sizes[i] = (layout->direction == TUIM_ROW)
-				? (int)hint.preferred_width
-				: (int)hint.preferred_height;
-		}
-		else {
-			computed_sizes[i] = current.base_size;
-		}
-	}
+    int cursor_offset = 0;
+    int dynamic_spacing = layout->spacing;
 
-	int cursor = (layout->direction == TUIM_ROW)
-		? layout->bounds.x
-		: layout->bounds.y;
+    if (total_flex == 0.0f) {
+        switch (layout->justify) {
+        case TUIM_CENTER_JUSTIFY:
+            cursor_offset = remaining / 2;
+            break;
 
-	for (size_t i = 0; i < layout->size; ++i) {
-		TuimLayoutElement* current = &layout->elements[i];
-		MEB_ASSERT(current);
-		TuimElement el = current->data;
+        case TUIM_END_JUSTIFY:
+            cursor_offset = remaining;
+            break;
 
-		cursor += current->margin_start;
+        case TUIM_SPACE_BETWEEN:
+            if (layout->size > 1)
+                dynamic_spacing = layout->spacing
+                + remaining / (int)(layout->size - 1);
+            break;
 
-		int main_size = computed_sizes[i];
+        case TUIM_SPACE_AROUND:
+            if (layout->size > 0) {
+                int per = remaining / (int)layout->size;
+                dynamic_spacing = layout->spacing + per;
+                cursor_offset = per / 2;
+            }
+            break;
 
-		TuimRect rect;
+        default:
+            break;
+        }
+    }
 
-		if (layout->direction == TUIM_ROW) {
-			rect.x = cursor;
-			rect.y = layout->bounds.y;
-			rect.width = main_size;
-			rect.height = layout->bounds.height;
-		}
-		else {
-			rect.x = layout->bounds.x;
-			rect.y = cursor;
-			rect.width = layout->bounds.width;
-			rect.height = main_size;
-		}
+    // calculate sizes
 
-		if (el.layout)
-			el.layout(el.data, rect);
+    int* computed_sizes = malloc(sizeof(int) * layout->size);
+    MEB_ASSERT(computed_sizes);
 
-		cursor += main_size;
-		cursor += current->margin_end;
+    for (size_t i = 0; i < layout->size; i++) {
+        TuimLayoutElement current = layout->elements[i];
 
-		if (i < layout->size - 1) {
-			cursor += layout->spacing;
-		}
+        if (current.flex > 0.0f && total_flex > 0.0f) {
+            computed_sizes[i] = (int)((current.flex / total_flex) * remaining);
+        }
+        else if (current.base_size == 0) {
+            if (!current.data.measure) {
+                computed_sizes[i] = 0;
+            }
+            else {
+                TuimSizeHint hint = current.data.measure(current.data.data);
+                computed_sizes[i] = (layout->direction == TUIM_ROW)
+                    ? (int)hint.preferred_width
+                    : (int)hint.preferred_height;
+            }
+        }
+        else {
+            computed_sizes[i] = current.base_size;
+        }
+    }
 
-		if (el.update)
-			el.update(ctx, el.data);
-	}
+    // size and position
+    int cursor = (layout->direction == TUIM_ROW)
+        ? layout->bounds.x
+        : layout->bounds.y;
 
-	free(computed_sizes);
+    cursor += cursor_offset;
+
+    int cross_origin = (layout->direction == TUIM_ROW)
+        ? layout->bounds.y : layout->bounds.x;
+    int cross_total = (layout->direction == TUIM_ROW)
+        ? layout->bounds.height : layout->bounds.width;
+
+    for (size_t i = 0; i < layout->size; ++i) {
+        TuimLayoutElement* current = &layout->elements[i];
+        TuimElement el = current->data;
+
+        cursor += current->margin_start;
+
+        int main_size = computed_sizes[i];
+
+        int cross_size = cross_total;
+
+        if (!current->expand && el.measure) {
+            TuimSizeHint hint = el.measure(el.data);
+            int natural = (layout->direction == TUIM_ROW)
+                ? (int)hint.preferred_height
+                : (int)hint.preferred_width;
+            cross_size = (natural < cross_total) ? natural : cross_total;
+        }
+
+        TuimAlign cross_align = (layout->direction == TUIM_ROW)
+            ? current->v_align
+            : current->h_align;
+
+        int cross_pos;
+        switch (cross_align) {
+        case TUIM_CENTER_ALIGN:
+            cross_pos = cross_origin + (cross_total - cross_size) / 2;
+            break;
+        case TUIM_RIGHT_ALIGN:
+            cross_pos = cross_origin + cross_total - cross_size;
+            break;
+        default:
+            cross_pos = cross_origin;
+            break;
+        }
+
+        // build rect
+
+        TuimRect rect;
+
+        if (layout->direction == TUIM_ROW) {
+            rect.x = cursor;
+            rect.y = cross_pos;
+            rect.width = main_size;
+            rect.height = cross_size;
+        }
+        else {
+            rect.x = cross_pos;
+            rect.y = cursor;
+            rect.width = cross_size;
+            rect.height = main_size;
+        }
+
+        if (el.layout)
+            el.layout(el.data, rect);
+
+        cursor += main_size;
+        cursor += current->margin_end;
+
+        if (i < layout->size - 1)
+            cursor += dynamic_spacing;
+
+        if (el.update)
+            el.update(ctx, el.data);
+    }
+
+    free(computed_sizes);
 }
 
 TuimElement tuim_layout_get(TuimLayout* layout, const size_t index) {
@@ -143,9 +217,10 @@ void tuim_layout_init(TuimLayout* layout, size_t capacity) {
 	layout->bounds.y = TUIM_LAYOUT_DEFAULT_BOUNDS_Y;
 	layout->bounds.width = TUIM_LAYOUT_DEFAULT_BOUNDS_WIDTH;
 	layout->bounds.height = TUIM_LAYOUT_DEFAULT_BOUNDS_HEIGHT;
-
+	
 	layout->direction = TUIM_LAYOUT_DEFAULT_DIRECTION;
 	layout->spacing = TUIM_LAYOUT_DEFAULT_SPACING;
+    layout->align_items = TUIM_CENTER_ALIGN;
 }
 
 // i dont know if works, i havent tested it

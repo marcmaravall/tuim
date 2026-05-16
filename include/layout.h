@@ -11,12 +11,12 @@
 #include "checkbox.h"
 
 typedef enum {
-    TUIM_LEFT,
-    TUIM_CENTER,
-    TUIM_RIGHT,
+    TUIM_LEFT_ALIGN,
+    TUIM_CENTER_ALIGN,
+    TUIM_RIGHT_ALIGN,
 } TuimAlign;
 
-#define TUIM_ALGIN_DEFAULT TUIM_LEFT
+#define TUIM_ALGIN_DEFAULT TUIM_LEFT_ALIGN
 
 typedef struct {
     TuimElement data;
