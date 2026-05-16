@@ -49,6 +49,7 @@ int main() {
 		int scroll = tuim_get_mouse_scroll(&ctx);
 		sw.scroll_y += scroll/60;
 
+		mds_format(&win->title, "Window Formated FPS: %f", tuim_get_fps(&ctx));
 		tuim_text_format(debug, "FPS: %f   DELTA TIME: %f", tuim_get_fps(&ctx), tuim_get_delta_time(&ctx));
 
 		tuim_window_update(&ctx, win);

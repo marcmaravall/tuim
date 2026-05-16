@@ -15,6 +15,7 @@
 #include "text_list.h"
 
 #include <meb.h>
+#include <mds.h>
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -73,7 +74,7 @@ typedef struct {
 	size_t max_height;
 	// ---------
 
-	char* title;
+	mdString title;
 
 	// ---------
 	int start_mouse_resize_x;
@@ -119,5 +120,8 @@ TuimElement tuim_window_add_checkbox(TuimWindow* window, const char* str, TuimCh
 TuimElement tuim_window_add_text_list(TuimWindow* window, const size_t capacity, TuimTextList* list);
 
 void tuim_window_set_bounds(TuimWindow* window, const TuimSizeHint sh);
+
+mdString tuim_window_get_title			(const TuimWindow* win);
+const char* tuim_window_get_title_cstr	(const TuimWindow* win);
 
 #endif // TUIM_WINDOW_H

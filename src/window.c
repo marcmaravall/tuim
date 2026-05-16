@@ -4,7 +4,7 @@ TuimWindow* tuim_default_window() {
 	TuimWindow* w = malloc(sizeof(TuimWindow));
 	tuim_layout_init(& w->layout, TUIM_WINDOW_LAYOUT_DEFAULT_CAPACITY);
 	
-	w->title = "hello, world!";
+	w->title = mds_new("hello, world!");
 	
 	w->min_height = TUIM_WINDOW_DEFAULT_MIN_HEIGHT;
 	w->min_width  = TUIM_WINDOW_DEFAULT_MIN_WIDTH;
@@ -38,7 +38,7 @@ TuimWindow* tuim_window(const char* title, const TuimRect rect) {
 	MEB_ASSERT(title);
 
 	TuimWindow *window = tuim_default_window();
-	window->title = (char*)title;
+	window->title = mds_new(title);
 	window->rect = rect;
 	tuim_window_resize(window, window->rect);
 
@@ -48,9 +48,8 @@ TuimWindow* tuim_window(const char* title, const TuimRect rect) {
 // TODO: use less malloc 
 void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 	MEB_ASSERT(ctx && window);
-	MEB_ASSERT(window->title);
 
-	const size_t title_size = strlen(window->title);
+	const size_t title_size = mds_size(window->title);
 	char* title_to_render;
 
 	if (title_size > window->rect.width) {
@@ -58,7 +57,7 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 		MEB_ASSERT(title_to_render);
 
 		// TODO: quit unsafe warning
-		strncpy(title_to_render, window->title, window->rect.width);
+		strncpy(title_to_render, mds_get(window->title), window->rect.width);
 
 		size_t from = window->rect.width - 3;
 		for (size_t i = from; i < window->rect.width; ++i) {
@@ -70,7 +69,7 @@ void tuim_window_draw(TuimContext* ctx, TuimWindow* window) {
 		MEB_ASSERT(title_to_render);
 	}
 	else {
-		title_to_render = window->title;
+		title_to_render = mds_get(window->title);
 	}
 
 	const int x0 = window->rect.x;
@@ -110,7 +109,7 @@ void tuim_window_destroy(TuimWindow* window) {
 	MEB_ASSERT(window);
 	
 	tuim_layout_destroy(&window->layout);
-	window->title = NULL;
+	mds_free(&window->title);
 }
 
 // returns 1 if the window was updated, 0 otherwise
@@ -314,5 +313,16 @@ void tuim_window_set_bounds(TuimWindow* window, const TuimSizeHint sh) {
 }
 
 TuimElement tuim_window_element(const char* title, const TuimRect rect) {
+	MEB_ASSERT(title);
 	return tuim_window_to_element(tuim_window(title, rect));
+}
+
+mdString tuim_window_get_title(const TuimWindow* win) {
+	MEB_ASSERT(win);
+	return win->title;
+}
+
+const char* tuim_window_get_title_cstr(const TuimWindow* win) {
+	MEB_ASSERT(win);
+	return mds_get(win->title);
 }
